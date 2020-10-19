@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+      "experimentalDecorators": true,
+      "target": "es5",
+      "lib": [
+        "es6",
+        "es2017",
+        "dom"
+      ],
+      "module": "commonjs",
+      "declaration": true,
+      "outDir": "./dist",
+      "strict": true,
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "paths": {
+        "@test/*": ["test/*"],
+        "@/*": ["src/*"]
+      }
+    },
+    "include": ["src", "test"],
+    "exclude": ["node_modules"]
+}

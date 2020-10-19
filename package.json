@@ -1,0 +1,32 @@
+{
+  "name": "MC-Core-Js",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "coverage": "jest --config jestconfig.json --coverage",
+    "lint": "ts lint --project \"./tsconfig.json\"",
+    "test": "jest --config jestconfig.json"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "core-js": "^3.6.5",
+    "inversify": "^5.0.1",
+    "moment": "^2.27.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.9.1",
+    "eslint": "^5.16.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.3.0",
+    "ts-lint": "^4.5.1",
+    "typescript": "^4.0.2"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ]
+}
