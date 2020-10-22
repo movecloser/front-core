@@ -1,4 +1,5 @@
 import { injectable } from 'inversify'
+
 import { IDocument } from '@/services/document'
 
 export interface IWindow {

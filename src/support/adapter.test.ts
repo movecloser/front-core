@@ -1,6 +1,6 @@
-import { mapCollection, mapModel, MappingConfig, MappingTypes } from './adapter'
-import { MappingError } from '../../src/exceptions/errors'
-import { AbstractIntention } from '../../src/shared/intention'
+import { mapCollection, mapModel, MappingConfig, MappingTypes } from '@/support/adapter'
+import { MappingError } from '@/exceptions/errors'
+import { AbstractIntention } from '@/support/intention'
 
 
 const mappingConfig: MappingConfig = {

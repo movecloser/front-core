@@ -10,7 +10,7 @@ import {
   Params
 } from '@/contracts/resources'
 import { IValidation } from '@/contracts/validation'
-import { ILocalizationService } from '@/services/localization'
+import { ILocalizationService } from '@/platforms/vue/localization'
 import { IResources } from '../contracts/resources'
 import { InternalServerError, TemporaryUnavailableError } from '../../src/exceptions/errors'
 

@@ -1,7 +1,7 @@
 import { injectable } from 'inversify'
 import { Route, RouteConfig } from 'vue-router'
 
-import localStorage from '@support/local-storage'
+import localStorage from '@/support/local-storage'
 
 export enum Locale {
   En = 'en',

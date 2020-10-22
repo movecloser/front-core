@@ -1,6 +1,6 @@
+import { injectable } from 'inversify'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { filter, first } from 'rxjs/operators'
-import { injectable } from 'inversify'
 
 import {
   EventbusCallback,
