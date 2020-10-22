@@ -1,5 +1,7 @@
 import { injectable } from 'inversify'
-import moment, { Duration, Moment } from 'moment'
+import { Duration, Moment } from 'moment'
+import * as moment from 'moment'
+import { IncorrectCall } from '@/exceptions/errors'
 
 export interface IDateTime {
   difference (start: string, end?: string): number
@@ -25,6 +27,14 @@ export class DateTime implements IDateTime {
    * Calculate difference between two dates in sec.
    */
   difference (end: string, start: string = ''): number {
+    if (!end) {
+      throw new IncorrectCall('Cannot calculate difference when specific date is not provided')
+    }
+
+    if (typeof end !== 'string' || typeof start !== 'string') {
+      throw new IncorrectCall('[difference] method should be called with strings as an arguments')
+    }
+
     const startDate: Moment = start.length ? moment(start) : moment()
     const endDate: Moment = moment(end)
 
@@ -43,6 +53,10 @@ export class DateTime implements IDateTime {
    * Return now with given format.
    */
   nowToFormat (format: string = ''): string {
+    if (typeof format !== 'string') {
+      throw new IncorrectCall('Format should be a string')
+    }
+
     return format.length ? moment().format(format) : moment().format()
   }
 
@@ -50,6 +64,10 @@ export class DateTime implements IDateTime {
    * Parse date to instance of moment.
    */
   parse (date: string): Moment {
+    if (!date || typeof date !== 'string') {
+      throw new IncorrectCall('Cannot [parse] when date is not provided')
+    }
+
     return moment(date)
   }
 
@@ -57,6 +75,13 @@ export class DateTime implements IDateTime {
    * Returns date to specific format.
    */
   parseToFormat (date: string, format: string): string {
+    if (!date || typeof date !== 'string') {
+      throw new IncorrectCall('Cannot [parseToFormat] when date is not provided')
+    }
+
+    if (!format || typeof format !== 'string') {
+      throw new IncorrectCall('Cannot [parseToFormat] when format is not provided')
+    }
     return moment(date).format(format)
   }
 }
