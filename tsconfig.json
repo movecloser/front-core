@@ -16,7 +16,8 @@
       "paths": {
         "@test/*": ["test/*"],
         "@/*": ["src/*"]
-      }
+      },
+      "allowSyntheticDefaultImports": true
     },
     "include": ["src", "test"],
     "exclude": ["node_modules"]
