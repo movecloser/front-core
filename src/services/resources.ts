@@ -11,8 +11,8 @@ import {
 } from '@/contracts/resources'
 import { IValidation } from '@/contracts/validation'
 import { ILocalizationService } from '@/platforms/vue/localization'
-import { IResources } from '../contracts/resources'
-import { InternalServerError, TemporaryUnavailableError } from '../../src/exceptions/errors'
+import { IResources } from '@/contracts/resources'
+import { InternalServerError, TemporaryUnavailableError } from '@/exceptions/errors'
 
 /**
  * Resources is a service class that provides unified access to the API.
@@ -84,11 +84,13 @@ export class Resources implements IResources {
     }
 
     if (response.status === 500) {
+      // @ts-ignore
       throw new InternalServerError(response.errors.message)
     }
 
     if (response.status === 503) {
       this._eventbus.emit('maintenance')
+      // @ts-ignore
       throw new TemporaryUnavailableError(response.errors.message)
     }
 

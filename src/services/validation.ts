@@ -1,6 +1,6 @@
-import { injectable } from 'inversify'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
+import { injectable } from 'inversify'
 
 import {
   ErrorsPayload,
@@ -9,11 +9,12 @@ import {
   ValidationEvent,
   ValidationEventType
 } from '@/contracts/validation'
+import { IncorrectCall } from '@/exceptions/errors'
 
 /**
  * Validation service is responsible for sending 422 response to correct form.
  *
- * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ * @author  Kuba Fogel <kuba.fogel@movecloser.pl>
  * @version 1.0.0
  */
 @injectable()
@@ -46,16 +47,19 @@ export class Validation implements IValidation {
    * Subscribe to give form for clear events.
    *
    * @param  {string} form
-   * @param  {string} field
    * @param  {function} callback
    * @return {Subscription}
    */
   onClear (form: string, callback: () => void): Subscription {
+    if (!callback || typeof callback !== 'function') {
+      throw new IncorrectCall(
+        '[onClear] method requires argument (function) that will be fired, when clear event will occur.'
+      )
+    }
+
     return this._stream$.pipe(
       filter(
-        (event: ValidationEvent) => event.form === form ||
-        event.type === ValidationEventType.Clear
-      )
+        (event: ValidationEvent) => event.form === form || event.type === ValidationEventType.Clear)
     ).subscribe(() => {
       callback()
     })
@@ -70,6 +74,12 @@ export class Validation implements IValidation {
    * @return {Subscription}
    */
   onErrors (form: string, field: string, callback: ValidationErrorCallback): Subscription {
+    if (!callback || typeof callback !== 'function') {
+      throw new IncorrectCall(
+        '[onErrors] method requires argument (function) that will be fired, when error event will occur.'
+      )
+    }
+
     return this._stream$.pipe(
       filter(
         (event: ValidationEvent) => event.form === form ||
@@ -85,6 +95,7 @@ export class Validation implements IValidation {
     ).subscribe((event: ValidationEvent) => {
       if (form === event.form) {
         const errors: string[] = []
+        /* istanbul ignore next */
         if (
           event.hasOwnProperty('errors') &&
           typeof event.errors !== 'undefined' &&
@@ -109,15 +120,22 @@ export class Validation implements IValidation {
    * @return {Subscription}
    */
   onFormErrors (form: string, callback: ValidationErrorCallback): Subscription {
-    return this._stream$.pipe(
-      filter(
-        (event: ValidationEvent) => event.form === form ||
-          event.type === ValidationEventType.Error
+    if (!callback || typeof callback !== 'function') {
+      throw new IncorrectCall(
+        '[onFormErrors] method requires argument (function) that will be fired, when error event will occur.'
       )
+    }
+
+    return this._stream$.pipe(
+      filter((event: ValidationEvent) =>
+        event.form === form || event.type === ValidationEventType.Error)
     ).subscribe((event: ValidationEvent) => {
       const errors: string[] = []
-
-      if (event.hasOwnProperty('errors') && typeof event.errors !== 'undefined') {
+      /* istanbul ignore next */
+      if (
+        event.hasOwnProperty('errors')
+        && typeof event.errors !== 'undefined')
+      {
         errors.push(
           ...event.errors['message']
         )

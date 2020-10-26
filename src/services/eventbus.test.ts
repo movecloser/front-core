@@ -19,7 +19,7 @@ describe('Tests for Eventbus service', () => {
   /**
    * Tests for [emit] method
    */
-  test('Expect [emit] method to emit event name', () => {
+  test('Expect [emit] method to emit event name.', () => {
     let event
 
     // @ts-ignore
@@ -34,7 +34,7 @@ describe('Tests for Eventbus service', () => {
     expect('test:event').toBe(event.name)
   })
 
-  test('Expect [emit] method to emit event with payload', () => {
+  test('Expect [emit] method to emit event with payload.', () => {
     let event
 
     // @ts-ignore
@@ -53,7 +53,7 @@ describe('Tests for Eventbus service', () => {
     expect(event.payload).toEqual({ test: true })
   })
 
-  test('Expect [emit] method to log events', () => {
+  test('Expect [emit] method to log events.', () => {
     let event
     process.env.APP_EVENT_LOG = 'true'
     console.info = jest.fn()
@@ -77,7 +77,7 @@ describe('Tests for Eventbus service', () => {
   /**
    * Tests for [observe] method
    */
-  test('Expect [observe] method to return Subscription, and use probvided callback', () => {
+  test('Expect [observe] method to return Subscription, and use provided callback.', () => {
     let result
     const observer: IObserver = {
       observableEvents: {
@@ -95,7 +95,7 @@ describe('Tests for Eventbus service', () => {
     expect(result).toBe(true)
   })
 
-  test('Expect [observe] method to do nothing if handler is not provided', () => {
+  test('Expect [observe] method to do nothing if handler is not provided.', () => {
     let result
     const observer: IObserver = {
       observableEvents: {
@@ -112,7 +112,7 @@ describe('Tests for Eventbus service', () => {
   /**
    * Tests for [handle] method
    */
-  test('Expect [handle] method to return Subscription', () => {
+  test('Expect [handle] method to return Subscription.', () => {
     const subscription = eventbus.handle('test:event', () => {
       return
     })
@@ -123,7 +123,7 @@ describe('Tests for Eventbus service', () => {
   /**
    * Tests for [handleOnce] method
    */
-  test('Expect [handleOnce] method to return Subscription', async () => {
+  test('Expect [handleOnce] method to return Subscription.', async () => {
     const subscription = eventbus.handleOnce('test:once', () => {
       return
     })

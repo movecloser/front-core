@@ -22,6 +22,7 @@ export class Eventbus implements IEventbus {
 
   constructor () {
     const event: EventPayload = { name: 'app:started' }
+    /* istanbul ignore next */
     this._stream$ = new BehaviorSubject(event)
   }
 
@@ -67,7 +68,8 @@ export class Eventbus implements IEventbus {
   handle (name: string, callback: EventbusCallback): Subscription {
     return this._stream$.pipe(
       filter((event: EventPayload) => event.name === name)
-    ).subscribe((event: EventPayload) => {
+    ).subscribe(/* istanbul ignore next */(event: EventPayload) => {
+      /* istanbul ignore next */
       setTimeout(() => callback(event), 1)
     })
   }
@@ -78,7 +80,7 @@ export class Eventbus implements IEventbus {
   handleOnce (name: string, callback: EventbusCallback): Subscription {
     return this._stream$.pipe(
       first((event: EventPayload) => event.name === name)
-    ).subscribe((event: EventPayload) => {
+    ).subscribe(/* istanbul ignore next */ (event: EventPayload) => {
       setTimeout(() => callback(event), 1)
     })
   }
