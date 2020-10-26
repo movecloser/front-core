@@ -37,8 +37,9 @@ export class Eventbus implements IEventbus {
 
     this._stream$.next(eventData)
 
-    if (process.env.VUE_APP_EVENT_LOG === 'true') {
+    if (process.env.APP_EVENT_LOG === 'true') {
       /* eslint no-console: off */
+      /* istanbul ignore next */
       console.info(`Event: ${name}`, payload)
     }
   }
