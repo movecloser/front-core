@@ -5,7 +5,7 @@ import { Eventbus } from '@/services/eventbus'
 import { Subscription } from 'rxjs'
 // import { filter } from 'rxjs/operators'
 
-describe('Tests for Eventbus service', () => {
+describe('Tests for Eventbus service.', () => {
   const eventbus: IEventbus = new Eventbus()
 
   /**

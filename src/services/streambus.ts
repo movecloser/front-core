@@ -1,5 +1,6 @@
 import { injectable } from 'inversify'
 import { Observable } from 'rxjs'
+import { IncorrectValueError } from '@/exceptions/errors'
 
 export interface IStreamBus {
   get (stream: string): Observable<any>
@@ -37,7 +38,7 @@ export class StreamBus implements IStreamBus {
 
   public get (stream: string): Observable<any> {
     if (!this._registry.hasOwnProperty(stream)) {
-      throw new Error(`Stream [${stream}] does not exist.`)
+      throw new IncorrectValueError(`Stream [${stream}] does not exist.`)
     }
 
     return this._registry[stream]
@@ -45,7 +46,7 @@ export class StreamBus implements IStreamBus {
 
   public register (stream: string, factory: StreamFactory, force: boolean = false): boolean {
     if (this._registry.hasOwnProperty(stream) && !force) {
-      throw new Error(`Stream [${stream}] already exists.`)
+      throw new IncorrectValueError(`Stream [${stream}] already exists.`)
     }
 
     this._registry[stream] = factory()
@@ -53,6 +54,10 @@ export class StreamBus implements IStreamBus {
   }
 
   public unregister (stream: string): boolean {
+    if (!this._registry.hasOwnProperty(stream)) {
+      return false
+    }
+
     return delete this._registry[stream]
   }
 }
