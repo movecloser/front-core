@@ -51,7 +51,7 @@ export class AxiosDriver implements IDriver {
           )
         }
 
-        return new Response(0, {}, {}, { message: 'Unxpected request error.' })
+        return new Response(0, {}, {}, { message: 'Unexpected request error.' })
       })
 
     return responseInstance

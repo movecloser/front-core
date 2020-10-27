@@ -22,7 +22,6 @@ export class Eventbus implements IEventbus {
 
   constructor () {
     const event: EventPayload = { name: 'app:started' }
-    /* istanbul ignore next */
     this._stream$ = new BehaviorSubject(event)
   }
 
@@ -40,7 +39,6 @@ export class Eventbus implements IEventbus {
 
     if (process.env.APP_EVENT_LOG === 'true') {
       /* eslint no-console: off */
-      /* istanbul ignore next */
       console.info(`Event: ${name}`, payload)
     }
   }

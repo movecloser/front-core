@@ -47,6 +47,8 @@ describe('Tests for Eventbus service', () => {
       test: true
     })
 
+
+
     // @ts-ignore
     expect('test:event').toBe(event.name)
     // @ts-ignore
