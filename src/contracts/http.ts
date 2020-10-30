@@ -1,14 +1,8 @@
 import { IEventbus } from './eventbus'
-
-export interface DriverConfig {
-  logResponse: boolean
-  simpleLog: boolean
-}
-
-export type DriverFactory = () => IDriver
+import { HttpDriver } from '@/services/http/http-driver'
 
 export type DriverRegistry = {
-  [key: string]: DriverFactory
+  [key: string]: HttpDriver
 }
 
 export type Handler = (response: IResponse, eventbus: IEventbus) => void
@@ -24,16 +18,16 @@ export enum Methods {
   Put = 'put'
 }
 
-export type HttpFactory = () => IHttp
-
 export const HttpType = Symbol.for('IHttp')
 
 export interface IDriver {
   request (method: string, target: string, data: Payload, headers: Headers, responseType: any): Promise<IResponse>
 }
 
+export interface IHttpConnector {
+}
+
 export interface IHttp {
-  by (driver: string): IHttp
   delete (target: string, data: Payload, headers: Headers): Promise<IResponse>
   get (target: string, params: Payload, headers: Headers, responseType: any): Promise<IResponse>
   post (target: string, data: Payload, headers: Headers): Promise<IResponse>

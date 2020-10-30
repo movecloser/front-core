@@ -3,7 +3,6 @@ import 'reflect-metadata'
 import { EventPayload, IEventbus, IObserver } from '@/contracts/eventbus'
 import { Eventbus } from '@/services/eventbus'
 import { Subscription } from 'rxjs'
-// import { filter } from 'rxjs/operators'
 
 describe('Tests for Eventbus service.', () => {
   const eventbus: IEventbus = new Eventbus()
@@ -46,8 +45,6 @@ describe('Tests for Eventbus service.', () => {
     eventbus.emit('test:event', {
       test: true
     })
-
-
 
     // @ts-ignore
     expect('test:event').toBe(event.name)

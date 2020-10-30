@@ -3,13 +3,8 @@ import { StreamBus, StreamList } from '@/services/streambus'
 import { Observable, of } from 'rxjs'
 import { IncorrectValueError } from '@/exceptions/errors'
 
-const testStreamFactory = function (): Observable<number> {
-  return of(1, 2, 3)
-}
-const streams: StreamList = {
-  'test$': testStreamFactory,
-}
-
+const testStreamFactory = function (): Observable<number> { return of(1, 2, 3) }
+const streams: StreamList = { 'test$': testStreamFactory }
 const streamBus = new StreamBus(streams)
 
 describe('Tests for Streambus service.', () => {
@@ -46,7 +41,6 @@ describe('Tests for Streambus service.', () => {
     expect(error).toBeInstanceOf(IncorrectValueError)
     expect(() => { throw error }).toThrow(IncorrectValueError)
   })
-
 
   /**
    * Tests for [register] method

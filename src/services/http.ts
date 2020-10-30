@@ -2,109 +2,120 @@ import { injectable } from 'inversify'
 
 import {
   DriverRegistry,
-  Handler,
   Headers,
   IDriver,
-  IHttp,
+  IHttp, IHttpConnector,
   IResponse,
   Payload
 } from '@/contracts/http'
-import { IEventbus } from '@/contracts/eventbus'
+import { IncorrectCall } from '@/exceptions/errors'
+import { HttpDriver } from '@/services/http/http-driver'
 
 /**
- * Http is service class that provides http functionality.
+ * Http Connector is service class that provides http functionality.
  *
  * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  * @version 1.0.0
  */
 @injectable()
-export class Http implements IHttp {
-  private _driver: IDriver|null = null
-  private _chosen: string
-  private _drivers: DriverRegistry = {}
-  private _eventbus: IEventbus
-  private _handlers: Handler[] = []
+export class HttpConnector implements IHttpConnector {
+  private _defaultDestination: string|null
+  private _drivers: DriverRegistry
 
-  constructor (drivers: DriverRegistry, chosen: string, handlers: Handler[], eventbus: IEventbus) {
-    this._chosen = chosen
+  constructor (drivers: DriverRegistry = {}, defaultDestination: string|null = null) {
+    this._defaultDestination = defaultDestination
     this._drivers = drivers
-    this._eventbus = eventbus
-    this._handlers = handlers
   }
 
-  by (driver: string): Http {
-    this._driver = this.buildDriver(driver)
-    return this
+  /**
+   * Return instance of requested destination driver.
+   * @param destination
+   */
+  public destination (destination: string): HttpDriver {
+    if (!this._drivers.hasOwnProperty(destination)) {
+      throw new IncorrectCall(`HttpConnector has no driver matching given destination [${destination}] defined.`)
+    }
+
+    return this._drivers[destination]
+  }
+
+  /**
+   * Registering new destination.
+   * @param name
+   * @param driver
+   * @param setAsDefault
+   */
+  public register (name: string, driver: HttpDriver, setAsDefault: boolean = false): void {
+    if (this._drivers.hasOwnProperty(name)) {
+      throw new IncorrectCall(`Destination with name: [${name}], has been already registered.`)
+    }
+
+    if (!driver) {
+      throw new IncorrectCall(`Cannot register destination without driver specified.`)
+    }
+
+    this._drivers[name] = driver
+
+    if (setAsDefault) {
+      this.setDefaultDestination(name)
+    }
+  }
+
+  /**
+   * Setter for default destination field.
+   * Value cannot be override during runtime.
+   *
+   * @param name
+   */
+  public setDefaultDestination (name: string): void {
+    if (this._defaultDestination !== null) {
+      throw new IncorrectCall('Default destination already set. Cannot override.')
+    }
+
+    if (!name) {
+      throw new IncorrectCall('Cannot set default destination without name specified.')
+    }
+
+    if (!this._drivers.hasOwnProperty(name)) {
+      throw new IncorrectCall(`Cannot set default destination [${name}] that hasn't been registered.`)
+    }
+
+    this._defaultDestination = name
   }
 
   /**
    * Perform delete http request.
    */
-  delete (target: string, data: Payload = {}, headers: Headers = {}): Promise<IResponse> {
-    return this.call('delete', target, data, headers)
+  public delete (target: string, data: Payload = {}, headers: Headers = {}, options = null): Promise<IResponse> {
+    return this.defaultDriver.delete(target, data, headers, options)
   }
 
   /**
    * Perform get http request.
    */
-  get (target: string, params: Payload = {}, headers: Headers = {}, responseType = 'json'): Promise<IResponse> {
-    return this.call('get', target, params, headers, responseType)
+  public get (target: string, params: Payload = {}, headers: Headers = {}, options = null): Promise<IResponse> {
+    return this.defaultDriver.get( target, params, headers, options)
   }
 
   /**
    * Perform post http request.
    */
-  post (target: string, data: Payload = {}, headers: Headers = {}):Promise<IResponse> {
-    return this.call('post', target, data, headers)
+  public post (target: string, data: Payload = {}, headers: Headers = {}, options = null): Promise<IResponse> {
+    return this.defaultDriver.post(target, data, headers, options)
   }
 
   /**
    * Perform put http request.
    */
-  put (target: string, data: Payload, headers: Headers = {}): Promise<IResponse> {
-    return this.call('put', target, data, headers)
+  public put (target: string, data: Payload, headers: Headers = {}, options = null): Promise<IResponse> {
+    return this.defaultDriver.put( target, data, headers, options)
   }
 
   /**
-   * Build driver from existing in list.
+   *
+   * @private
    */
-  protected buildDriver (driver: string): IDriver {
-    if (!this._drivers.hasOwnProperty(driver)) {
-      throw new Error(
-        'Invalid http drivers configuration.'
-      )
-    }
-    // We need to create new instance of chosen driver. To do this we use
-    // a list of all available drivers from var [drivers]. This list contains
-    // references to factory functions. What left to do is just call this reference
-    // which gives us correct instance.
-    return this._drivers[driver]()
-  }
-
-  /**
-   * Call to api using driver.
-   */
-  protected async call (method: string, target: string, data: Payload, headers: Headers, responseType: any = 'json'): Promise<IResponse> {
-    if (this._driver === null) {
-      this._driver = this.buildDriver(this._chosen)
-    }
-
-    const response: Promise<IResponse> = this._driver.request(method, target, data, headers, responseType)
-      .then((response: IResponse) => {
-        this.handleResponse(response)
-        return response
-      })
-
-    this._driver = null
-    return response
-  }
-
-  /**
-   * Handle default behaviours for certain response.
-   */
-  protected handleResponse (response: IResponse) {
-    for (const h of this._handlers) {
-      h(response, this._eventbus)
-    }
+  private get defaultDriver(): HttpDriver {
+    return  this._drivers[this._defaultDestination as string]
   }
 }
