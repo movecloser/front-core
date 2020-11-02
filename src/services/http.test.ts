@@ -302,7 +302,7 @@ describe('Test Http class', () => {
     }, 'test-driver')
 
     // @ts-ignore
-    response = await http.put('/test', {})
+    await http.put('/test', {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
     expect(mockedCallFn).toBeCalledWith('put', "/test", {}, {}, null)
