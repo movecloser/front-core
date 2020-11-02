@@ -3,8 +3,7 @@ import { injectable } from 'inversify'
 import {
   DriverRegistry,
   Headers,
-  IDriver,
-  IHttp, IHttpConnector,
+  IHttpConnector,
   IResponse,
   Payload
 } from '@/contracts/http'
@@ -20,7 +19,7 @@ import { HttpDriver } from '@/services/http/http-driver'
 @injectable()
 export class HttpConnector implements IHttpConnector {
   private _defaultDestination: string|null
-  private _drivers: DriverRegistry
+  private readonly _drivers: DriverRegistry
 
   constructor (drivers: DriverRegistry = {}, defaultDestination: string|null = null) {
     this._defaultDestination = defaultDestination
@@ -69,7 +68,7 @@ export class HttpConnector implements IHttpConnector {
    */
   public setDefaultDestination (name: string): void {
     if (this._defaultDestination !== null) {
-      throw new IncorrectCall('Default destination already set. Cannot override.')
+      throw new IncorrectCall('Default destination already set. Cannot overwrite.')
     }
 
     if (!name) {
@@ -116,6 +115,10 @@ export class HttpConnector implements IHttpConnector {
    * @private
    */
   private get defaultDriver(): HttpDriver {
+    if (!this._defaultDestination) {
+      throw new IncorrectCall('Default destination is not set. Cannot perform action when driver is not selected.')
+    }
+
     return  this._drivers[this._defaultDestination as string]
   }
 }

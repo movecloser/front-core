@@ -1,7 +1,6 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from 'axios'
-import { axios as axiosConfig, common } from '@/config/http'
-import { DriverConfig, Headers, IDriver, IResponse, Methods, Payload } from '@/contracts/http'
-import { Response } from './response'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+// import { axios as axiosConfig, common } from '@/config/http'
+import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 import { HttpDriver } from '@/services/http/http-driver'
 
 /**
@@ -21,13 +20,13 @@ export class AxiosDriver extends HttpDriver {
   /**
    * Performs http request using axios.
    */
-  protected async call (method: Methods, target: string, data: Payload, headers: Headers, options: any): Promise<IResponse> {
+  protected async _call (method: Methods, target: string, data: Payload, headers: Headers, options: any): Promise<IResponse> {
     const responseInstance = await this.instance.request({
       method: method,
       url: target,
       ...AxiosDriver.composePayload(data, method),
       headers: headers,
-      options ? ...options : null
+      responseType: options && options.responseType ? options.responseType : 'json'
     })
       .then((response: AxiosResponse) => {
         return this.composeSuccessResponse(response.status, response.data, response.headers)

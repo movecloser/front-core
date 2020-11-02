@@ -20,9 +20,9 @@ export enum Methods {
 
 export const HttpType = Symbol.for('IHttp')
 
-export interface IDriver {
-  request (method: string, target: string, data: Payload, headers: Headers, responseType: any): Promise<IResponse>
-}
+// export interface IDriver {
+//   request (method: string, target: string, data: Payload, headers: Headers, responseType: any): Promise<IResponse>
+// }
 
 export interface IHttpConnector {
 }
