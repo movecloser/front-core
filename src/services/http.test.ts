@@ -3,26 +3,16 @@ import 'reflect-metadata'
 import { HttpConnector } from '@/services/http'
 import { IncorrectCall } from '@/exceptions/errors'
 import { HttpDriver } from '@/services/http/http-driver'
-import { Headers, IResponse, Payload } from '@/contracts/http'
-
-export const mockedCallFn = jest.fn()
-
-class TestDriver extends HttpDriver {
-  protected async _call (
-    method: string,
-    target: string,
-    data: Payload,
-    headers: Headers,
-    options?: any
-  ): Promise<IResponse> {
-    return mockedCallFn(method, target, data, headers, options)
-  }
-}
+import { mockedCallFn, TestDriver } from '@/services/http/http-driver.test'
 
 describe('Test Http class', () => {
-
+  const log = console.log
+  beforeEach(() => {
+    console.log = jest.fn();
+  });
   afterEach(() => {
     jest.clearAllMocks();
+    console.log = log
   });
 
   test('Expect [destination] method to return requested driver.', () => {
@@ -53,7 +43,7 @@ describe('Test Http class', () => {
   test('Expect [register] method to add new driver.', () => {
     const http = new HttpConnector()
 
-    http.register('test-driver', new TestDriver(true))
+    http.register('test-driver', new TestDriver(false))
 
     // @ts-ignore
     const result = http._drivers.hasOwnProperty('test-driver')
@@ -64,7 +54,7 @@ describe('Test Http class', () => {
   test('Expect [register] method to add new default driver.', () => {
     const http = new HttpConnector()
 
-    http.register('test-driver', new TestDriver(true), true)
+    http.register('test-driver', new TestDriver(false), true)
 
     // @ts-ignore
     const result = http._drivers.hasOwnProperty('test-driver')
@@ -80,13 +70,13 @@ describe('Test Http class', () => {
 
   test('Expect [register] method to throw error (cannot overwrite).', () => {
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     })
     let error: any
 
     try {
       // @ts-ignore
-      http.register('test-driver', new TestDriver(true))
+      http.register('test-driver', new TestDriver(false))
     } catch (err) {
       error = err
     }
@@ -114,7 +104,7 @@ describe('Test Http class', () => {
 
   test('Expect [setDefaultDestination] method to add new default driver.', () => {
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     })
 
     http.setDefaultDestination('test-driver')
@@ -179,11 +169,8 @@ describe('Test Http class', () => {
 
   test('Expect [defaultDriver] method to return default driver instance.', () => {
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
-    })
-
-    // @ts-ignore
-    http._defaultDestination = 'test-driver'
+      'test-driver': new TestDriver(false)
+    }, 'test-driver')
 
     // @ts-ignore
     const driver = http.defaultDriver
@@ -211,7 +198,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore
@@ -225,7 +212,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore
@@ -239,7 +226,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore
@@ -253,7 +240,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore
@@ -267,7 +254,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore
@@ -281,11 +268,8 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
-
-    // @ts-ignore
-    http._defaultDestination = 'test-driver'
 
     // @ts-ignore
     await http.post('/test', {}, {}, {})
@@ -298,7 +282,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore
@@ -312,7 +296,7 @@ describe('Test Http class', () => {
     mockedCallFn.mockReturnValueOnce({})
 
     const http = new HttpConnector({
-      'test-driver': new TestDriver(true)
+      'test-driver': new TestDriver(false)
     }, 'test-driver')
 
     // @ts-ignore

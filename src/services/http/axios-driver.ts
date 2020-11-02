@@ -29,13 +29,15 @@ export class AxiosDriver extends HttpDriver {
       responseType: options && options.responseType ? options.responseType : 'json'
     })
       .then((response: AxiosResponse) => {
+        this._logResponse(target, method, response.status, response.request, response.data)
         return this.composeSuccessResponse(response.status, response.data, response.headers)
       })
       .catch((error: AxiosError) => {
         if (error.hasOwnProperty('response') && typeof error.response !== 'undefined') {
+          this._logResponse(target, method, error.response.status ,error.response.request, error.response.data)
           return this.composeFailResponse(
             error.response.status,
-            {},
+            error.response.data,
             error.response.headers,
             error.response.data
           )

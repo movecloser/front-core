@@ -5,8 +5,8 @@ import { Response } from '@/services/http/response'
 export abstract class HttpDriver implements IHttp {
   protected _debug: boolean
 
-  constructor (debug: boolean) {
-    this._debug = debug
+  constructor (debug?: boolean) {
+    this._debug = !!debug
   }
 
   /**
