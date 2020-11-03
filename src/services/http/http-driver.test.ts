@@ -26,9 +26,11 @@ export class TestDriver extends HttpDriver {
 
 describe('Test HttpDriver class', () => {
   const log = console.log
+
   beforeEach(() => {
     console.log = jest.fn()
   });
+
   afterEach(() => {
     jest.clearAllMocks()
     console.log = log
@@ -54,6 +56,98 @@ describe('Test HttpDriver class', () => {
     driver._call()
 
     expect(consoleSpy).toBeCalledTimes(1)
+  })
+
+  test('Expect [delete] to return be called', async () => {
+    mockedCallFn.mockReturnValueOnce({
+      method: 'DELETE',
+      target: '/test',
+      status: 200,
+      request: {
+        headers: {}
+      },
+      response: {
+        data: {}
+      }
+    })
+
+    const driver = new TestDriver()
+    const callSpy = jest.spyOn(driver, 'delete')
+    // @ts-ignore
+    const response = await driver.delete('/test')
+
+    expect(callSpy).toBeCalledTimes(1)
+    expect(callSpy).toBeCalledWith('/test')
+    expect(response.status).toBe(200)
+  })
+
+  test('Expect [get] to return be called', async () => {
+    mockedCallFn.mockReturnValueOnce({
+      method: 'GET',
+      target: '/test',
+      status: 200,
+      request: {
+        headers: {}
+      },
+      response: {
+        data: {}
+      }
+    })
+
+    const driver = new TestDriver()
+    const callSpy = jest.spyOn(driver, 'get')
+    // @ts-ignore
+    const response = await driver.get('/test')
+
+    expect(callSpy).toBeCalledTimes(1)
+    expect(callSpy).toBeCalledWith('/test')
+    expect(response.status).toBe(200)
+  })
+
+  test('Expect [post] to return be called', async () => {
+    mockedCallFn.mockReturnValueOnce({
+      method: 'POST',
+      target: '/test',
+      status: 200,
+      request: {
+        headers: {}
+      },
+      response: {
+        data: {}
+      }
+    })
+
+    const driver = new TestDriver()
+    const callSpy = jest.spyOn(driver, 'post')
+    // @ts-ignore
+    const response = await driver.post('/test')
+
+    expect(callSpy).toBeCalledTimes(1)
+    expect(callSpy).toBeCalledWith('/test')
+    expect(response.status).toBe(200)
+  })
+
+  test('Expect [put] to return be called', async () => {
+    mockedCallFn.mockReturnValueOnce({
+      method: 'PUT',
+      target: '/test',
+      status: 200,
+      request: {
+        headers: {}
+      },
+      response: {
+        data: {}
+      }
+    })
+
+    const driver = new TestDriver()
+    const callSpy = jest.spyOn(driver, 'put')
+    // @ts-ignore
+    const response = await driver.put('/test')
+
+    expect(callSpy).toBeCalledTimes(1)
+    expect(callSpy).toBeCalledWith('/test')
+    expect(response.status).toBe(200)
   })
 
   test('Expect [composeSuccessResponse] to return response', () => {
