@@ -30,6 +30,18 @@ export const localStorage = {
   },
 
   /**
+   * Removes this value the given key.
+   * @param key - The key that is to be removed.
+   */
+  remove (key: string): void {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    window.localStorage.removeItem(key)
+  },
+
+  /**
    * Sets the value for the given key.
    * @param key - The key that is to be modified.
    * @param value - The target value for the key.
