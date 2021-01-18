@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } f
 // import { axios as axiosConfig, common } from '@/config/http'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 import { HttpDriver } from '@/services/http/http-driver'
+import { ConnectionError } from '@/exceptions/errors'
 
 /**
  * Provides axios instance for http calls.
@@ -21,7 +22,7 @@ export class AxiosDriver extends HttpDriver {
    * Performs http request using axios.
    */
   protected async _call (method: Methods, target: string, data: Payload, headers: Headers, options: any): Promise<IResponse> {
-    const responseInstance = await this.instance.request({
+    return await this.instance.request({
       method: method,
       url: target,
       ...AxiosDriver.composePayload(data, method),
@@ -34,7 +35,7 @@ export class AxiosDriver extends HttpDriver {
       })
       .catch((error: AxiosError) => {
         if (error.hasOwnProperty('response') && typeof error.response !== 'undefined') {
-          this._logResponse(target, method, error.response.status ,error.response.request, error.response.data)
+          this._logResponse(target, method, error.response.status, error.response.request, error.response.data)
           return this.composeFailResponse(
             error.response.status,
             error.response.data,
@@ -43,10 +44,8 @@ export class AxiosDriver extends HttpDriver {
           )
         }
 
-        return this.composeFailResponse(0, {}, {}, { message: 'Unexpected request error.' })
+        throw new ConnectionError('Cannot perform request.')
       })
-
-    return responseInstance
   }
 
   /**

@@ -6,6 +6,7 @@ import 'reflect-metadata'
 import { AxiosDriver } from '@/services/http/axios-driver'
 import { AxiosRequestConfig } from 'axios'
 import { Methods } from '@/contracts/http'
+import { ConnectionError } from '@/exceptions/errors'
 
 const axiosConfig: AxiosRequestConfig = {
   // url: '/Testowanie_oprogramowania',
@@ -25,12 +26,18 @@ describe('Test AxiosDriver class', () => {
   })
 
   // Invalid url
-  test('Expect [_call] method to perform invalid request (Invalid url)', async () => {
-    const target = 'http://test.test/'
-    // @ts-ignore
-    const response = await driver._call(Methods.Get, target, {}, {}, {})
+  test('Expect [_call] method to perform invalid request (Invalid url)', async() => {
+    const target = 'http://invalid-url/'
+    let error: any
 
-    expect(response.status).toBe(0)
+    try {
+      // @ts-ignore
+      await driver._call(Methods.Get, target, {}, {}, {})
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => {throw error}).toThrow(ConnectionError)
   })
 
   // Not Found
