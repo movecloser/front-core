@@ -1,9 +1,13 @@
 import {
   BadRequestError,
   ConflictError,
-  DeprecatedError, IncorrectCall, IncorrectValueError,
+  ConnectionError,
+  DeprecatedError,
+  IncorrectCall,
+  IncorrectValueError,
   InternalServerError,
-  MappingError, MissingParameter,
+  MappingError,
+  MissingParameter,
   MissingPropertyError,
   NotFoundError,
   NotImplementedError,
@@ -19,6 +23,16 @@ describe('Test error classes', () => {
     expect(() => {
       throw error
     }).toThrowError(BadRequestError)
+    expect(error.message).toBe(message)
+  })
+
+  test('Expect [ConnectionError] to contain specific message', () => {
+    const message = 'Connection Error'
+    const error = new ConnectionError(message)
+
+    expect(() => {
+      throw error
+    }).toThrowError(ConnectionError)
     expect(error.message).toBe(message)
   })
 

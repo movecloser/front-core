@@ -14,6 +14,13 @@ export class BadRequestError extends KernelError {
     }
 }
 
+export class ConnectionError extends KernelError {
+    public name: string = 'ConflictError'
+    constructor (public message: string) {
+        super()
+    }
+}
+
 export class ConflictError extends KernelError {
     public name: string = 'ConflictError'
     constructor (public message: string) {
