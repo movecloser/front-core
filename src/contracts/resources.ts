@@ -14,7 +14,7 @@ export const AuthorizationType = Symbol.for('Authorization')
 export type FoundResource = {
   url: string
   method: Methods
-  formName: string|null
+  shorthand: string|null
   auth: boolean
 }
 
@@ -29,6 +29,11 @@ export interface IResources {
   ): Promise<IResponse>
   get (resource: string, action: string, params: Params): FoundResource
   register (list: ResourcesRegistry): void
+}
+
+export interface IResourcesMiddleware {
+  afterCall: (response: IResponse) => void
+  beforeCall: (resource: FoundResource, headers: Headers, body: Payload) => ({ headers: Headers, body: Payload })
 }
 
 export type Params = {

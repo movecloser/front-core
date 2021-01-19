@@ -1,18 +1,15 @@
 import { injectable } from 'inversify'
 
-import { IEventbus } from '@/contracts/eventbus'
 import { Headers, IHttp, IResponse, Methods, Payload } from '@/contracts/http'
 import {
-  Authorization,
   FoundResource,
+  IResourcesMiddleware,
+  Params,
   Resource,
-  ResourcesRegistry,
-  Params
+  ResourcesRegistry
 } from '@/contracts/resources'
-import { IValidation } from '@/contracts/validation'
-import { ILocalizationService } from '@/platforms/vue/localization'
 import { IResources } from '@/contracts/resources'
-import { InternalServerError, TemporaryUnavailableError } from '@/exceptions/errors'
+import { InternalServerError } from '@/exceptions/errors'
 
 /**
  * Resources is a service class that provides unified access to the API.
@@ -22,27 +19,19 @@ import { InternalServerError, TemporaryUnavailableError } from '@/exceptions/err
  */
 @injectable()
 export class Resources implements IResources {
-  private _auth: Authorization
-  private _eventbus: IEventbus
   private readonly _http: IHttp
   private _list: ResourcesRegistry
-  private _validation: IValidation
-  private readonly _localizationService: ILocalizationService
+  private _middlewares: IResourcesMiddleware[]
 
   constructor (
     list: ResourcesRegistry,
     httpService: IHttp,
-    authService: Authorization,
-    validationService: IValidation,
-    eventBus: IEventbus,
-    localizationService: ILocalizationService
+    middlewares: IResourcesMiddleware[]
+
   ) {
     this._list = list
     this._http = httpService
-    this._auth = authService
-    this._validation = validationService
-    this._eventbus = eventBus
-    this._localizationService = localizationService
+    this._middlewares = middlewares
   }
 
   /**
@@ -57,41 +46,27 @@ export class Resources implements IResources {
     responseType = 'json'
   ): Promise<IResponse> {
     const res: FoundResource = this.get(resource, action, params)
-    const form: string = res.formName !== null
-      ? res.formName : this.resolveFormName(resource, action)
 
-    if (res.auth || this._auth.check()) {
-      headers = {
-        ...headers,
-        ...this._auth.getAuthorizationHeader()
-      }
+    if (res.shorthand === null) {
+      res.shorthand = this.resolveShorthand(resource, action)
     }
 
-    headers = {
-      ...headers,
-      ...this._localizationService.getLocalizationHeaders()
+    for (const middleware of this._middlewares) {
+      const afterBefore = middleware.beforeCall(res, headers, body)
+      headers = afterBefore.headers
+      body = afterBefore.body
     }
-
-    this._validation.clearForm(form)
 
     const response: IResponse = await this._http[res.method](res.url, body, headers, responseType)
 
-    if (response.status === 422) {
-      this._validation.pushErrors(
-        form,
-        response.errors !== null ? response.errors.errors : {}
-      )
-    }
-
+    // TODO: Move to middleware
     if (response.status === 500) {
       // @ts-ignore
       throw new InternalServerError(response.errors.message)
     }
 
-    if (response.status === 503) {
-      this._eventbus.emit('maintenance')
-      // @ts-ignore
-      throw new TemporaryUnavailableError(response.errors.message)
+    for (const middleware of this._middlewares) {
+      middleware.afterCall(response)
     }
 
     return response
@@ -127,7 +102,7 @@ export class Resources implements IResources {
     return {
       method: endpoint.method,
       url: url,
-      formName: form,
+      shorthand: form,
       auth: endpoint.hasOwnProperty('auth') && typeof endpoint.auth !== 'undefined'
         ? endpoint.auth : false
     }
@@ -172,7 +147,7 @@ export class Resources implements IResources {
     }
     if (!this._list[resource].methods[action]) {
       throw new Error(
-        'There is no such action in actions list.'
+        'There is no such action in actions [list].'
       )
     }
   }
@@ -194,7 +169,7 @@ export class Resources implements IResources {
   /**
    * Resolve form name by resource & action.
    */
-  private resolveFormName (resource: string, action: string): string {
+  private resolveShorthand (resource: string, action: string): string {
     const first = resource.substr(0, 1)
 
     return `${action}${first.toUpperCase()}${resource.substr(1, resource.length)}`
