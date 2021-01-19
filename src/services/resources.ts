@@ -9,7 +9,6 @@ import {
   ResourcesRegistry
 } from '@/contracts/resources'
 import { IResources } from '@/contracts/resources'
-import { InternalServerError } from '@/exceptions/errors'
 
 /**
  * Resources is a service class that provides unified access to the API.
@@ -58,12 +57,6 @@ export class Resources implements IResources {
     }
 
     const response: IResponse = await this._http[res.method](res.url, body, headers, responseType)
-
-    // TODO: Move to middleware
-    if (response.status === 500) {
-      // @ts-ignore
-      throw new InternalServerError(response.errors.message)
-    }
 
     for (const middleware of this._middlewares) {
       middleware.afterCall(response)
