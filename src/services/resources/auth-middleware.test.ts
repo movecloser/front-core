@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { AuthHeader, Authorization, FoundResource } from '@/contracts/resources'
+import { Authorization, FoundResource } from '@/contracts/resources'
 import { AuthMiddleware } from '@/services/resources/auth-middleware'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 
@@ -8,28 +8,26 @@ describe('Test auth middleware', () => {
     public check = () => false;
     public getAuthorizationHeader = () => {
       return { Authorization: 'test-auth-token' }
-    };
+    }
   }
-
   const authService = new TestAuthService()
+  const authMiddleware = new AuthMiddleware(authService)
 
   afterEach(() => {
     jest.clearAllMocks();
-  });
+  })
 
   test('Expect [beforeCall] to return modified headers', () => {
     const authSpy = jest.spyOn(authService, 'getAuthorizationHeader')
-    const authMiddleware = new AuthMiddleware(authService)
-
     const testResource: FoundResource = {
       url: '/',
       method: Methods.Get,
       shorthand: null,
       auth: true
     }
-
     const testHeaders: Headers = { test: 'true' }
     const testBody: Payload = {}
+
     const { headers, body } = authMiddleware.beforeCall(testResource, testHeaders, testBody)
 
     expect(authSpy).toHaveBeenCalledTimes(1)
@@ -39,17 +37,15 @@ describe('Test auth middleware', () => {
   })
 
   test('Expect [beforeCall] to do nothing', () => {
-    const authMiddleware = new AuthMiddleware(authService)
-
     const testResource: FoundResource = {
       url: '/',
       method: Methods.Get,
       shorthand: null,
       auth: false
     }
-
     const testHeaders: Headers = { test: 'true' }
     const testBody: Payload = {}
+
     const { headers, body } = authMiddleware.beforeCall(testResource, testHeaders, testBody)
 
     expect(headers).toEqual(testHeaders)
@@ -57,9 +53,7 @@ describe('Test auth middleware', () => {
   })
 
   test('Expect [afterCall]', () => {
-    const authMiddleware = new AuthMiddleware(authService)
     const authSpy = jest.spyOn(authMiddleware, 'afterCall')
-
     const testResponse: IResponse = {
       data: {},
       errors: null,

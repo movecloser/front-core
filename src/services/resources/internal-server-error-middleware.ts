@@ -16,7 +16,7 @@ export class InternalServerErrorMiddleware implements IResourcesMiddleware {
   public afterCall (response: IResponse): void {
     if (response.status === 500) {
       // @ts-ignore
-      throw new InternalServerError(response.errors.message)
+      throw new InternalServerError(response.errors['message'])
     }
   }
 
