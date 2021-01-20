@@ -1,5 +1,4 @@
-import { Bootstraper} from '@/platforms/vue/bootstrapper'
-import config from './config/index'
+import { createApp } from './bootstrap/app'
 
 // if (process.env.VUE_APP_ENV !== 'local') {
 //   Sentry.init({
@@ -16,13 +15,10 @@ import config from './config/index'
 //   })
 // }
 
-const bootstrapper: Bootstraper = new Bootstraper(config)
-bootstrapper.boot()
-
-const { container, router } = bootstrapper.components()
+const { container, router, store } = createApp()
 
 // return new Vue({
-//   router,
+//   modules,
 //   store,
 //   container,
 //   i18n: I18n,

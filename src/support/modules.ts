@@ -1,5 +1,5 @@
 import { AsyncContainerModule, Container, ContainerModule } from 'inversify'
-import { RouteConfig } from 'vue-router/types/index'
+import { RouteConfig } from 'vue-modules/types/index'
 import { Module as VuexModule, ModuleTree } from 'vuex/types/index'
 
 export function AppModule (registry: ModuleRegistry) {

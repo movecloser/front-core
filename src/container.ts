@@ -1,5 +1,5 @@
 import { AsyncContainerModule, Container as Inversify, ContainerModule } from 'inversify'
-import { IModuleConstructor } from '@/support/modules'
+import { IContainer, ContainerOptions } from '@/contracts/container'
 
 export class Container implements IContainer<Inversify, ContainerModule, AsyncContainerModule> {
   /**
@@ -43,18 +43,3 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
     this.container.unload(module)
   }
 }
-
-interface IContainer<C, M, N> {
-  createContainer: (config?: ContainerOptions) => void
-  getContainer: () => C
-  loadModule: (module: M | N, async?: boolean) => Promise<void>
-  unloadModule: (module: M | N, async?: boolean) => void
-}
-
-interface ContainerOptions {
-  [key: string]: string
-}
-
-export const registry: IModuleConstructor[] = [
-  // register modules here.
-]
