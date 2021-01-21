@@ -21,7 +21,6 @@ const { container, router, store } = createApp()
 //   modules,
 //   store,
 //   container,
-//   i18n: I18n,
 //   render: h => h(Root)
 // })
 

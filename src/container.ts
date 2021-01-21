@@ -3,7 +3,7 @@ import { IContainer, ContainerOptions } from '@/contracts/container'
 
 export class Container implements IContainer<Inversify, ContainerModule, AsyncContainerModule> {
   /**
-   * Container
+   * Container instance.
    * @private
    */
   private container!: Inversify
@@ -13,6 +13,19 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
    */
   public createContainer (config: ContainerOptions = {}): void {
     this.container = new Inversify(config)
+  }
+
+  /**
+   *
+   * @param binder
+   * @param async
+   */
+  public createModule (binder: any, async: boolean = false): ContainerModule| AsyncContainerModule {
+    if (async) {
+      return new AsyncContainerModule(binder)
+    }
+
+    return new ContainerModule(binder)
   }
 
   /**

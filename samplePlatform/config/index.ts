@@ -1,11 +1,10 @@
-import { AppConfig } from '../../src/contracts/bootstrapper'
+import { AppConfig, RouterDriver, StoreDriver } from '@/contracts/bootstrapper'
 
 import { modules } from './modules'
-import { test } from './test'
+import { IModuleConstructor } from '@/support/modules'
 
 export const config: AppConfig = {
-  router: 'vue-router',
-  store: 'vuex',
+  router: RouterDriver.VueRouter,
+  store: StoreDriver.Vuex,
   modules,
-  test
 }
