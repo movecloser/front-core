@@ -1,11 +1,11 @@
 import { injectable } from 'inversify'
 
-import { FoundResource, IResourcesMiddleware } from '@/contracts/resources'
+import { FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
 import { Headers, IResponse, Payload } from '@/contracts/http'
 import { InternalServerError } from '@/exceptions/errors'
 
 @injectable()
-export class InternalServerErrorMiddleware implements IResourcesMiddleware {
+export class InternalServerErrorMiddleware implements ConnectorMiddleware {
   constructor () {}
 
   /**

@@ -1,30 +1,22 @@
-import { IEventbus } from './eventbus'
 import { HttpDriver } from '@/services/http/http-driver'
 
 export type DriverRegistry = {
   [key: string]: HttpDriver
 }
 
-export type Handler = (response: IResponse, eventbus: IEventbus) => void
-
 export type Headers = {
   [key: string]: string
 }
 
-export enum Methods {
-  Delete = 'delete',
-  Get = 'get',
-  Post = 'post',
-  Put = 'put'
-}
-
-export const HttpType = Symbol.for('IHttp')
-
-// export interface IDriver {
-//   request (method: string, target: string, data: Payload, headers: Headers, responseType: any): Promise<IResponse>
-// }
-
 export interface IHttpConnector {
+  defaultDestination(): string
+  destination (destination: string): HttpDriver
+  register (name: string, driver: HttpDriver, setAsDefault?: boolean): void
+  setDefaultDestination (name: string): void
+  delete (target: string, data?: Payload, headers?: Headers, options?: any): Promise<IResponse>
+  get (target: string, params?: Payload, headers?: Headers, options?: any): Promise<IResponse>
+  post (target: string, data?: Payload, headers?: Headers, options?: any): Promise<IResponse>
+  put (target: string, data?: Payload, headers?: Headers, options?: any): Promise<IResponse>
 }
 
 export interface IHttp {
@@ -45,6 +37,13 @@ export interface IResponse {
 
 export type List = {
   [key: number]: any
+}
+
+export enum Methods {
+  Delete = 'delete',
+  Get = 'get',
+  Post = 'post',
+  Put = 'put'
 }
 
 export type Payload = {

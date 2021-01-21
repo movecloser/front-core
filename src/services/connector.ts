@@ -1,54 +1,49 @@
-import { injectable } from 'inversify'
-
-import { Headers, IHttp, IResponse, Methods, Payload } from '@/contracts/http'
+import { Headers, IHttpConnector, IResponse, Payload } from '@/contracts/http'
 import {
+  ConnectorMiddleware,
   FoundResource,
-  IResourcesMiddleware,
   Params,
   Resource,
-  ResourcesRegistry
-} from '@/contracts/resources'
-import { IResources } from '@/contracts/resources'
+  ResourcesRegistry, ResponseType
+} from '@/contracts/connector.ts'
+import { Injectable } from '@/contracts/container'
+import { IConnector } from '@/contracts/connector.ts'
 
 /**
- * Resources is a service class that provides unified access to the API.
+ * ApiConnector is a service class that provides unified access to the REST API.
  *
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  * @version 1.0.0
+ * @licence MIT
  */
-@injectable()
-export class Resources implements IResources {
-  private readonly _http: IHttp
+@Injectable()
+export class ApiConnector implements IConnector {
+  private readonly _http: IHttpConnector
   private _list: ResourcesRegistry
-  private _middlewares: IResourcesMiddleware[]
+  private _middlewares: ConnectorMiddleware[]
 
   constructor (
     list: ResourcesRegistry,
-    httpService: IHttp,
-    middlewares: IResourcesMiddleware[]
-
+    httpConnector: IHttpConnector,
+    middlewares: ConnectorMiddleware[]
   ) {
     this._list = list
-    this._http = httpService
+    this._http = httpConnector
     this._middlewares = middlewares
   }
 
   /**
    * Call to resource.
    */
-  async call (
+  public async call (
     resource: string,
     action: string,
     params: Params = {},
     body: Payload = {},
     headers: Headers = {},
-    responseType = 'json'
+    responseType = ResponseType.Json
   ): Promise<IResponse> {
-    const res: FoundResource = this.get(resource, action, params)
-
-    if (res.shorthand === null) {
-      res.shorthand = this.resolveShorthand(resource, action)
-    }
+    const res: FoundResource = this.findResource(resource, action, params)
 
     for (const middleware of this._middlewares) {
       const afterBefore = middleware.beforeCall(res, headers, body)
@@ -56,7 +51,12 @@ export class Resources implements IResources {
       body = afterBefore.body
     }
 
-    const response: IResponse = await this._http[res.method](res.url, body, headers, responseType)
+    const response: IResponse = await this._http.destination(res.connection)[res.method](
+      res.url,
+      body,
+      headers,
+      // responseType @fixme Add ResponseType here
+    )
 
     for (const middleware of this._middlewares) {
       middleware.afterCall(response)
@@ -68,56 +68,53 @@ export class Resources implements IResources {
   /**
    * Return resource address.
    */
-  get (resource: string, action: string, params: Params = {}): FoundResource {
+  public findResource (resource: string, action: string, params: Params = {}): FoundResource {
     this.checkIfActionOfResourceExists(resource, action)
 
     const endpoint: Resource = this._list[resource].methods[action]
 
-    if (!Object.values(Methods).includes(endpoint.method)) {
-      throw new Error(
-        `Method not allowed: [${endpoint.method}]`
-      )
-      // If error add:
-      // "compilerOptions": {
-      //  "lib": ["es2017"]
-      // }
-    }
-
-    const url: string = Resources.buildUrl(
+    const connection: string | undefined = this._list[resource].connection
+    const url: string = ApiConnector.buildUrl(
       this._list[resource].prefix,
       endpoint,
       params
     )
 
-    const form = (endpoint.hasOwnProperty('formName') && typeof endpoint.formName !== 'undefined')
-      ? endpoint.formName : null
-
     return {
+      connection: typeof connection !== 'undefined' ? connection : this._http.defaultDestination(),
       method: endpoint.method,
       url: url,
-      shorthand: form,
-      auth: endpoint.hasOwnProperty('auth') && typeof endpoint.auth !== 'undefined'
+      shorthand: ('shorthand' in endpoint && typeof endpoint.shorthand !== 'undefined')
+        ? endpoint.shorthand : ApiConnector.resolveShorthand(resource, action),
+      auth: ('auth' in endpoint && typeof endpoint.auth !== 'undefined')
         ? endpoint.auth : false
     }
   }
 
   /**
-   * Merges given list with existing one.
+   * Merge given list with existing middlewares.
    */
-  register (list: ResourcesRegistry): void {
+  public useMiddlewares (list: ConnectorMiddleware[]): void {
+    this._middlewares = { ...this._middlewares, ...list }
+  }
+
+  /**
+   * Merge given list with existing registry..
+   */
+  public useResources (list: ResourcesRegistry): void {
     this._list = { ...this._list, ...list }
   }
 
   /**
    * Build full url based on resource from routing list.
    */
-  private static buildUrl (prefix: string|null, endpoint: Resource, params: Params) {
+  private static buildUrl (prefix: string | null, endpoint: Resource, params: Params) {
     let url: string = endpoint.url
 
     if (endpoint.hasOwnProperty('params') && typeof endpoint.params !== 'undefined') {
-      Resources.checkIfAllParamsProvided(endpoint.params, params)
+      ApiConnector.checkIfAllParamsProvided(endpoint.params, params)
 
-      for (const [key, value] of Object.entries(params)) {
+      for (const [ key, value ] of Object.entries(params)) {
         url = url.replace(`{${key}}`, value as string)
       }
     }
@@ -162,9 +159,11 @@ export class Resources implements IResources {
   /**
    * Resolve form name by resource & action.
    */
-  private resolveShorthand (resource: string, action: string): string {
+  private static resolveShorthand (resource: string, action: string): string {
     const first = resource.substr(0, 1)
 
     return `${action}${first.toUpperCase()}${resource.substr(1, resource.length)}`
   }
 }
+
+export const ApiConnectorType = Symbol.for('IConnector')

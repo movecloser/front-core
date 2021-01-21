@@ -1,10 +1,10 @@
 import { injectable } from 'inversify'
 
-import { Authorization, FoundResource, IResourcesMiddleware } from '@/contracts/resources'
+import { Authorization, FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
 import { Headers, IResponse, Payload } from '@/contracts/http'
 
 @injectable()
-export class AuthMiddleware implements IResourcesMiddleware {
+export class AuthMiddleware implements ConnectorMiddleware {
   constructor (protected authService: Authorization) {}
 
   /**

@@ -3,7 +3,7 @@ import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 import { TemporaryUnavailableError } from '@/exceptions/errors'
 import { Eventbus } from '@/services/eventbus'
 import { EventbusMiddleware } from '@/services/resources/eventbus-middleware'
-import { FoundResource } from '@/contracts/resources'
+import { FoundResource } from '@/contracts/connector.ts'
 
 describe('Test eventbus middleware', () => {
   const eventBus = new Eventbus()

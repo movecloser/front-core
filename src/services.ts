@@ -1,4 +1,4 @@
-import { AppConfig } from '@/contracts/bootstrapper'
+import { IConfiguration } from "@/contracts/configuration"
 import { Interfaces } from '@/contracts/container'
 import { EventbusType, IEventbus } from '@/contracts/eventbus'
 import { HttpType, IHttp } from '@/contracts/http'
@@ -8,7 +8,7 @@ import { DocumentService, DocumentType, IDocument } from '@/services/document'
 import { Eventbus } from '@/services/eventbus'
 import { HttpConnector } from '@/services/http'
 
-export const services = (config: AppConfig) => {
+export const services = (config: IConfiguration) => {
   return (bind: Interfaces.Bind) => {
     // Datetime
     bind<IDateTime>(DateTimeType).to(DateTime)
@@ -19,8 +19,8 @@ export const services = (config: AppConfig) => {
     // Http
     bind<IHttp>(HttpType).toDynamicValue(() => {
       return new HttpConnector(
-        { axios: config.http.factory },
-        'axios'
+        config.byKey('http.drivers'),
+        config.byKey('http.default')
       )
     }).inSingletonScope()
   }

@@ -9,51 +9,53 @@ export interface Authorization {
   getAuthorizationHeader (): AuthHeader
 }
 
-export const AuthorizationType = Symbol.for('Authorization')
+export interface ConnectorMiddleware {
+  afterCall: (response: IResponse) => void
+  beforeCall: (
+    resource: FoundResource,
+    headers: Headers,
+    body: Payload
+  ) => ({ headers: Headers, body: Payload })
+}
 
 export type FoundResource = {
+  connection: string
   url: string
   method: Methods
-  shorthand: string|null
+  shorthand: string
   auth: boolean
 }
 
-export interface IResources {
+export interface IConnector {
   call (
     resource: string,
     action: string,
     params?: Params,
     body?: Payload,
     headers?: Headers,
-    responseType?: any
+    responseType?: ResponseType
   ): Promise<IResponse>
-  get (resource: string, action: string, params: Params): FoundResource
-  register (list: ResourcesRegistry): void
-}
-
-export interface IResourcesMiddleware {
-  afterCall: (response: IResponse) => void
-  beforeCall: (resource: FoundResource, headers: Headers, body: Payload) => ({ headers: Headers, body: Payload })
+  findResource (resource: string, action: string, params: Params): FoundResource
+  useMiddlewares (list: ConnectorMiddleware[]): void
+  useResources (list: ResourcesRegistry): void
 }
 
 export type Params = {
-  [key: string]: string|number
+  [key: string]: string | number
 }
 
 export type Resource = {
   url: string
   method: Methods
   params?: string[]
-  formName?: string
+  shorthand?: string
   auth?: boolean
 }
 
-export const ResourcesType = Symbol.for('IResources')
-
 export type ResourceDefinition = {
-  prefix: string|null
+  prefix: string | null
   methods: ResourceMethod,
-  formName?: string
+  connection?: string
 }
 
 export type ResourceMethod = {
@@ -73,4 +75,9 @@ export interface ResourceResponseMeta {
   to?: number
   per_page?: number
   path?: string
+}
+
+export enum ResponseType {
+  Blob = 'blob',
+  Json = 'json'
 }

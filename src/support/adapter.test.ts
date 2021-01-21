@@ -189,7 +189,7 @@ describe('Test adapter methods', () => {
       image: {
         type: MappingTypes.Adapter,
         value: 'image',
-        map: nestedMapping,
+        map: nestedMapping
       }
     }
 
@@ -220,7 +220,7 @@ describe('Test adapter methods', () => {
       image: {
         type: MappingTypes.Adapter,
         //@ts-ignore
-        map: null,
+        map: null
       }
     }
 
@@ -232,6 +232,7 @@ describe('Test adapter methods', () => {
     interface TestIntentionPayload {
       firstName: string
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         // first_name: 'firstName'
@@ -257,6 +258,7 @@ describe('Test adapter methods', () => {
     interface TestIntentionPayload {
       firstName: string
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         // @ts-ignore
@@ -270,13 +272,14 @@ describe('Test adapter methods', () => {
 
     const intention = new TestIntention(payload)
 
-    expect(intention.toRequest()).toEqual({ })
+    expect(intention.toRequest()).toEqual({})
   })
 
   test('Expect [mapIntention] to map intention by function.', () => {
     interface TestIntentionPayload {
       types: object[]
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         types: {
@@ -289,13 +292,13 @@ describe('Test adapter methods', () => {
 
     const payload = {
       types: [
-        { name: 'A', id: 1},
-        { name: 'B', id: 2},
-        { name: 'C', id: 3}
+        { name: 'A', id: 1 },
+        { name: 'B', id: 2 },
+        { name: 'C', id: 3 }
       ]
     }
     const intention = new TestIntention(payload)
-    const result = { types: [1, 2, 3] }
+    const result = { types: [ 1, 2, 3 ] }
 
     expect(intention.toRequest()).toEqual(result)
   })
@@ -304,6 +307,7 @@ describe('Test adapter methods', () => {
     interface TestIntentionPayload {
       types: object[]
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         types: {
@@ -317,9 +321,9 @@ describe('Test adapter methods', () => {
 
     const payload = {
       types: [
-        { name: 'A', id: 1},
-        { name: 'B', id: 2},
-        { name: 'C', id: 3}
+        { name: 'A', id: 1 },
+        { name: 'B', id: 2 },
+        { name: 'C', id: 3 }
       ]
     }
     const intention = new TestIntention(payload)
@@ -331,6 +335,7 @@ describe('Test adapter methods', () => {
     interface TestIntentionPayload {
       types: object[]
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         types: {
@@ -338,16 +343,17 @@ describe('Test adapter methods', () => {
           // @ts-ignore
           target: null,
           // @ts-ignore
-          value: () => {}
+          value: () => {
+          }
         }
       }
     }
 
     const payload = {
       types: [
-        { name: 'A', id: 1},
-        { name: 'B', id: 2},
-        { name: 'C', id: 3}
+        { name: 'A', id: 1 },
+        { name: 'B', id: 2 },
+        { name: 'C', id: 3 }
       ]
     }
     const intention = new TestIntention(payload)

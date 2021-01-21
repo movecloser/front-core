@@ -1,19 +1,27 @@
 import { Container as Inversify } from 'inversify'
 
-import {AppConfig, Bootstrapper, Platform, RoutesStack, StoreStack} from '@/contracts/bootstrapper'
-import { Container } from '@/container'
-import { services } from './services'
-import { Configuration } from '@/configuration'
+import {
+  AppConfig,
+  Bootstrapper as Abstract,
+  Platform,
+  RoutesStack,
+  StoreStack
+} from '@/contracts/bootstrapper'
+import { IConfiguration } from "@/contracts/configuration"
 
-export class Bootstraper implements Bootstrapper {
-  protected config: AppConfig
+import { Configuration } from '@/configuration'
+import { Container } from '@/container'
+import { services } from '@/services'
+
+export class Bootstrapper implements Abstract {
+  protected config: IConfiguration
   protected container: Container
   protected platform: Platform
 
   protected routesStack: RoutesStack = []  // @fixme Array is temp
   protected storeStack: StoreStack = [] // @fixme Array is temp
 
-  constructor(config: AppConfig, platform: Platform) {
+  constructor (config: AppConfig, platform: Platform) {
     this.config = new Configuration(config)
     this.container = this.createContainer()
 
@@ -23,7 +31,7 @@ export class Bootstraper implements Bootstrapper {
   /**
    *
    */
-  public async boot(): Promise<void> {
+  public async boot (): Promise<void> {
     const { modules, router, store } = this.config.toObject()
     // const routing = []
     // const stateTree = {}
@@ -48,7 +56,7 @@ export class Bootstraper implements Bootstrapper {
 
     for (const m of providers) {
       await this.container.loadModule(
-        createModule(m.binder, m.async),
+        this.container.createModule(m.binder, m.async),
         m.async
       )
     }
@@ -58,25 +66,30 @@ export class Bootstraper implements Bootstrapper {
   }
 
   /**
-   * Returns actual Ioc Container.
+   * Returns app configuration.
    */
-  public getContainer(): Inversify {
-    return this.container.getContainer()
+  public getConfiguration (): IConfiguration {
+    return this.config
   }
 
-  // /getconfiguration
+  /**
+   * Returns actual Ioc Container.
+   */
+  public getContainer (): Inversify {
+    return this.container.getContainer()
+  }
 
   /**
    * Returns Routes Stack object.
    */
-  public getRoutesStack(): RoutesStack {
+  public getRoutesStack (): RoutesStack {
     return this.routesStack
   }
 
   /**
    * Returns Store Stack object.
    */
-  public getStoreStack(): StoreStack {
+  public getStoreStack (): StoreStack {
     return this.storeStack
   }
 
@@ -84,10 +97,10 @@ export class Bootstraper implements Bootstrapper {
    * Creates new instance of Ioc Container.
    * @private
    */
-  private createContainer(): Container {
+  private createContainer (): Container {
     const container = new Container()
     container.createContainer(
-      ('container' in this.config) ? this.config.container : {}
+      this.config.has('container') ? this.config.byFile('container') : {}
     )
 
     return container

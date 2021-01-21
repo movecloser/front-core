@@ -1,11 +1,11 @@
 import { injectable } from 'inversify'
 
-import { FoundResource, IResourcesMiddleware } from '@/contracts/resources'
+import { FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
 import { Headers, IResponse, Payload } from '@/contracts/http'
 import { IValidation } from '@/contracts/validation'
 
 @injectable()
-export class ValidationMiddleware implements IResourcesMiddleware {
+export class ValidationMiddleware implements ConnectorMiddleware {
   /**
    * Name of form used in given request.
    * @protected

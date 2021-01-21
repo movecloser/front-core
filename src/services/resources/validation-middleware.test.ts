@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import { IValidation } from '@/contracts/validation'
 import { Validation } from '@/services/validation'
 import { ValidationMiddleware } from '@/services/resources/validation-middleware'
-import { FoundResource } from '@/contracts/resources'
+import { FoundResource } from '@/contracts/connector.ts'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 
 describe('Test validation middleware', () => {

@@ -1,8 +1,10 @@
 import { Container } from 'inversify'
+
 import { ContainerOptions } from '@/contracts/container'
+import { IConfiguration } from '@/contracts/configuration'
 import { IModuleConstructor } from '@/support/modules'
 
-export interface AppConfig{
+export interface AppConfig {
   container?: ContainerOptions
   modules: IModuleConstructor[]
   router: RouterDriver
@@ -11,10 +13,11 @@ export interface AppConfig{
 }
 
 export interface Bootstrapper {
-  boot(): void
+  boot (): void
+  getConfiguration (): IConfiguration
   getContainer (): Container
   getRoutesStack (): RoutesStack
-  getStoreStack(): StoreStack
+  getStoreStack (): StoreStack
 }
 
 export enum Platform {
@@ -22,8 +25,8 @@ export enum Platform {
   Vue = 'vue'
 }
 
-export type RoutesStack = AnyObject|any[]
-export type StoreStack = AnyObject|any[]
+export type RoutesStack = AnyObject | any[]
+export type StoreStack = AnyObject | any[]
 
 export enum RouterDriver {
   None = 'none',
@@ -36,6 +39,7 @@ export enum StoreDriver {
   // Redux ='redux',
   Vuex = 'vuex'
 }
+
 interface AnyObject {
   [key: string]: any
 }

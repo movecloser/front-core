@@ -1,5 +1,3 @@
-import { injectable } from 'inversify'
-
 import {
   DriverRegistry,
   Headers,
@@ -7,6 +5,8 @@ import {
   IResponse,
   Payload
 } from '@/contracts/http'
+import { Injectable } from '@/contracts/container'
+
 import { IncorrectCall } from '@/exceptions/errors'
 import { HttpDriver } from '@/services/http/http-driver'
 
@@ -15,15 +15,40 @@ import { HttpDriver } from '@/services/http/http-driver'
  *
  * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  * @version 1.0.0
+ * @licence MIT
  */
-@injectable()
+@Injectable()
 export class HttpConnector implements IHttpConnector {
-  private _defaultDestination: string|null
+  private _defaultDestination: string | null
   private readonly _drivers: DriverRegistry
 
-  constructor (drivers: DriverRegistry = {}, defaultDestination: string|null = null) {
+  constructor (drivers: DriverRegistry = {}, defaultDestination: string | null = null) {
     this._defaultDestination = defaultDestination
     this._drivers = drivers
+  }
+
+  /**
+   * Return default destination.
+   */
+  public defaultDestination (): string {
+    if (!this._defaultDestination) {
+      throw new IncorrectCall(
+        'Default destination is not set. Cannot perform action when driver is not selected.')
+    }
+
+    return this._defaultDestination
+  }
+
+  /**
+   * Perform delete http request.
+   */
+  public delete (
+    target: string,
+    data: Payload = {},
+    headers: Headers = {},
+    options = null
+  ): Promise<IResponse> {
+    return this.defaultDriver.delete(target, data, headers, options)
   }
 
   /**
@@ -36,6 +61,42 @@ export class HttpConnector implements IHttpConnector {
     }
 
     return this._drivers[destination]
+  }
+
+  /**
+   * Perform get http request.
+   */
+  public get (
+    target: string,
+    params: Payload = {},
+    headers: Headers = {},
+    options = null
+  ): Promise<IResponse> {
+    return this.defaultDriver.get(target, params, headers, options)
+  }
+
+  /**
+   * Perform post http request.
+   */
+  public post (
+    target: string,
+    data: Payload = {},
+    headers: Headers = {},
+    options = null
+  ): Promise<IResponse> {
+    return this.defaultDriver.post(target, data, headers, options)
+  }
+
+  /**
+   * Perform put http request.
+   */
+  public put (
+    target: string,
+    data: Payload,
+    headers: Headers = {},
+    options = null
+  ): Promise<IResponse> {
+    return this.defaultDriver.put(target, data, headers, options)
   }
 
   /**
@@ -83,42 +144,17 @@ export class HttpConnector implements IHttpConnector {
   }
 
   /**
-   * Perform delete http request.
-   */
-  public delete (target: string, data: Payload = {}, headers: Headers = {}, options = null): Promise<IResponse> {
-    return this.defaultDriver.delete(target, data, headers, options)
-  }
-
-  /**
-   * Perform get http request.
-   */
-  public get (target: string, params: Payload = {}, headers: Headers = {}, options = null): Promise<IResponse> {
-    return this.defaultDriver.get( target, params, headers, options)
-  }
-
-  /**
-   * Perform post http request.
-   */
-  public post (target: string, data: Payload = {}, headers: Headers = {}, options = null): Promise<IResponse> {
-    return this.defaultDriver.post(target, data, headers, options)
-  }
-
-  /**
-   * Perform put http request.
-   */
-  public put (target: string, data: Payload, headers: Headers = {}, options = null): Promise<IResponse> {
-    return this.defaultDriver.put( target, data, headers, options)
-  }
-
-  /**
    *
    * @private
    */
-  private get defaultDriver(): HttpDriver {
+  private get defaultDriver (): HttpDriver {
     if (!this._defaultDestination) {
-      throw new IncorrectCall('Default destination is not set. Cannot perform action when driver is not selected.')
+      throw new IncorrectCall(
+        'Default destination is not set. Cannot perform action when driver is not selected.')
     }
 
-    return  this._drivers[this._defaultDestination as string]
+    return this._drivers[this._defaultDestination as string]
   }
 }
+
+export const HttpConnectorType = Symbol.for('IHttpConnector')

@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { Authorization, FoundResource } from '@/contracts/resources'
+import { Authorization, FoundResource } from '@/contracts/connector.ts'
 import { AuthMiddleware } from '@/services/resources/auth-middleware'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 

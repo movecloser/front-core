@@ -1,111 +1,115 @@
 import { IModel, ModelConstructor, ModelPayload } from '../contracts/models'
 import { MissingPropertyError } from '@/exceptions/errors'
 
+/**
+ * @author Kuba Fogel <kuba.foge@movecloser.pl>
+ * @version 1.0.0
+ */
 export abstract class Model<T> implements IModel {
-    public initialValues: ModelPayload = {}
-    protected _data: ModelPayload = {}
-    protected modelProperties: string[] = []
+  public initialValues: ModelPayload = {}
+  protected _data: ModelPayload = {}
+  protected modelProperties: string[] = []
 
-    constructor (payload: ModelPayload = {}) {
-        this.boot()
+  constructor (payload: ModelPayload = {}) {
+    this.boot()
 
-        for (const [key, value] of Object.entries(payload)) {
-            this.set(key, value)
-        }
+    for (const [ key, value ] of Object.entries(payload)) {
+      this.set(key, value)
+    }
+  }
+
+  protected abstract boot (): void
+
+  /**
+   * Model property getter
+   * @param property
+   */
+  public get (property: string): any {
+    if (!(property in this._data)) {
+      throw new MissingPropertyError(property)
     }
 
-    protected abstract boot (): void
+    return this._data[property]
+  }
 
-    /**
-     * Model property getter
-     * @param property
-     */
-    public get (property: string): any {
-        if (!(property in this._data)) {
-            throw new MissingPropertyError(property)
-        }
-
-        return this._data[property]
+  /**
+   * Method to update incomplete properties on existing model instance
+   * @param payload
+   */
+  public static hydrate (payload: ModelPayload): IModel {
+    // @ts-ignore
+    const model: Model = new this()
+    const mappedPayload: ModelPayload = {
+      ...model.initialValues,
+      ...payload
     }
 
-    /**
-     * Method to update incomplete properties on existing model instance
-     * @param payload
-     */
-    public static hydrate (payload: ModelPayload): IModel {
+    for (const [ key, value ] of Object.entries(mappedPayload)) {
+      model.set(key, value)
+    }
+
+    return model
+  }
+
+  /**
+   * Model property setter
+   * @param property
+   * @param value
+   */
+  public set (property: string, value: any): void {
+    if (this.modelProperties.includes(property)) {
+      const upperPropertyName: string = property.charAt(0).toUpperCase() + property.slice(1)
+      const setterMethod: string = `set${upperPropertyName}Property`
+      // @ts-ignore
+      if (typeof this[setterMethod] === 'function') {
         // @ts-ignore
-        const model: Model = new this()
-        const mappedPayload: ModelPayload = {
-            ...model.initialValues,
-            ...payload
-        }
+        this._data[property] = this[setterMethod](value)
+        return
+      }
 
-        for (const [key, value] of Object.entries(mappedPayload)) {
-            model.set(key, value)
-        }
+      const relatesMethod: string = `relatesTo${upperPropertyName}`
+      // @ts-ignore
+      if (typeof this[relatesMethod] === 'function') {
+        // @ts-ignore
+        this._data[property] = this[relatesMethod](value)
+        return
+      }
 
-        return model
+      this._data[property] = value
     }
+  }
 
-    /**
-     * Model property setter
-     * @param property
-     * @param value
-     */
-    public set (property: string, value: any): void {
-        if (this.modelProperties.includes(property)) {
-            const upperPropertyName: string = property.charAt(0).toUpperCase() + property.slice(1)
-            const setterMethod: string = `set${upperPropertyName}Property`
-            // @ts-ignore
-            if (typeof this[setterMethod] === 'function') {
-                // @ts-ignore
-                this._data[property] = this[setterMethod](value)
-                return
-            }
+  /**
+   * Method to extract raw data from model
+   */
+  public toObject (): T {
+    return Object.assign({ ...this.initialValues }, this._data) as T
+  }
 
-            const relatesMethod: string = `relatesTo${upperPropertyName}`
-            // @ts-ignore
-            if (typeof this[relatesMethod] === 'function') {
-                // @ts-ignore
-                this._data[property] = this[relatesMethod](value)
-                return
-            }
+  /**
+   * Method to get model related to given property
+   * @param model
+   * @param value
+   * @protected
+   */
+  protected hasOne<T> (model: ModelConstructor, value: T) {
+    return model.hydrate(value)
+  }
 
-            this._data[property] = value
-        }
+  /**
+   * Method to get collection related to given property
+   * @param model
+   * @param values
+   * @protected
+   */
+  protected hasMany<T> (model: ModelConstructor, values: T[]) {
+    const collection = []
+
+    for (const value of values) {
+      collection.push(
+        this.hasOne<T>(model, value)
+      )
     }
-
-    /**
-     * Method to extract raw data from model
-     */
-    public toObject (): T {
-        return Object.assign({...this.initialValues}, this._data) as T
-    }
-
-    /**
-     * Method to get model related to given property
-     * @param model
-     * @param value
-     * @protected
-     */
-    protected hasOne<T> (model: ModelConstructor, value: T) {
-        return model.hydrate(value)
-    }
-
-    /**
-     * Method to get collection related to given property
-     * @param model
-     * @param values
-     * @protected
-     */
-    protected hasMany<T> (model: ModelConstructor, values: T[]) {
-        const collection = []
-
-        for (const value of values) {
-            collection.push(
-                this.hasOne<T>(model, value)
-            )
-        }
-        return collection
-    }
+    return collection
+  }
 }

@@ -1,12 +1,12 @@
 import { injectable } from 'inversify'
 
-import { FoundResource, IResourcesMiddleware } from '@/contracts/resources'
+import { FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
 import { Headers, IResponse, Payload } from '@/contracts/http'
 import { TemporaryUnavailableError } from '@/exceptions/errors'
 import { IEventbus } from '@/contracts/eventbus'
 
 @injectable()
-export class EventbusMiddleware implements  IResourcesMiddleware {
+export class EventbusMiddleware implements  ConnectorMiddleware {
   constructor (protected eventbus: IEventbus) {}
 
   /**

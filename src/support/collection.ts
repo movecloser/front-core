@@ -1,4 +1,4 @@
-import { ICollection, IMeta, MetaPayload } from '../contracts/models'
+import { ICollection, IMeta, MetaPayload } from '@/contracts/models'
 
 export class Collection<T> extends Array implements ICollection<T> {
     protected _meta: MetaPayload = {}

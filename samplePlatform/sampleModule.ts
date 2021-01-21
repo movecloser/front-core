@@ -8,7 +8,7 @@ import { AppConfig } from '../src/contracts/bootstrapper'
     return (bind: Interfaces.Bind) => {
       // bind<AuthRepository>(MeRepositoryType).toDynamicValue((context: Interfaces.Context) => {
       //   return new MeRepository(
-      //     // context.container.get(ResourcesType),
+      //     // context.container.get(RESTConnectorType),
       //   )
       // }).inSingletonScope()
       //

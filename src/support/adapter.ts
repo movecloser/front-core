@@ -37,8 +37,13 @@ export enum MappingTypes {
  * @param preserve
  * @return Array
  */
+
 /* istanbul ignore next */
-export function mapCollection<T> (toMap: any[], mapping: MappingConfig, preserve: boolean = true):T[] {
+export function mapCollection<T> (
+  toMap: any[],
+  mapping: MappingConfig,
+  preserve: boolean = true
+): T[] {
   return toMap.map((item: any) => {
     return mapModel<T>(item, mapping, preserve)
   })
@@ -83,7 +88,7 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
     mapped[key] = item[key]
   })
 
-  for (const [key, instruction] of Object.entries(mapping)) {
+  for (const [ key, instruction ] of Object.entries(mapping)) {
     if (typeof instruction === 'string') {
       mapped[key] = item[instruction]
 
@@ -101,7 +106,8 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
       switch (instruction.type) {
         case MappingTypes.Adapter:
           if (typeof instruction.map === 'undefined' || typeof instruction.value !== 'string') {
-            throw new MappingError('Invalid instruction. Map in not a MappingConfig or value is not a string.')
+            throw new MappingError(
+              'Invalid instruction. Map in not a MappingConfig or value is not a string.')
           }
 
           mapByConfig(mapped[key], item[instruction.value], instruction.map, false)
@@ -134,7 +140,7 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
  * @param item
  */
 function mapByStructure (mapped: any, item: any, mapping: MappingConfig): void {
-  for (const [key, value] of Object.entries(item)) {
+  for (const [ key, value ] of Object.entries(item)) {
     if (!mapping.hasOwnProperty(key) || mapping[key] === 'undefined' || mapping[key] === null) {
       continue
     }

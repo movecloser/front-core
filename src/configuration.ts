@@ -1,9 +1,10 @@
 import { AppConfig } from '@/contracts/bootstrapper'
+import { IConfiguration } from '@/contracts/configuration'
 
 export class Configuration implements IConfiguration {
   constructor (private config: AppConfig) {}
 
-  byFile (name: string): any {
+  byFile<Expected>(name: string): Expected {
     if (!this.config[name]) {
       throw new Error(`Key ${name} is not a valid config key`)
     }
@@ -11,28 +12,18 @@ export class Configuration implements IConfiguration {
     return this.config[name]
   }
 
-  byKeys (key: string, shouldThrow: boolean = true, defaultValue: any = null): ConfigurationValue {
+  byKey<Expected>(key: string, shouldThrow: boolean = true, defaultValue: any = null): Expected {
     const keys: string[] = key.split('.')
     //
 
-    return {}
+    return {} as Expected
+  }
+
+  has (file: string): boolean {
+    return file in this.config
   }
 
   public toObject (): AppConfig {
     return this.config
   }
 }
-
-
-type ConfigurationFile = string|number|boolean|ConfigurationObject
-
-type ConfigurationValue = ConfigurationObject
-
-interface ConfigurationObject {
-  [key: string]: any
-}
-export interface IConfiguration {
-  byFile (name: string): ConfigurationFile
-  toObject (): AppConfig
-}
-
