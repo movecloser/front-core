@@ -6,17 +6,25 @@ export class Configuration implements IConfiguration {
 
   byFile<Expected>(name: string): Expected {
     if (!this.config[name]) {
-      throw new Error(`Key ${name} is not a valid config key`)
+      throw new Error(`Key [${name}] is not a valid config key.`)
     }
 
-    return this.config[name]
+    return this.config[name] as Expected
   }
 
-  byKey<Expected>(key: string, shouldThrow: boolean = true, defaultValue: any = null): Expected {
-    const keys: string[] = key.split('.')
-    //
+  byKey<Expected>(path: string, shouldThrow: boolean = true, defaultValue: any = null): Expected {
+    const keys: string[] = path.split('.')
+    let temp = this.config
 
-    return {} as Expected
+    for (const key of keys) {
+      if (!temp.hasOwnProperty(key)) {
+        throw new Error(`Key [${key}] is not a valid config key.`)
+      }
+
+      temp = temp[key]
+    }
+
+    return temp as Expected
   }
 
   has (file: string): boolean {
