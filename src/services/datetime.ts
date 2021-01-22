@@ -2,7 +2,7 @@ import { IncorrectCall } from '@/exceptions/errors'
 import { Duration, Moment } from 'moment'
 import * as moment from 'moment'
 
-import { Injectable } from '@/contracts/container'
+import { Injectable } from '@/container'
 
 export interface IDateTime {
   difference (start: string, end?: string): number

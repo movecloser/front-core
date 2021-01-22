@@ -5,7 +5,7 @@ import {
   IResponse,
   Payload
 } from '@/contracts/http'
-import { Injectable } from '@/contracts/container'
+import { Injectable } from '@/container'
 
 import { IncorrectCall } from '@/exceptions/errors'
 import { HttpDriver } from '@/services/http/http-driver'

@@ -6,7 +6,7 @@ import {
   Resource,
   ResourcesRegistry, ResponseType
 } from '@/contracts/connector.ts'
-import { Injectable } from '@/contracts/container'
+import { Injectable } from '@/container'
 import { IConnector } from '@/contracts/connector.ts'
 
 /**
