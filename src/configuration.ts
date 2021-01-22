@@ -4,7 +4,11 @@ import { IConfiguration } from '@/contracts/configuration'
 export class Configuration implements IConfiguration {
   constructor (private config: AppConfig) {}
 
-  byFile<Expected>(name: string): Expected {
+  /**
+   * Returns file (top level section) of configuration.
+   * @param name
+   */
+  public byFile<Expected>(name: string): Expected {
     if (!this.config[name]) {
       throw new Error(`Key [${name}] is not a valid config key.`)
     }
@@ -12,13 +16,21 @@ export class Configuration implements IConfiguration {
     return this.config[name] as Expected
   }
 
-  byKey<Expected>(path: string, shouldThrow: boolean = true, defaultValue: any = null): Expected {
-    const keys: string[] = path.split('.')
+  /**
+   *  Provides access to config by given key.
+   *  Key is string consisting of keys connected by dots.
+   *  'http.base.url' or 'router.mode'
+   * @param key
+   * @param shouldThrow
+   * @param defaultValue
+   */
+  public byKey<Expected>(key: string, shouldThrow: boolean = true, defaultValue: any = null): Expected {
+    const keys: string[] = key.split('.')
     let temp = this.config
 
-    for (const key of keys) {
-      if (!temp.hasOwnProperty(key)) {
-        throw new Error(`Key [${key}] is not a valid config key.`)
+    for (const k of keys) {
+      if (!temp.hasOwnProperty(k)) {
+        throw new Error(`Key [${k}] is not a valid config key.`)
       }
 
       temp = temp[key]
@@ -27,10 +39,17 @@ export class Configuration implements IConfiguration {
     return temp as Expected
   }
 
-  has (file: string): boolean {
+  /**
+   * Returns true if given filename exists in config's top level structure.
+   * @param file
+   */
+  public has (file: string): boolean {
     return file in this.config
   }
 
+  /**
+   * Returns complete configuration as single object.
+   */
   public toObject (): AppConfig {
     return this.config
   }
