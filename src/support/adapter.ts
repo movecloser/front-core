@@ -49,6 +49,11 @@ export function mapCollection<T> (
   })
 }
 
+/**
+ * Converts Intention object to format required by server side.
+ * @param toMap
+ * @param mapping
+ */
 export function mapIntention<T> (toMap: any, mapping: MappingConfig): T {
   const mapped = {}
   mapByStructure(mapped, toMap, mapping)

@@ -3,7 +3,7 @@ export interface Filters {
 }
 
 export interface FiltersConfig {
-    [key: string]: string|number|boolean|FilterParams|FilterParams[]
+  [key: string]: string|number|boolean|FilterParams|FilterParams[]
 }
 
 export interface FilterParams {

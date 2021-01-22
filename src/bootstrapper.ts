@@ -13,6 +13,7 @@ import { Configuration } from '@/configuration'
 import { Container } from '@/container'
 import { services } from '@/services'
 import { routerFactory, storeFactory } from '@/bootstrap/factories'
+import { EventbusType, IEventbus } from '@/contracts/eventbus'
 
 export class Bootstrapper implements Abstract {
   protected config: IConfiguration
@@ -29,30 +30,34 @@ export class Bootstrapper implements Abstract {
   }
 
   /**
-   *
+   * Bootstrapper init method.
    */
   public async boot (): Promise<void> {
     const { modules, router, store } = this.config.toObject()
-    // const routing = []
-    // const stateTree = {}
 
-    const providers: any[] = [
-      {
-        binder: services(this.config),
-        async: false
+    await this.container.loadModule(
+      this.container.createModule(services(this.config))
+    )
+
+    const providers: any[] = []
+    const observers: symbol[] = []
+    const useRouter: boolean = !!router
+    const useStore: boolean = !!store
+
+    for (let module of modules) {
+      providers.push({
+        // binder: module.providers,
+        // async: module.providersAsync
+      })
+
+      if (useRouter) {
+        this.routerBootstrapper.applyModule(module.name, ()=> {} /* Module factory fn*/)
       }
-    ]
 
-    // for (let module of modules) {
-    //   providers.push({
-    //     binder: module.providers,
-    //     async: module.providersAsync
-    //   })
-    //
-    //   routing.push(...module.routes(this.container))
-    //
-    //   Object.assign(tree, module.state(this.container))
-    // }
+      if (useStore) {
+        this.storeBootstrapper.applyModule(module.name, ()=> {} /* Module factory fn*/)
+      }
+    }
 
     for (const m of providers) {
       await this.container.loadModule(
@@ -61,8 +66,13 @@ export class Bootstrapper implements Abstract {
       )
     }
 
-    // this.routesStack = routing //?
-    // this.storeStack = stateTree //?
+    const eventbus: IEventbus = this.getContainer().get(EventbusType)
+
+    for (const observer of observers) {
+      eventbus.observe(
+        this.getContainer().get(observer)
+      )
+    }
   }
 
   /**

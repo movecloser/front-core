@@ -5,7 +5,7 @@ import { MissingPropertyError } from '@/exceptions/errors'
  * @author Kuba Fogel <kuba.foge@movecloser.pl>
  * @version 1.0.0
  */
-export abstract class Model<T> implements IModel {
+export abstract class Model<T> implements IModel<T> {
   public initialValues: ModelPayload = {}
   protected _data: ModelPayload = {}
   protected modelProperties: string[] = []
@@ -36,7 +36,7 @@ export abstract class Model<T> implements IModel {
    * Method to update incomplete properties on existing model instance
    * @param payload
    */
-  public static hydrate (payload: ModelPayload): IModel {
+  public static hydrate (payload: ModelPayload): IModel<T> {
     // @ts-ignore
     const model: Model = new this()
     const mappedPayload: ModelPayload = {
@@ -92,7 +92,7 @@ export abstract class Model<T> implements IModel {
    * @param value
    * @protected
    */
-  protected hasOne<T> (model: ModelConstructor, value: T) {
+  protected hasOne<R> (model: ModelConstructor<R>, value: ModelPayload) {
     return model.hydrate(value)
   }
 
@@ -102,12 +102,12 @@ export abstract class Model<T> implements IModel {
    * @param values
    * @protected
    */
-  protected hasMany<T> (model: ModelConstructor, values: T[]) {
+  protected hasMany<R> (model: ModelConstructor<R>, values: ModelPayload[]) {
     const collection = []
 
     for (const value of values) {
       collection.push(
-        this.hasOne<T>(model, value)
+        this.hasOne<R>(model, value)
       )
     }
     return collection

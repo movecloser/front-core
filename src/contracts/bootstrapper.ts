@@ -4,9 +4,9 @@ import { ContainerOptions } from '@/contracts/container'
 import { IConfiguration } from '@/contracts/configuration'
 import { IModuleConstructor } from '@/support/modules'
 
-export interface AppConfig {
+export interface AppConfig<C> {
   container?: ContainerOptions
-  modules: IModuleConstructor[]
+  modules: IModuleConstructor<C>[]
   router: RouterDriver
   store: StoreDriver
   [key: string]: any
@@ -48,3 +48,5 @@ export interface BootstrapDriver<S> {
   applyModule (name: string, callback: () => any): void
   stack (): S
 }
+
+export type ProvidersFactory<C> = (config: IConfiguration) => C

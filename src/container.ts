@@ -20,7 +20,7 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
    * @param binder
    * @param async
    */
-  public createModule (binder: any, async: boolean = false): ContainerModule| AsyncContainerModule {
+  public createModule (binder: Binder, async: boolean = false): ContainerModule| AsyncContainerModule {
     if (async) {
       return new AsyncContainerModule(binder)
     }

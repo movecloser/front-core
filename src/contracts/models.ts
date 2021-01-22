@@ -15,8 +15,7 @@ export interface MetaPayload {
     [key: string]: any
 }
 
-export interface IModel {
-    [key: string]: any
+export interface IModel<T> {
     initialValues: ModelPayload
     get (key: string): any
     set (property: string, value: any): void
@@ -27,7 +26,9 @@ export interface ModelPayload {
     [key: string]: any
 }
 
-export interface ModelConstructor {
-    new (payload?: ModelPayload): IModel
-    hydrate (payload: ModelPayload): IModel
+export interface ModelConstructor<T> {
+    new (payload?: ModelPayload): IModel<T>
+    hydrate (payload: ModelPayload): IModel<T>
 }
+
+

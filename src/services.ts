@@ -8,7 +8,7 @@ import { DocumentService, DocumentType, IDocument } from '@/services/document'
 import { Eventbus } from '@/services/eventbus'
 import { HttpConnector } from '@/services/http'
 
-export const services = (config: IConfiguration) => {
+export const services: ProvidersFactory = (config: IConfiguration) => {
   return (bind: Interfaces.Bind) => {
     // Datetime
     bind<IDateTime>(DateTimeType).to(DateTime)
