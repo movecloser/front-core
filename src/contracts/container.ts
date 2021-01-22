@@ -9,4 +9,4 @@ export interface ContainerOptions {
   [key: string]: string
 }
 
-export { injectable as Injectable, interfaces as Interfaces } from 'inversify'
+export { interfaces as Interfaces } from 'inversify'

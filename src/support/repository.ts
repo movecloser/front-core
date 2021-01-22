@@ -1,5 +1,5 @@
-import { Injectable } from '@/contracts/container'
 import { IConnector } from '@/contracts/connector.ts'
+import { Injectable } from '@/container'
 
 /**
  * Repository is service class that provides loading data via store.

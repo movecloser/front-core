@@ -56,3 +56,5 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
     this.container.unload(module)
   }
 }
+
+export { injectable as Injectable } from 'inversify'
