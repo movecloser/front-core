@@ -20,7 +20,7 @@ export class Bootstrapper implements Abstract {
   protected routerBootstrapper: BootstrapDriver<RoutesStack>
   protected storeBootstrapper: BootstrapDriver<StoreStack>
 
-  constructor (config: AppConfig, platform: Platform) {
+  constructor (config: AppConfig, protected platform: Platform) {
     this.config = new Configuration(config)
     this.container = this.createContainer()
 

@@ -1,14 +1,24 @@
-import { BootstrapDriver, RoutesStack } from '@/contracts/bootstrapper'
+import { BootstrapDriver, RoutesStack, StoreStack } from '@/contracts/bootstrapper'
 import { Container } from '@/container'
 
-export class VuexBootstrapper implements BootstrapDriver<RoutesStack> {
+export class VuexBootstrapper implements BootstrapDriver<StoreStack> {
   constructor (private container: Container) {}
 
-   public applyModule (name: string, callback: () => any): void {
+  private _stack: StoreStack = {}
 
+  /**
+   * Applies callback to bootstrapper stack.
+   * @param name
+   * @param callback
+   */
+  public applyModule (name: string, callback: (name: string, container: Container) => any): void {
+    Object.assign(this._stack, callback(name, this.container))
   }
 
-   public stack (): RoutesStack {
-    return {}
+  /**
+   * Return stack for current bootstrapper.
+   */
+  public stack (): StoreStack {
+    return this._stack
   }
 }
