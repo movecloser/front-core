@@ -1,7 +1,7 @@
 import { Container as Inversify } from 'inversify'
 
 import {
-  AppConfig,
+  AppConfig, BootstrapDriver,
   Bootstrapper as Abstract,
   Platform,
   RoutesStack,
@@ -12,20 +12,20 @@ import { IConfiguration } from "@/contracts/configuration"
 import { Configuration } from '@/configuration'
 import { Container } from '@/container'
 import { services } from '@/services'
+import { routerFactory, storeFactory } from '@/bootstrap/factories'
 
 export class Bootstrapper implements Abstract {
   protected config: IConfiguration
   protected container: Container
-  protected platform: Platform
-
-  protected routesStack: RoutesStack = []  // @fixme Array is temp
-  protected storeStack: StoreStack = [] // @fixme Array is temp
+  protected routerBootstrapper: BootstrapDriver<RoutesStack>
+  protected storeBootstrapper: BootstrapDriver<StoreStack>
 
   constructor (config: AppConfig, platform: Platform) {
     this.config = new Configuration(config)
     this.container = this.createContainer()
 
-    this.platform = platform
+    this.routerBootstrapper = routerFactory(config.byFile('router'))
+    this.storeBootstrapper = storeFactory(config.byFile('state'))
   }
 
   /**
@@ -83,14 +83,14 @@ export class Bootstrapper implements Abstract {
    * Returns Routes Stack object.
    */
   public getRoutesStack (): RoutesStack {
-    return this.routesStack
+    return this.routerBoootstrapper.stack()
   }
 
   /**
    * Returns Store Stack object.
    */
   public getStoreStack (): StoreStack {
-    return this.storeStack
+    return this.storeBoootstrapper.stack()
   }
 
   /**

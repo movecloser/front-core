@@ -43,3 +43,8 @@ export enum StoreDriver {
 interface AnyObject {
   [key: string]: any
 }
+
+export interface BootstrapDriver<S> {
+  applyModule (name: string, callback: () => any): void
+  stack (): S
+}
