@@ -1,4 +1,4 @@
-import { IModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import { IModel, ModelConstructor, ModelPayload } from '@/contracts/models'
 import { MissingPropertyError } from '@/exceptions/errors'
 
 /**
@@ -36,7 +36,7 @@ export abstract class Model<T> implements IModel<T> {
    * Method to update incomplete properties on existing model instance
    * @param payload
    */
-  public static hydrate (payload: ModelPayload): IModel<T> {
+  public static hydrate<T> (payload: ModelPayload): IModel<T> {
     // @ts-ignore
     const model: Model = new this()
     const mappedPayload: ModelPayload = {

@@ -1,11 +1,12 @@
 import { AbstractIntention } from '@/support/intention'
-import { MappingConfig, MappingTypes } from '@/support/adapter'
+import { MappingConfig, MappingTypes } from '@/contracts/support'
 
 describe('Test intention methods', () => {
   test('Expect intention [toModel] to return intention payload', () => {
     interface TestIntentionPayload {
       types: object[]
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         types: {
@@ -13,16 +14,17 @@ describe('Test intention methods', () => {
           // @ts-ignore
           target: null,
           // @ts-ignore
-          value: () => {}
+          value: () => {
+          }
         }
       }
     }
 
     const payload = {
       types: [
-        { name: 'A', id: 1},
-        { name: 'B', id: 2},
-        { name: 'C', id: 3}
+        { name: 'A', id: 1 },
+        { name: 'B', id: 2 },
+        { name: 'C', id: 3 }
       ]
     }
     const intention = new TestIntention(payload)
@@ -34,6 +36,7 @@ describe('Test intention methods', () => {
     interface TestIntentionPayload {
       firstName: string
     }
+
     class TestIntention extends AbstractIntention<TestIntentionPayload> {
       protected map: MappingConfig = {
         firstName: 'first_name'

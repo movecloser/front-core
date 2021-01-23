@@ -1,5 +1,7 @@
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
 
+export const ApiConnectorType = Symbol.for('IConnector')
+
 export interface AuthHeader {
   Authorization: string
 }

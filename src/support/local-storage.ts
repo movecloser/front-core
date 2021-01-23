@@ -1,56 +1,54 @@
+import { WindowService } from '@/services/window'
+
 /**
  * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
+ * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ * @version 1.0.0
+ * @licence MIT
  */
-
-export const localStorage = {
-
+export class LocalStorage {
   /**
    * Resolves the value for the given key.
    * Returns 'null' if the key is not set.
-   * @param key - The key which value is to be resolved.
    */
   get (key: string): string | null {
-    if (typeof window === 'undefined') {
+    if (!WindowService.isDefined) {
       return null
     }
 
     return window.localStorage.getItem(key)
-  },
+  }
 
   /**
    * Checks if the given key has ever been set.
-   * @param key - The key that is to be checked.
    */
   isSet (key: string): boolean {
-    if (typeof window === 'undefined') {
+    if (!WindowService.isDefined) {
       return false
     }
 
     return window.localStorage.getItem(key) !== null
-  },
+  }
 
   /**
    * Removes this value the given key.
-   * @param key - The key that is to be removed.
    */
   remove (key: string): void {
-    if (typeof window === 'undefined') {
+    if (!WindowService.isDefined) {
       return
     }
 
     window.localStorage.removeItem(key)
-  },
+  }
 
   /**
    * Sets the value for the given key.
-   * @param key - The key that is to be modified.
-   * @param value - The target value for the key.
    */
   set (key: string, value: string): void {
-    if (typeof window !== 'undefined') {
+    if (WindowService.isDefined) {
       window.localStorage.setItem(key, value)
     }
   }
 }
 
-export default localStorage
+export default LocalStorage

@@ -1,7 +1,8 @@
 import { Container } from '@/container'
 import { RouterDriver, StoreDriver } from '@/contracts/bootstrapper'
-import { VuexBootstrapper } from '@/bootstrap/drivers/vuex-bootstrapper'
-import { VueRouterBootstrapper } from '@/bootstrap/drivers/vue-router-bootstrapper'
+
+import { VuexBootstrapper } from './drivers/vuex-bootstrapper'
+import { VueRouterBootstrapper } from './drivers/vue-router-bootstrapper'
 
 /**
  * Decide which of predefined router driver to use.

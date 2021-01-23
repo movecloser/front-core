@@ -1,10 +1,10 @@
-export interface ICollection<T> {
-    first (): T|false
-    getItem (callback: (item: T, index?: number) => boolean): T|false
-    hasItem (callback: (item: T, index?: number) => boolean): boolean
+export interface ICollection<Type> {
+    first (): Type|false
+    getItem (callback: (item: Type, index?: number) => boolean): Type|false
+    hasItem (callback: (item: Type, index?: number) => boolean): boolean
     hasItems (): boolean
     isEmpty (): boolean
-    last (): T|false
+    last (): Type|false
 }
 
 export interface IMeta {
@@ -19,16 +19,16 @@ export interface IModel<T> {
     initialValues: ModelPayload
     get (key: string): any
     set (property: string, value: any): void
-    toObject (): ModelPayload
+    toObject (): T
 }
 
 export interface ModelPayload {
     [key: string]: any
 }
 
-export interface ModelConstructor<T> {
-    new (payload?: ModelPayload): IModel<T>
-    hydrate (payload: ModelPayload): IModel<T>
+export interface ModelConstructor<Type> {
+    new (payload?: ModelPayload): IModel<Type>
+    hydrate<Model> (payload: ModelPayload): IModel<Model>
 }
 
 

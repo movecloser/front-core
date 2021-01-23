@@ -1,15 +1,6 @@
-export interface Filters {
-  [key: string]: string|number
-}
-
-export interface FiltersConfig {
-  [key: string]: string|number|boolean|FilterParams|FilterParams[]
-}
-
-export interface FilterParams {
-  conjunction?: ConjunctionOperator
-  operator: FilterOperator
-  value: string|number|boolean
+export enum ConjunctionOperator {
+  Or = 'or',
+  And = 'and'
 }
 
 export enum FilterOperator {
@@ -21,7 +12,16 @@ export enum FilterOperator {
   GreaterEqual = 'ge'
 }
 
-export enum ConjunctionOperator {
-  Or = 'or',
-  And = 'and'
+export interface FilterParams {
+  conjunction?: ConjunctionOperator
+  operator: FilterOperator
+  value: string|number|boolean
+}
+
+export interface Filters {
+  [key: string]: string|number
+}
+
+export interface FiltersConfig {
+  [key: string]: string|number|boolean|FilterParams|FilterParams[]
 }

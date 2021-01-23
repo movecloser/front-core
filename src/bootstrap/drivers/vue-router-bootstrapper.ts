@@ -2,28 +2,25 @@ import { RouteConfig } from 'vue-router'
 
 import { BootstrapDriver, RoutesStack } from '@/contracts/bootstrapper'
 import { Container } from '@/container'
+import { ContainerFactory } from '@/module'
 
 export class VueRouterBootstrapper implements BootstrapDriver<RoutesStack> {
-  constructor (private container: Container) {}
-
   private _stack: RoutesStack = []
+
+  constructor (private container: Container) {}
 
   /**
    * Applies callback to bootstrapper stack.
-   * @param name
-   * @param callback
    */
-  public applyModule (name: string, callback: (container: Container) => any): void {
-    if ('push' in this._stack) {
-      const routes = callback(this.container).map((route: RouteConfig) => {
-        return this.prefixRouteName(route, name)
-      })
+  public applyModule (name: string, callback: ContainerFactory): void {
+    const routes = callback(this.container).map((route: RouteConfig) => {
+      return this.prefixRouteName(route, name)
+    })
 
-      this._stack = [
-        ...this.stack,
-        ...routes
-      ]
-    }
+    this._stack = [
+      ...this._stack as Array<RouteConfig>,
+      ...routes
+    ]
   }
 
   /**
@@ -44,7 +41,10 @@ export class VueRouterBootstrapper implements BootstrapDriver<RoutesStack> {
     }
 
     if (route.children) {
-      route.children = route.children.map(child => this.prefixRouteName(child, route.name || prefix))
+      route.children = route.children.map((child: RouteConfig) => this.prefixRouteName(
+        child,
+        route.name || prefix
+      ))
     }
 
     return route

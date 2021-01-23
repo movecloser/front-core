@@ -1,6 +1,5 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { filter } from 'rxjs/operators'
-import { injectable } from 'inversify'
 
 import {
   ErrorsPayload,
@@ -9,7 +8,9 @@ import {
   ValidationEvent,
   ValidationEventType
 } from '@/contracts/validation'
+
 import { IncorrectCall } from '@/exceptions/errors'
+import { Injectable } from '@/container'
 
 /**
  * Validation service is responsible for sending 422 response to correct form.
@@ -17,7 +18,7 @@ import { IncorrectCall } from '@/exceptions/errors'
  * @author  Kuba Fogel <kuba.fogel@movecloser.pl>
  * @version 1.0.0
  */
-@injectable()
+@Injectable()
 export class Validation implements IValidation {
   private _stream$!: BehaviorSubject<ValidationEvent>
 

@@ -1,13 +1,7 @@
-import { injectable } from 'inversify'
+import { IDocument } from '@/contracts/services'
+
+import { Injectable } from '@/container'
 import { WindowService } from '@/services/window'
-
-export interface IDocument {
-  addEventListener (name: any, handler: (this: Document, ev: any) => any, options?: any): void
-  call (method: string, params: object): any
-  removeEventListener (name: any, handler: (this: Document, ev: any) => any, options?: any): void
-}
-
-export const DocumentType = Symbol.for('IDocument')
 
 /**
  * Provides window object access and functionalities.
@@ -15,7 +9,7 @@ export const DocumentType = Symbol.for('IDocument')
  * @author  Kuba Fogel <kuba.fogel@movecloser.pl>
  * @version 1.0.0
  */
-@injectable()
+@Injectable()
 export class DocumentService implements IDocument {
   /**
    * Determine if window object is available (Client vs SSR).

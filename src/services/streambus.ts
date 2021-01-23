@@ -1,24 +1,9 @@
-import { injectable } from 'inversify'
 import { Observable } from 'rxjs'
+
+import { IStreamBus, StreamFactory, StreamList, StreamRegistry } from '@/contracts/services'
+
 import { IncorrectValueError } from '@/exceptions/errors'
-
-export interface IStreamBus {
-  get (stream: string): Observable<any>
-  register (stream: string, factory: StreamFactory, force?: boolean): boolean
-  unregister (stream: string): boolean
-}
-
-export const StreamBusType = Symbol.for('IStreamBus')
-
-export type StreamFactory = () => Observable<any>
-
-export interface StreamList {
-  [key: string]: StreamFactory
-}
-
-interface StreamRegistry {
-  [key: string]: Observable<any>
-}
+import { Injectable } from '@/container'
 
 /**
  * Provides access to stream based bus channels.
@@ -26,7 +11,7 @@ interface StreamRegistry {
  * @author  Kuba Fogel <kuba.fogel@movecloser.pl>
  * @version 1.0.0
  */
-@injectable()
+@Injectable()
 export class StreamBus implements IStreamBus {
   private _registry: StreamRegistry = {}
 

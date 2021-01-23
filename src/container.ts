@@ -1,12 +1,19 @@
 import { AsyncContainerModule, Container as Inversify, ContainerModule } from 'inversify'
 import { IContainer, ContainerOptions } from '@/contracts/container'
 
+/**
+ * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ * @author Kuba Fogel <kuba.fogel@movecloser.pl>
+ * @version 1.0.0
+ * @licence MIT
+ */
 export class Container implements IContainer<Inversify, ContainerModule, AsyncContainerModule> {
   /**
    * Container instance.
    * @private
    */
   private container!: Inversify
+
   /**
    * Returns new instance of IOC container.
    * @param config
@@ -20,12 +27,20 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
    * @param binder
    * @param async
    */
-  public createModule (binder: Binder, async: boolean = false): ContainerModule| AsyncContainerModule {
+  public createModule (binder: any, async: boolean = false): ContainerModule| AsyncContainerModule {
     if (async) {
       return new AsyncContainerModule(binder)
     }
 
     return new ContainerModule(binder)
+  }
+
+  /**
+   * Returns instance of Service by it's identifier.
+   * @param identifier
+   */
+  public get<ServiceContract>(identifier: any): ServiceContract {
+    return this.container.get<ServiceContract>(identifier)
   }
 
   /**

@@ -23,7 +23,7 @@ describe('Tests for Eventbus service.', () => {
 
     // @ts-ignore
     eventbus._stream$.pipe(
-    ).subscribe((ev: EventPayload) => {
+    ).subscribe((ev: EventPayload<any>) => {
       event = ev
     })
 
@@ -38,7 +38,7 @@ describe('Tests for Eventbus service.', () => {
 
     // @ts-ignore
     eventbus._stream$.pipe(
-    ).subscribe((ev: EventPayload) => {
+    ).subscribe((ev: EventPayload<any>) => {
       event = ev
     })
 
@@ -60,7 +60,7 @@ describe('Tests for Eventbus service.', () => {
 
     // @ts-ignore
     eventbus._stream$.pipe(
-    ).subscribe((ev: EventPayload) => {
+    ).subscribe((ev: EventPayload<any>) => {
       event = ev
     })
 

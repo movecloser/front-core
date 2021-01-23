@@ -1,9 +1,7 @@
-import { Container as Inversify } from 'inversify'
-
+import { EventbusType, IEventbus } from '@/contracts/eventbus'
 import {
   AppConfig, BootstrapDriver,
   Bootstrapper as Abstract,
-  Platform,
   RoutesStack,
   StoreStack
 } from '@/contracts/bootstrapper'
@@ -11,9 +9,9 @@ import { IConfiguration } from "@/contracts/configuration"
 
 import { Configuration } from '@/configuration'
 import { Container } from '@/container'
-import { services } from '@/services'
+import { IModule } from '@/module'
 import { routerFactory, storeFactory } from '@/bootstrap/factories'
-import { EventbusType, IEventbus } from '@/contracts/eventbus'
+import { services } from '@/services'
 
 export class Bootstrapper implements Abstract {
   protected config: IConfiguration
@@ -21,7 +19,7 @@ export class Bootstrapper implements Abstract {
   protected routerBootstrapper: BootstrapDriver<RoutesStack>
   protected storeBootstrapper: BootstrapDriver<StoreStack>
 
-  constructor (config: AppConfig, protected platform: Platform) {
+  constructor (config: AppConfig) {
     this.config = new Configuration(config)
     this.container = this.createContainer()
 
@@ -44,18 +42,26 @@ export class Bootstrapper implements Abstract {
     const useRouter: boolean = !!router
     const useStore: boolean = !!store
 
-    for (let module of modules) {
-      providers.push({
-        // binder: module.providers,
-        // async: module.providersAsync
-      })
+    for (let m of modules) {
+      const module: IModule = new m()
 
-      if (useRouter) {
-        this.routerBootstrapper.applyModule(module.name, ()=> {} /* Module factory fn*/)
+      if (module.providers) {
+        providers.push({
+          binder: module.providers,
+          async: module.providersAsync
+        })
       }
 
-      if (useStore) {
-        this.storeBootstrapper.applyModule(module.name, ()=> {} /* Module factory fn*/)
+      if (module.observers) {
+        observers.push(...module.observers)
+      }
+
+      if (useRouter && module.routes) {
+        this.routerBootstrapper.applyModule(module.name, module.routes)
+      }
+
+      if (useStore && module.state) {
+        this.storeBootstrapper.applyModule(module.name, module.state)
       }
     }
 
@@ -66,11 +72,10 @@ export class Bootstrapper implements Abstract {
       )
     }
 
-    const eventbus: IEventbus = this.getContainer().get(EventbusType)
-
+    const eventbus: IEventbus = this.container.get(EventbusType)
     for (const observer of observers) {
       eventbus.observe(
-        this.getContainer().get(observer)
+        this.container.get(observer)
       )
     }
   }
@@ -83,29 +88,28 @@ export class Bootstrapper implements Abstract {
   }
 
   /**
-   * Returns actual Ioc Container.
+   * Returns Container instance.
    */
-  public getContainer (): Inversify {
-    return this.container.getContainer()
+  public getContainer (): Container {
+    return this.container
   }
 
   /**
    * Returns Routes Stack object.
    */
   public getRoutesStack (): RoutesStack {
-    return this.routerBoootstrapper.stack()
+    return this.routerBootstrapper.stack()
   }
 
   /**
    * Returns Store Stack object.
    */
   public getStoreStack (): StoreStack {
-    return this.storeBoootstrapper.stack()
+    return this.storeBootstrapper.stack()
   }
 
   /**
    * Creates new instance of Ioc Container.
-   * @private
    */
   private createContainer (): Container {
     const container = new Container()

@@ -1,16 +1,10 @@
-import { IncorrectCall } from '@/exceptions/errors'
 import { Duration, Moment } from 'moment'
 import * as moment from 'moment'
 
-import { Injectable } from '@/container'
+import { IDateTime } from '@/contracts/services'
 
-export interface IDateTime {
-  difference (start: string, end?: string): number
-  now: Moment
-  nowToFormat (format: string): string
-  parse (date: string): Moment
-  parseToFormat (date: string, format: string): string
-}
+import { IncorrectCall } from '@/exceptions/errors'
+import { Injectable } from '@/container'
 
 /**
  * DateTime is service class that parses Date to wanted format
@@ -67,5 +61,3 @@ export class DateTime implements IDateTime {
     return moment(date).format(format)
   }
 }
-
-export const DateTimeType = Symbol.for('IDateTime')

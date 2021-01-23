@@ -1,10 +1,13 @@
+import { IIntention } from '@/contracts/support'
 import { mapIntention, MappingConfig } from '@/support/adapter'
 
-export interface IIntention<T> {
-  toModel: () => T,
-  toRequest: () => any
-}
-
+/**
+ * An intention is the inverted Adapter that translate model structure into api data structure.
+ *
+ * @author Kuba Fogel <kuba.fogel@movecloser.pl>
+ * @version 1.0.0
+ * @licence MIT
+ */
 export abstract class AbstractIntention<T> implements IIntention<T>{
   protected abstract map: MappingConfig
 

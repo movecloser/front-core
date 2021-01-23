@@ -1,4 +1,3 @@
-import { Headers, IHttpConnector, IResponse, Payload } from '@/contracts/http'
 import {
   ConnectorMiddleware,
   FoundResource,
@@ -6,8 +5,10 @@ import {
   Resource,
   ResourcesRegistry, ResponseType
 } from '@/contracts/connector.ts'
-import { Injectable } from '@/container'
+import { Headers, IHttpConnector, IResponse, Payload } from '@/contracts/http'
 import { IConnector } from '@/contracts/connector.ts'
+
+import { Injectable } from '@/container'
 
 /**
  * ApiConnector is a service class that provides unified access to the REST API.
@@ -55,7 +56,7 @@ export class ApiConnector implements IConnector {
       res.url,
       body,
       headers,
-      // responseType @fixme Add ResponseType here
+      { responseType }
     )
 
     for (const middleware of this._middlewares) {
@@ -165,5 +166,3 @@ export class ApiConnector implements IConnector {
     return `${action}${first.toUpperCase()}${resource.substr(1, resource.length)}`
   }
 }
-
-export const ApiConnectorType = Symbol.for('IConnector')

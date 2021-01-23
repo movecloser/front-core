@@ -1,5 +1,6 @@
+import { IMeta } from '@/contracts/models'
+
 import { Collection } from './collection'
-import { IMeta } from '../contracts/models'
 import { ITest, TestModel } from './model.test'
 
 const emptyCollection = new Collection<TestModel>([])

@@ -1,4 +1,3 @@
-import { injectable } from 'inversify'
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { filter, first } from 'rxjs/operators'
 
@@ -10,26 +9,28 @@ import {
   ObservableEvents
 } from '@/contracts/eventbus'
 
+import { Injectable } from '@/container'
+
 /**
  * Eventbus based on RxJS.
  *
  * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  * @version 1.0.0
  */
-@injectable()
+@Injectable()
 export class Eventbus implements IEventbus {
-  private _stream$!: BehaviorSubject<EventPayload>
+  private _stream$!: BehaviorSubject<EventPayload<any>>
 
   constructor () {
-    const event: EventPayload = { name: 'app:started' }
+    const event: EventPayload<undefined> = { name: 'app:started' }
     this._stream$ = new BehaviorSubject(event)
   }
 
   /**
    * Emit new event to bus.
    */
-  emit (name: string, payload: any = null): void {
-    let eventData: EventPayload = { name }
+  emit<Data> (name: string, payload: any = null): void {
+    let eventData: EventPayload<Data> = { name }
 
     if (payload !== null) {
       eventData.payload = payload
@@ -47,7 +48,7 @@ export class Eventbus implements IEventbus {
    * Register new observer.
    */
   observe (observer: IObserver): Subscription {
-    return this._stream$.subscribe((event: EventPayload) => {
+    return this._stream$.subscribe((event: EventPayload<any>) => {
       const index: ObservableEvents = observer.observableEvents
 
       if (index.hasOwnProperty(event.name) && typeof index[event.name] !== 'undefined') {
@@ -63,10 +64,10 @@ export class Eventbus implements IEventbus {
   /**
    * Handle event of type.
    */
-  handle (name: string, callback: EventbusCallback): Subscription {
+  handle<Data> (name: string, callback: EventbusCallback<Data>): Subscription {
     return this._stream$.pipe(
-      filter((event: EventPayload) => event.name === name)
-    ).subscribe(/* istanbul ignore next */(event: EventPayload) => {
+      filter((event: EventPayload<any>) => event.name === name)
+    ).subscribe(/* istanbul ignore next */(event: EventPayload<Data>) => {
       /* istanbul ignore next */
       setTimeout(() => callback(event), 1)
     })
@@ -75,10 +76,10 @@ export class Eventbus implements IEventbus {
   /**
    * Handle event of type only once.
    */
-  handleOnce (name: string, callback: EventbusCallback): Subscription {
+  handleOnce<Data> (name: string, callback: EventbusCallback<Data>): Subscription {
     return this._stream$.pipe(
-      first((event: EventPayload) => event.name === name)
-    ).subscribe(/* istanbul ignore next */ (event: EventPayload) => {
+      first((event: EventPayload<any>) => event.name === name)
+    ).subscribe(/* istanbul ignore next */ (event: EventPayload<Data>) => {
       setTimeout(() => callback(event), 1)
     })
   }

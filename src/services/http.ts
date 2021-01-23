@@ -1,14 +1,15 @@
 import {
   DriverRegistry,
   Headers,
-  IHttpConnector,
+  IHttp,
+  IHttpConnector, IHttpConstructors,
   IResponse,
   Payload
 } from '@/contracts/http'
 import { Injectable } from '@/container'
 
-import { IncorrectCall } from '@/exceptions/errors'
 import { HttpDriver } from '@/services/http/http-driver'
+import { IncorrectCall } from '@/exceptions/errors'
 
 /**
  * Http Connector is service class that provides http functionality.
@@ -20,11 +21,14 @@ import { HttpDriver } from '@/services/http/http-driver'
 @Injectable()
 export class HttpConnector implements IHttpConnector {
   private _defaultDestination: string | null
-  private readonly _drivers: DriverRegistry
+  private readonly _drivers: DriverRegistry = {}
 
-  constructor (drivers: DriverRegistry = {}, defaultDestination: string | null = null) {
+  constructor (constructors: IHttpConstructors = {}, defaultDestination: string | null = null) {
     this._defaultDestination = defaultDestination
-    this._drivers = drivers
+
+    for (const [name, fn] of Object.entries(constructors)) {
+      this._drivers[name] = fn()
+    }
   }
 
   /**
@@ -55,7 +59,7 @@ export class HttpConnector implements IHttpConnector {
    * Return instance of requested destination driver.
    * @param destination
    */
-  public destination (destination: string): HttpDriver {
+  public destination (destination: string): IHttp {
     if (!this._drivers.hasOwnProperty(destination)) {
       throw new IncorrectCall(`HttpConnector has no driver matching given destination [${destination}] defined.`)
     }
@@ -147,7 +151,7 @@ export class HttpConnector implements IHttpConnector {
    *
    * @private
    */
-  private get defaultDriver (): HttpDriver {
+  private get defaultDriver (): IHttp {
     if (!this._defaultDestination) {
       throw new IncorrectCall(
         'Default destination is not set. Cannot perform action when driver is not selected.')
@@ -157,4 +161,3 @@ export class HttpConnector implements IHttpConnector {
   }
 }
 
-export const HttpConnectorType = Symbol.for('IHttpConnector')

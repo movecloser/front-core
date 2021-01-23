@@ -1,5 +1,5 @@
+import { MissingPropertyError } from '@/exceptions/errors'
 import { Model } from './model'
-import { MissingPropertyError } from '../../src/exceptions/errors'
 
 export interface ITest {
   id: number
@@ -19,7 +19,7 @@ export class TestModel extends Model<ITest> {
       name: 'n/a',
       value: 1
     }
-    this.modelProperties = ['id', 'name', 'value', 'type']
+    this.modelProperties = [ 'id', 'name', 'value', 'type' ]
   }
 }
 
@@ -46,7 +46,7 @@ class TestModelWithNestedMany extends TestModel {
 
 class TestNestedModel extends Model<ITest> {
   protected boot (): void {
-    this.modelProperties = ['name']
+    this.modelProperties = [ 'name' ]
   }
 }
 
@@ -164,7 +164,7 @@ describe('Test abstract model class', () => {
 
   test('Expect [modelProperties] to be set as provided', () => {
     const model = new TestModel()
-    const modelProperties = ['id', 'name', 'value', 'type']
+    const modelProperties = [ 'id', 'name', 'value', 'type' ]
     //@ts-ignore
     expect(model.modelProperties).toEqual(modelProperties)
   })

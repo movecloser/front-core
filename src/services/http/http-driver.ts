@@ -1,5 +1,5 @@
-// import { IEventbus } from '@/contracts/eventbus'
 import { Headers, IHttp, IResponse, Payload } from '@/contracts/http'
+
 import { Response } from '@/services/http/response'
 
 export abstract class HttpDriver implements IHttp {

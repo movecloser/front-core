@@ -1,28 +1,5 @@
-import { injectable } from 'inversify'
-
-import { IDocument } from '@/services/document'
-
-export interface IWindow {
-  addEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void
-
-  call: (method: string, params: any[]) => any
-  document: IDocument
-  isClient: boolean
-  isDesktop: boolean
-  isMobile: boolean
-  isPhone: boolean
-  isServer: boolean
-  isTablet: boolean
-  native: Window | null
-
-  scrollTo(options?: ScrollToOptions): void;
-  scrollTo(x: number, y: number): void;
-  redirect (target: string): void
-
-  removeEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void
-}
-
-export const WindowType = Symbol.for('IWindow')
+import { IDocument, IWindow } from '@/contracts/services'
+import { Injectable } from '@/container'
 
 /**
  * Provides window object access and functionalities.
@@ -30,7 +7,7 @@ export const WindowType = Symbol.for('IWindow')
  * @author  Kuba Fogel <kuba.fogel@movecloser.pl>
  * @version 1.0.0
  */
-@injectable()
+@Injectable()
 export class WindowService implements IWindow {
   /**
    * Service that implements IDocument.

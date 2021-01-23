@@ -1,15 +1,24 @@
-import { Container } from 'inversify'
-
-import { ContainerOptions } from '@/contracts/container'
+import { ContainerOptions, Interfaces } from '@/contracts/container'
 import { IConfiguration } from '@/contracts/configuration'
-import { IModuleConstructor } from '@/support/modules'
+import { IHttpConnectorConfig } from '@/contracts/http'
+import { ResourcesRegistry } from '@/contracts/connector'
 
-export interface AppConfig<C> {
+import { Container } from '@/container'
+import { IModuleConstructor } from '@/module'
+
+export interface AppConfig extends AnyObject {
   container?: ContainerOptions
-  modules: IModuleConstructor<C>[]
+  http?: IHttpConnectorConfig
+  middlewares?: symbol[],
+  modules: IModuleConstructor[]
+  resources?: ResourcesRegistry
   router: RouterDriver
   store: StoreDriver
-  [key: string]: any
+}
+
+export interface BootstrapDriver<Stack> {
+  applyModule (name: string, callback: ContainerFactory): void
+  stack (): Stack
 }
 
 export interface Bootstrapper {
@@ -20,10 +29,9 @@ export interface Bootstrapper {
   getStoreStack (): StoreStack
 }
 
-export enum Platform {
-  React = 'react',
-  Vue = 'vue'
-}
+export type ContainerFactory = (container: Container) => any
+
+export type ProvidersFactory = (config: IConfiguration) => Interfaces.ContainerModuleCallBack | Interfaces.AsyncContainerModuleCallBack
 
 export type RoutesStack = AnyObject | any[]
 export type StoreStack = AnyObject | any[]
@@ -36,17 +44,9 @@ export enum RouterDriver {
 export enum StoreDriver {
   // Mobx = 'mobx',
   None = 'none',
-  // Redux ='redux',
   Vuex = 'vuex'
 }
 
-interface AnyObject {
+export interface AnyObject {
   [key: string]: any
 }
-
-export interface BootstrapDriver<S> {
-  applyModule (name: string, callback: () => any): void
-  stack (): S
-}
-
-export type ProvidersFactory<C> = (config: IConfiguration) => C

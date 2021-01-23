@@ -1,26 +1,10 @@
+import {
+  MappingConfig,
+  MappingFunction,
+  MappingInstruction,
+  MappingTypes
+} from '@/contracts/support'
 import { MappingError } from '@/exceptions/errors'
-
-export type MappingConfig = {
-  [key: string]: MappingInstruction | string
-}
-
-interface MappingDriver {
-  value?: MappingFunction | string
-  map?: MappingConfig
-  target?: string
-}
-
-type MappingFunction = (toMap: any) => any
-
-export interface MappingInstruction extends MappingDriver {
-  type: MappingTypes
-}
-
-export enum MappingTypes {
-  Adapter = 'adapter',
-  Function = 'function'
-}
-
 
 /**
  * Adapter to connect api response with data model required by frontend

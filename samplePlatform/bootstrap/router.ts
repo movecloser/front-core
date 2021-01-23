@@ -1,4 +1,4 @@
-import { Container } from 'inversify'
+import { Container } from 'src/container'
 
 export const createRouter = (container: Container, routesStack: RouteConfig[]): VueRouter => {
   return { ...routesStack } as VueRouter
