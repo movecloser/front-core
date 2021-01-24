@@ -1,5 +1,5 @@
-import { IDocument, IWindow } from '@/contracts/services'
-import { Injectable } from '@/container'
+import { IDocument, IWindow } from '../contracts/services'
+import { Injectable } from '../container'
 
 /**
  * Provides window object access and functionalities.

@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
 
-import { ConnectionError } from '@/exceptions/errors'
-import { HttpDriver } from '@/services/http/http-driver'
+import { ConnectionError } from '../../exceptions/errors'
+import { HttpDriver } from './http-driver'
 
 /**
  * Provides axios instance for http calls.

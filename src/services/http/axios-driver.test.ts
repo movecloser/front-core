@@ -1,12 +1,13 @@
 /**
  * @jest-environment node
  */
-
 import 'reflect-metadata'
-import { AxiosDriver } from '@/services/http/axios-driver'
 import { AxiosRequestConfig } from 'axios'
-import { Methods } from '@/contracts/http'
-import { ConnectionError } from '@/exceptions/errors'
+
+import { Methods } from '../../contracts/http'
+
+import { AxiosDriver } from './axios-driver'
+import { ConnectionError } from '../../exceptions/errors'
 
 const axiosConfig: AxiosRequestConfig = {
   // url: '/Testowanie_oprogramowania',

@@ -1,10 +1,10 @@
 import 'reflect-metadata'
-import { FoundResource } from '@/contracts/connector.ts'
-import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+import { FoundResource } from '../../contracts/connector'
+import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
 
-import { Eventbus } from '@/services/eventbus'
-import { EventbusMiddleware } from '@/services/resources/eventbus-middleware'
-import { TemporaryUnavailableError } from '@/exceptions/errors'
+import { Eventbus } from '../../services/eventbus'
+import { EventbusMiddleware } from './eventbus-middleware'
+import { TemporaryUnavailableError } from '../../exceptions/errors'
 
 describe('Test eventbus middleware', () => {
   const eventBus = new Eventbus()

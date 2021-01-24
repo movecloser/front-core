@@ -1,9 +1,9 @@
-import { ConnectorMiddleware, FoundResource } from '@/contracts/connector.ts'
-import { Headers, IResponse, Payload } from '@/contracts/http'
-import { IEventbus } from '@/contracts/eventbus'
+import { ConnectorMiddleware, FoundResource } from '../../contracts/connector'
+import { Headers, IResponse, Payload } from '../../contracts/http'
+import { IEventbus } from '../../contracts/eventbus'
 
-import { Injectable } from '@/container'
-import { TemporaryUnavailableError } from '@/exceptions/errors'
+import { Injectable } from '../../container'
+import { TemporaryUnavailableError } from '../../exceptions/errors'
 
 @Injectable()
 export class EventbusMiddleware implements  ConnectorMiddleware {

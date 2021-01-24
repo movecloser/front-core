@@ -3,8 +3,8 @@ import {
   MappingFunction,
   MappingInstruction,
   MappingTypes
-} from '@/contracts/support'
-import { MappingError } from '@/exceptions/errors'
+} from '../contracts/support'
+import { MappingError } from '../exceptions/errors'
 
 /**
  * Adapter to connect api response with data model required by frontend

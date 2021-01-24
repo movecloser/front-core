@@ -1,9 +1,9 @@
 import 'reflect-metadata'
-import { FoundResource } from '@/contracts/connector.ts'
-import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+import { FoundResource } from '../../contracts/connector'
+import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
 
-import { Validation } from '@/services/validation'
-import { ValidationMiddleware } from '@/services/resources/validation-middleware'
+import { Validation } from '../../services/validation'
+import { ValidationMiddleware } from './validation-middleware'
 
 describe('Test validation middleware', () => {
   const validationService = new Validation()

@@ -1,10 +1,10 @@
 import 'reflect-metadata'
 import { Observable, of } from 'rxjs'
 
-import { StreamList } from '@/contracts/services'
+import { StreamList } from '../contracts/services'
 
-import { IncorrectValueError } from '@/exceptions/errors'
-import { StreamBus } from '@/services/streambus'
+import { IncorrectValueError } from '../exceptions/errors'
+import { StreamBus } from './streambus'
 
 const testStreamFactory = function (): Observable<number> { return of(1, 2, 3) }
 const streams: StreamList = { 'test$': testStreamFactory }

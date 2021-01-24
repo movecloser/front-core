@@ -5,11 +5,11 @@ import {
   IHttpConnector, IHttpConstructors,
   IResponse,
   Payload
-} from '@/contracts/http'
-import { Injectable } from '@/container'
+} from '../contracts/http'
+import { Injectable } from '../container'
 
-import { HttpDriver } from '@/services/http/http-driver'
-import { IncorrectCall } from '@/exceptions/errors'
+import { HttpDriver } from './http/http-driver'
+import { IncorrectCall } from '../exceptions/errors'
 
 /**
  * Http Connector is service class that provides http functionality.

@@ -1,11 +1,11 @@
 import 'reflect-metadata'
 
-import { IHttp } from '@/contracts/http'
+import { IHttp } from '../contracts/http'
 
-import { HttpConnector } from '@/services/http'
-import { HttpDriver } from '@/services/http/http-driver'
-import { IncorrectCall } from '@/exceptions/errors'
-import { mockedCallFn, TestDriver } from '@/services/http/http-driver.test'
+import { HttpConnector } from './http'
+import { HttpDriver } from './http/http-driver'
+import { IncorrectCall } from '../exceptions/errors'
+import { mockedCallFn, TestDriver } from './http/http-driver.test'
 
 describe('Test Http class', () => {
   const log = console.log
@@ -20,6 +20,7 @@ describe('Test Http class', () => {
   test('Expect [destination] method to return requested driver.', () => {
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(true)
       }
     })
@@ -47,6 +48,7 @@ describe('Test Http class', () => {
   test('Expect [register] method to add new driver.', () => {
     const http = new HttpConnector()
 
+    // @ts-ignore
     http.register('test-driver', new TestDriver(false))
 
     // @ts-ignore
@@ -58,6 +60,7 @@ describe('Test Http class', () => {
   test('Expect [register] method to add new default driver.', () => {
     const http = new HttpConnector()
 
+    // @ts-ignore
     http.register('test-driver', new TestDriver(false), true)
 
     // @ts-ignore
@@ -75,6 +78,7 @@ describe('Test Http class', () => {
   test('Expect [register] method to throw error (cannot overwrite).', () => {
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     })
@@ -111,6 +115,7 @@ describe('Test Http class', () => {
   test('Expect [setDefaultDestination] method to add new default driver.', () => {
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     })
@@ -178,6 +183,7 @@ describe('Test Http class', () => {
   test('Expect [defaultDriver] method to return default driver instance.', () => {
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -209,6 +215,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -225,6 +232,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -241,6 +249,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -257,6 +266,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -273,6 +283,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -289,6 +300,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -305,6 +317,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')
@@ -321,6 +334,7 @@ describe('Test Http class', () => {
 
     const http = new HttpConnector({
       'test-driver': () => {
+        // @ts-ignore
         return new TestDriver(false)
       }
     }, 'test-driver')

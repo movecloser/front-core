@@ -1,18 +1,26 @@
-import { EventbusType, IEventbus } from '@/contracts/eventbus'
+import { EventbusType, IEventbus } from './contracts/eventbus'
 import {
   AppConfig, BootstrapDriver,
   IBootstrapper as Abstract,
   RoutesStack,
   StoreStack
-} from '@/contracts/bootstrapper'
-import { IConfiguration } from "@/contracts/configuration"
+} from './contracts/bootstrapper'
+import { IConfiguration } from "./contracts/configuration"
 
-import { Configuration } from '@/configuration'
-import { Container } from '@/container'
-import { IModule } from '@/module'
-import { routerFactory, storeFactory } from '@/bootstrap/factories'
-import { services } from '@/services'
+import { Configuration } from './configuration'
+import { Container } from './container'
+import { IModule } from './module'
+import { routerFactory, storeFactory } from './bootstrap/factories'
+import { services } from './services'
 
+/**
+ * Bootstrapper is responsible for booting the app with entire dependencies & base setup.
+ *
+ * @author Kuba Fogel <kuba.fogel@movecloser.pl>
+ * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ * @version 1.0.0
+ * @licence MIT
+ */
 export class Bootstrapper implements Abstract {
   protected config: IConfiguration
   protected container: Container

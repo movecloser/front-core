@@ -1,4 +1,4 @@
-import { AppConfig } from "@/contracts/bootstrapper"
+import { AppConfig } from "./bootstrapper"
 
 export interface IConfiguration {
   byFile<Expected> (name: string): Expected

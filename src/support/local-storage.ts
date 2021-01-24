@@ -1,4 +1,4 @@
-import { WindowService } from '@/services/window'
+import { WindowService } from '../services/window'
 
 /**
  * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>

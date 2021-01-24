@@ -1,4 +1,4 @@
-import { Headers, IResponse, List, Payload } from '@/contracts/http'
+import { Headers, IResponse, List, Payload } from '../../contracts/http'
 
 /**
  * Response class is responsible for delivering response from http request.

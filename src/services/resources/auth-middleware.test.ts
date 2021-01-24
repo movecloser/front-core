@@ -1,8 +1,8 @@
 import 'reflect-metadata'
-import { Authorization, FoundResource } from '@/contracts/connector.ts'
-import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+import { Authorization, FoundResource } from '../../contracts/connector'
+import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
 
-import { AuthMiddleware } from '@/services/resources/auth-middleware'
+import { AuthMiddleware } from './auth-middleware'
 
 describe('Test auth middleware', () => {
   class TestAuthService implements Authorization {

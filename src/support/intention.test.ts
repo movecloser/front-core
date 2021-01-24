@@ -1,5 +1,6 @@
-import { AbstractIntention } from '@/support/intention'
-import { MappingConfig, MappingTypes } from '@/contracts/support'
+import { MappingConfig, MappingTypes } from '../contracts/support'
+
+import { AbstractIntention } from '../support/intention'
 
 describe('Test intention methods', () => {
   test('Expect intention [toModel] to return intention payload', () => {

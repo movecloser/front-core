@@ -1,4 +1,4 @@
-import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+import { Headers, IResponse, Methods, Payload } from './http'
 
 export const ApiConnectorType = Symbol.for('IConnector')
 

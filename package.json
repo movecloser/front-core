@@ -1,6 +1,6 @@
 {
   "name": "movecloser-core",
-  "version": "1.0.0-rc.4",
+  "version": "1.0.0-rc.5",
   "scripts": {
     "build": "tsc",
     "coverage": "jest --config jestconfig.json --coverage",
@@ -23,11 +23,12 @@
     "ts-lint": "^4.5.1",
     "typescript": "^4.0.2",
     "vue-router": "^3.4.3",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "vue": "^2.6.12"
   },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "dist/**/*"
+    "lib/**/*"
   ]
 }

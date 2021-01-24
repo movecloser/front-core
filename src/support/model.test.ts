@@ -1,4 +1,4 @@
-import { MissingPropertyError } from '@/exceptions/errors'
+import { MissingPropertyError } from '../exceptions/errors'
 import { Model } from './model'
 
 export interface ITest {

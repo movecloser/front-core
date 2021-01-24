@@ -1,4 +1,4 @@
-import { Response } from '@/services/http/response'
+import { Response } from './response'
 
 describe('Test Response methods', () => {
   test('Expect method [hasErrors] to return true when errors object is provided', () => {

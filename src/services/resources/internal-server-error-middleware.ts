@@ -1,8 +1,8 @@
-import { FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
-import { Headers, IResponse, Payload } from '@/contracts/http'
+import { FoundResource, ConnectorMiddleware } from '../../contracts/connector'
+import { Headers, IResponse, Payload } from '../../contracts/http'
 
-import { Injectable } from '@/container'
-import { InternalServerError } from '@/exceptions/errors'
+import { Injectable } from '../../container'
+import { InternalServerError } from '../../exceptions/errors'
 
 @Injectable()
 export class InternalServerErrorMiddleware implements ConnectorMiddleware {

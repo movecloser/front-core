@@ -1,5 +1,5 @@
-import { FilterParams, Filters, FiltersConfig } from '@/contracts/repositories'
-import { IncorrectValueError, MissingParameter } from '@/exceptions/errors'
+import { FilterParams, Filters, FiltersConfig } from '../contracts/repositories'
+import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
 
 export const parse = (filters: FiltersConfig): Filters => {
   let result: Filters = {}

@@ -1,7 +1,7 @@
-import { IDocument } from '@/contracts/services'
+import { IDocument } from '../contracts/services'
 
-import { Injectable } from '@/container'
-import { WindowService } from '@/services/window'
+import { Injectable } from '../container'
+import { WindowService } from './window'
 
 /**
  * Provides window object access and functionalities.

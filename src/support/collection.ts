@@ -1,4 +1,4 @@
-import { ICollection, IMeta, MetaPayload } from '@/contracts/models'
+import { ICollection, IMeta, MetaPayload } from '../contracts/models'
 
 /**
  * Collection is an extension of classic Array with some new features and Model awareness.

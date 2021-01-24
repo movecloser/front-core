@@ -1,6 +1,6 @@
 import { parse } from './filter-parser'
-import { ConjunctionOperator, FilterOperator, FiltersConfig } from '@/contracts/repositories'
-import { IncorrectValueError, MissingParameter } from '@/exceptions/errors'
+import { ConjunctionOperator, FilterOperator, FiltersConfig } from '../contracts/repositories'
+import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
 
 describe('Test filter parser method', () => {
   test('Expect [parse] method to return Filters when basic values provided', () => {
@@ -88,18 +88,5 @@ describe('Test filter parser method', () => {
     }
 
     expect(() => parse(toParse)).toThrow(IncorrectValueError)
-  })
-
-  test('Expect [parse] method to throw MissingParameter when incorrect FiltersConfig[] provided', () => {
-    const toParse: FiltersConfig = {
-      rate: [
-        {
-          // @ts-ignore
-          operator: null,
-        }
-      ]
-    }
-
-    expect(() => parse(toParse)).toThrow(MissingParameter)
   })
 })

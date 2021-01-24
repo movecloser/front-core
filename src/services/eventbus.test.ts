@@ -1,8 +1,8 @@
 import 'reflect-metadata'
-
-import { EventPayload, IEventbus, IObserver } from '@/contracts/eventbus'
-import { Eventbus } from '@/services/eventbus'
 import { Subscription } from 'rxjs'
+
+import { EventPayload, IEventbus, IObserver } from '../contracts/eventbus'
+import { Eventbus } from './eventbus'
 
 describe('Tests for Eventbus service.', () => {
   const eventbus: IEventbus = new Eventbus()

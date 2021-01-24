@@ -1,4 +1,4 @@
-import { ContainerFactory, ProvidersFactory } from '@/contracts/bootstrapper'
+import { ContainerFactory, ProvidersFactory } from './contracts/bootstrapper'
 
 export function AppModule (registry: ModuleRegistry) {
   return function _AppModule (target: ModuleConstructor): IModuleConstructor {

@@ -1,5 +1,5 @@
-import { IModel, ModelConstructor, ModelPayload } from '@/contracts/models'
-import { MissingPropertyError } from '@/exceptions/errors'
+import { IModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import { MissingPropertyError } from '../exceptions/errors'
 
 /**
  * @author Kuba Fogel <kuba.foge@movecloser.pl>

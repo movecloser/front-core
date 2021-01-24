@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import * as moment from 'moment'
 
-import { DateTime } from '@/services/datetime'
+import { DateTime } from './datetime'
 
 const dateTime = new DateTime()
 

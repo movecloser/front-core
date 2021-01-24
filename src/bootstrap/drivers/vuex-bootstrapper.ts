@@ -1,6 +1,5 @@
-import { BootstrapDriver, StoreStack } from '@/contracts/bootstrapper'
-import { Container } from '@/container'
-import { ContainerFactory } from '@/module'
+import { BootstrapDriver, ContainerFactory, StoreStack } from '../../contracts/bootstrapper'
+import { Container } from '../../container'
 
 export class VuexBootstrapper implements BootstrapDriver<StoreStack> {
   private _stack: StoreStack = {}

@@ -1,5 +1,5 @@
-import { Container } from '@/container'
-import { RouterDriver, StoreDriver } from '@/contracts/bootstrapper'
+import { Container } from '../container'
+import { RouterDriver, StoreDriver } from '../contracts/bootstrapper'
 
 import { VuexBootstrapper } from './drivers/vuex-bootstrapper'
 import { VueRouterBootstrapper } from './drivers/vue-router-bootstrapper'

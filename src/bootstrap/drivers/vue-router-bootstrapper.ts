@@ -1,8 +1,7 @@
 import { RouteConfig } from 'vue-router'
 
-import { BootstrapDriver, RoutesStack } from '@/contracts/bootstrapper'
-import { Container } from '@/container'
-import { ContainerFactory } from '@/module'
+import { BootstrapDriver, ContainerFactory, RoutesStack } from '../../contracts/bootstrapper'
+import { Container } from '../../container'
 
 export class VueRouterBootstrapper implements BootstrapDriver<RoutesStack> {
   private _stack: RoutesStack = []

@@ -1,4 +1,4 @@
-import { IMeta } from '@/contracts/models'
+import { IMeta } from '../contracts/models'
 
 import { Collection } from './collection'
 import { ITest, TestModel } from './model.test'

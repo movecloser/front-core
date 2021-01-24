@@ -7,9 +7,9 @@ import {
   IEventbus,
   IObserver,
   ObservableEvents
-} from '@/contracts/eventbus'
+} from '../contracts/eventbus'
 
-import { Injectable } from '@/container'
+import { Injectable } from '../container'
 
 /**
  * Eventbus based on RxJS.

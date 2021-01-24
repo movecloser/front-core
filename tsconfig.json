@@ -5,20 +5,18 @@
       "lib": [
         "es6",
         "es2017",
-        "dom"
+        "dom",
+        "esnext"
       ],
       "module": "commonjs",
       "declaration": true,
-      "outDir": "./dist",
+      "outDir": "./lib",
+      "rootDir": ".",
       "strict": true,
       "resolveJsonModule": true,
-      "baseUrl": ".",
-      "paths": {
-        "@test/*": ["test/*"],
-        "@/*": ["src/*"]
-      },
+      "allowJs": true,
       "allowSyntheticDefaultImports": true
     },
-    "include": ["src", "test"],
-    "exclude": ["node_modules"]
+    "include": ["src"],
+    "exclude": ["node_modules", "src/platforms", "**/*.test.ts"]
 }

@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs'
 
-import { IStreamBus, StreamFactory, StreamList, StreamRegistry } from '@/contracts/services'
+import { IStreamBus, StreamFactory, StreamList, StreamRegistry } from '../contracts/services'
 
-import { IncorrectValueError } from '@/exceptions/errors'
-import { Injectable } from '@/container'
+import { IncorrectValueError } from '../exceptions/errors'
+import { Injectable } from '../container'
 
 /**
  * Provides access to stream based bus channels.

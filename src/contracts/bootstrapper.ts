@@ -1,10 +1,10 @@
-import { ContainerOptions, Interfaces } from '@/contracts/container'
-import { IConfiguration } from '@/contracts/configuration'
-import { IHttpConnectorConfig } from '@/contracts/http'
-import { ResourcesRegistry } from '@/contracts/connector'
+import { ContainerOptions, Interfaces } from './container'
+import { IConfiguration } from './configuration'
+import { IHttpConnectorConfig } from './http'
+import { ResourcesRegistry } from './connector'
 
-import { Container } from '@/container'
-import { IModuleConstructor } from '@/module'
+import { Container } from '../container'
+import { IModuleConstructor } from '../module'
 
 export interface AppConfig extends AnyObject {
   container?: ContainerOptions

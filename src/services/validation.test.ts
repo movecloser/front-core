@@ -1,9 +1,9 @@
 import 'reflect-metadata'
-
-import { IValidation, ValidationEventType } from '@/contracts/validation'
-import { Validation } from '@/services/validation'
-import { IncorrectCall } from '@/exceptions/errors'
 import { Subscription } from 'rxjs'
+
+import { IncorrectCall } from '../exceptions/errors'
+import { IValidation, ValidationEventType } from '../contracts/validation'
+import { Validation } from './validation'
 
 
 describe('Tests for Validation service', () => {

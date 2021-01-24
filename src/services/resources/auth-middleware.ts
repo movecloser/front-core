@@ -1,7 +1,7 @@
-import { Authorization, FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
-import { Headers, IResponse, Payload } from '@/contracts/http'
+import { Authorization, FoundResource, ConnectorMiddleware } from '../../contracts/connector'
+import { Headers, IResponse, Payload } from '../../contracts/http'
 
-import { Injectable } from '@/container'
+import { Injectable } from '../../container'
 
 @Injectable()
 export class AuthMiddleware implements ConnectorMiddleware {

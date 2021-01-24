@@ -1,9 +1,9 @@
-import { ApiConnectorType, ConnectorMiddleware, IConnector } from '@/contracts/connector'
+import { ApiConnectorType, ConnectorMiddleware, IConnector } from './contracts/connector'
 import {
   EventbusMiddlewareType,
   InternalServerErrorMiddlewareType,
   ValidationMiddlewareType
-} from '@/contracts/middlewares'
+} from './contracts/middlewares'
 import {
   DateTimeType,
   DocumentType,
@@ -11,24 +11,24 @@ import {
   IDocument,
   IWindow,
   WindowType
-} from '@/contracts/services'
-import { EventbusType, IEventbus } from '@/contracts/eventbus'
-import { HttpConnectorType, IHttpConnector, IHttpConstructors } from '@/contracts/http'
-import { IConfiguration } from '@/contracts/configuration'
-import { Interfaces } from '@/contracts/container'
-import { IValidation, ValidationType } from '@/contracts/validation'
-import { ProvidersFactory } from '@/contracts/bootstrapper'
+} from './contracts/services'
+import { EventbusType, IEventbus } from './contracts/eventbus'
+import { HttpConnectorType, IHttpConnector, IHttpConstructors } from './contracts/http'
+import { IConfiguration } from './contracts/configuration'
+import { Interfaces } from './contracts/container'
+import { IValidation, ValidationType } from './contracts/validation'
+import { ProvidersFactory } from './contracts/bootstrapper'
 
-import { ApiConnector } from '@/services/connector'
-import { DateTime } from '@/services/datetime'
-import { DocumentService } from '@/services/document'
-import { Eventbus } from '@/services/eventbus'
-import { EventbusMiddleware } from '@/services/resources/eventbus-middleware'
-import { HttpConnector } from '@/services/http'
-import { InternalServerErrorMiddleware } from '@/services/resources/internal-server-error-middleware'
-import { Validation } from '@/services/validation'
-import { ValidationMiddleware } from '@/services/resources/validation-middleware'
-import { WindowService } from '@/services/window'
+import { ApiConnector } from './services/connector'
+import { DateTime } from './services/datetime'
+import { DocumentService } from './services/document'
+import { Eventbus } from './services/eventbus'
+import { EventbusMiddleware } from './services/resources/eventbus-middleware'
+import { HttpConnector } from './services/http'
+import { InternalServerErrorMiddleware } from './services/resources/internal-server-error-middleware'
+import { Validation } from './services/validation'
+import { ValidationMiddleware } from './services/resources/validation-middleware'
+import { WindowService } from './services/window'
 
 /**
  * List of services included into movecloser/core

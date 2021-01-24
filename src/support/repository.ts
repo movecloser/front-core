@@ -1,10 +1,11 @@
-import { IConnector } from '@/contracts/connector.ts'
-import { ICollection, IModel, ModelConstructor, ModelPayload } from '@/contracts/models'
-import { Injectable } from '@/container'
+import { IConnector } from '../contracts/connector'
+import { ICollection, IModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import { MappingConfig } from '../contracts/support'
 
-import { Collection } from '@/support/collection'
-import { mapCollection, mapModel, MappingConfig } from '@/support/adapter'
-import { MappingError } from '@/exceptions/errors'
+import { Collection } from './collection'
+import { Injectable } from '../container'
+import { mapCollection, mapModel } from './adapter'
+import { MappingError } from '../exceptions/errors'
 
 /**
  * Repository is service class that provides loading data via store.

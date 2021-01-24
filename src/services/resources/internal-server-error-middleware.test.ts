@@ -1,8 +1,10 @@
 import 'reflect-metadata'
-import { InternalServerErrorMiddleware } from '@/services/resources/internal-server-error-middleware'
-import { FoundResource } from '@/contracts/connector.ts'
-import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
-import { InternalServerError } from '@/exceptions/errors'
+
+import { FoundResource } from '../../contracts/connector'
+import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
+
+import { InternalServerError } from '../../exceptions/errors'
+import { InternalServerErrorMiddleware } from './internal-server-error-middleware'
 
 describe('Test internal server error middleware', () => {
   afterEach(() => {

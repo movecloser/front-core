@@ -1,7 +1,8 @@
 import 'reflect-metadata'
-import { HttpDriver } from '@/services/http/http-driver'
-import { Headers, IResponse, Payload } from '@/contracts/http'
-import { Response } from '@/services/http/response'
+
+import { Headers, IResponse, Payload } from '../../contracts/http'
+import { HttpDriver } from './http-driver'
+import { Response } from './response'
 
 export const mockedCallFn = jest.fn()
 

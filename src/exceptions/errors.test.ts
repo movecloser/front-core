@@ -13,7 +13,7 @@ import {
   NotImplementedError,
   PermissionDeniedError,
   TemporaryUnavailableError, TooManyRequestsError, UnauthorizedError, UnprocessableEntityError
-} from '@/exceptions/errors'
+} from './errors'
 
 describe('Test error classes', () => {
   test('Expect [BadRequestError] to contain specific message', () => {

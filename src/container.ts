@@ -1,5 +1,5 @@
 import { AsyncContainerModule, Container as Inversify, ContainerModule } from 'inversify'
-import { IContainer, ContainerOptions } from '@/contracts/container'
+import { IContainer, ContainerOptions } from './contracts/container'
 
 /**
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>

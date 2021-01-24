@@ -7,10 +7,10 @@ import {
   ValidationErrorCallback,
   ValidationEvent,
   ValidationEventType
-} from '@/contracts/validation'
+} from '../contracts/validation'
 
-import { IncorrectCall } from '@/exceptions/errors'
-import { Injectable } from '@/container'
+import { IncorrectCall } from '../exceptions/errors'
+import { Injectable } from '../container'
 
 /**
  * Validation service is responsible for sending 422 response to correct form.

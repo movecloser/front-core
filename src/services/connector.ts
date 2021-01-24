@@ -4,11 +4,11 @@ import {
   Params,
   Resource,
   ResourcesRegistry, ResponseType
-} from '@/contracts/connector.ts'
-import { Headers, IHttpConnector, IResponse, Payload } from '@/contracts/http'
-import { IConnector } from '@/contracts/connector.ts'
+} from '../contracts/connector'
+import { Headers, IHttpConnector, IResponse, Payload } from '../contracts/http'
+import { IConnector } from '../contracts/connector'
 
-import { Injectable } from '@/container'
+import { Injectable } from '../container'
 
 /**
  * ApiConnector is a service class that provides unified access to the REST API.

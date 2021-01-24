@@ -1,5 +1,5 @@
-import { AppConfig } from '@/contracts/bootstrapper'
-import { IConfiguration } from '@/contracts/configuration'
+import { AppConfig } from './contracts/bootstrapper'
+import { IConfiguration } from './contracts/configuration'
 
 /**
  * Configuration is config files holder.
