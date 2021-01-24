@@ -50,7 +50,7 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
         }
 
         return new ApiConnector(
-          {},
+          config.byFile('resources'),
           context.container.get<IHttpConnector>(HttpConnectorType),
           middlewares
         )
