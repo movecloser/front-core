@@ -11,7 +11,7 @@
       "module": "commonjs",
       "declaration": true,
       "outDir": "./lib",
-      "rootDir": ".",
+      "rootDir": "./src",
       "strict": true,
       "resolveJsonModule": true,
       "allowJs": true,
