@@ -1,6 +1,6 @@
 {
   "name": "movecloser-core",
-  "version": "0.1.0",
+  "version": "1.0.0-rc.3",
   "scripts": {
     "build": "tsc",
     "coverage": "jest --config jestconfig.json --coverage",
