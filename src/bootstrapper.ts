@@ -1,7 +1,7 @@
 import { EventbusType, IEventbus } from '@/contracts/eventbus'
 import {
   AppConfig, BootstrapDriver,
-  Bootstrapper as Abstract,
+  IBootstrapper as Abstract,
   RoutesStack,
   StoreStack
 } from '@/contracts/bootstrapper'

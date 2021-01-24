@@ -12,8 +12,8 @@ export interface AppConfig extends AnyObject {
   middlewares?: symbol[],
   modules: IModuleConstructor[]
   resources?: ResourcesRegistry
-  router: RouterDriver
-  store: StoreDriver
+  router?: RouterDriver
+  store?: StoreDriver
 }
 
 export interface BootstrapDriver<Stack> {
@@ -21,15 +21,15 @@ export interface BootstrapDriver<Stack> {
   stack (): Stack
 }
 
-export interface Bootstrapper {
+export type ContainerFactory = (container: Container) => any
+
+export interface IBootstrapper {
   boot (): void
   getConfiguration (): IConfiguration
   getContainer (): Container
   getRoutesStack (): RoutesStack
   getStoreStack (): StoreStack
 }
-
-export type ContainerFactory = (container: Container) => any
 
 export type ProvidersFactory = (config: IConfiguration) => Interfaces.ContainerModuleCallBack | Interfaces.AsyncContainerModuleCallBack
 
