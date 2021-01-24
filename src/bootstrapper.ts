@@ -32,7 +32,7 @@ export class Bootstrapper implements Abstract {
     this.container = this.createContainer()
 
     this.routerBootstrapper = routerFactory(this.config.byFile('router'), this.container)
-    this.storeBootstrapper = storeFactory(this.config.byFile('state'), this.container)
+    this.storeBootstrapper = storeFactory(this.config.byFile('store'), this.container)
   }
 
   /**
