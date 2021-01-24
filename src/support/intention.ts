@@ -1,5 +1,5 @@
-import { IIntention } from '@/contracts/support'
-import { mapIntention, MappingConfig } from '@/support/adapter'
+import { IIntention, MappingConfig } from '@/contracts/support'
+import { mapIntention } from '@/support/adapter'
 
 /**
  * An intention is the inverted Adapter that translate model structure into api data structure.

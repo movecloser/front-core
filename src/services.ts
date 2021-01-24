@@ -1,5 +1,10 @@
 import { ApiConnectorType, ConnectorMiddleware, IConnector } from '@/contracts/connector'
 import {
+  EventbusMiddlewareType,
+  InternalServerErrorMiddlewareType,
+  ValidationMiddlewareType
+} from '@/contracts/middlewares'
+import {
   DateTimeType,
   DocumentType,
   IDateTime,
@@ -18,8 +23,11 @@ import { ApiConnector } from '@/services/connector'
 import { DateTime } from '@/services/datetime'
 import { DocumentService } from '@/services/document'
 import { Eventbus } from '@/services/eventbus'
+import { EventbusMiddleware } from '@/services/resources/eventbus-middleware'
 import { HttpConnector } from '@/services/http'
+import { InternalServerErrorMiddleware } from '@/services/resources/internal-server-error-middleware'
 import { Validation } from '@/services/validation'
+import { ValidationMiddleware } from '@/services/resources/validation-middleware'
 import { WindowService } from '@/services/window'
 
 /**
@@ -63,6 +71,25 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
           config.byKey<string>('http.default')
         )
       }).inSingletonScope()
+    }
+
+    // Middlewares
+    if (config.has('resources')) {
+      bind<ConnectorMiddleware>(EventbusMiddlewareType)
+        .toDynamicValue((context: Interfaces.Context) => {
+          return new EventbusMiddleware(
+            context.container.get<IEventbus>(EventbusType)
+          )
+        })
+
+      bind<ConnectorMiddleware>(InternalServerErrorMiddlewareType).to(InternalServerErrorMiddleware)
+
+      bind<ConnectorMiddleware>(ValidationMiddlewareType)
+        .toDynamicValue((context: Interfaces.Context) => {
+          return new ValidationMiddleware(
+            context.container.get<IValidation>(ValidationType)
+          )
+        })
     }
 
     // Validation

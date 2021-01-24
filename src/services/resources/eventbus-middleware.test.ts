@@ -1,9 +1,10 @@
 import 'reflect-metadata'
+import { FoundResource } from '@/contracts/connector.ts'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
-import { TemporaryUnavailableError } from '@/exceptions/errors'
+
 import { Eventbus } from '@/services/eventbus'
 import { EventbusMiddleware } from '@/services/resources/eventbus-middleware'
-import { FoundResource } from '@/contracts/connector.ts'
+import { TemporaryUnavailableError } from '@/exceptions/errors'
 
 describe('Test eventbus middleware', () => {
   const eventBus = new Eventbus()
@@ -11,9 +12,10 @@ describe('Test eventbus middleware', () => {
 
   test('Expect [beforeCall] to do nothing.', () => {
     const testResource: FoundResource = {
+      connection: 'test',
       url: '/',
       method: Methods.Get,
-      shorthand: null,
+      shorthand: 'testResource',
       auth: false
     }
     const testHeaders: Headers = { test: 'true' }

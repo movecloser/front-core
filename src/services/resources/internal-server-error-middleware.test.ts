@@ -13,9 +13,10 @@ describe('Test internal server error middleware', () => {
 
   test('Expect [beforeCall] to do nothing', () => {
     const testResource: FoundResource = {
+      connection: 'test',
       url: '/',
       method: Methods.Get,
-      shorthand: null,
+      shorthand: 'testResource',
       auth: false
     }
     const testHeaders: Headers = { test: 'true' }

@@ -2,7 +2,7 @@ import { MappingConfig, MappingTypes } from '@/contracts/support'
 import { MappingError } from '@/exceptions/errors'
 
 import { AbstractIntention } from './intention'
-import { mapCollection, mapModel} from './adapter'
+import { mapCollection, mapModel } from './adapter'
 
 const mappingConfig: MappingConfig = {
   id: 'id',

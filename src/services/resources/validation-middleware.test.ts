@@ -1,9 +1,9 @@
 import 'reflect-metadata'
-import { IValidation } from '@/contracts/validation'
-import { Validation } from '@/services/validation'
-import { ValidationMiddleware } from '@/services/resources/validation-middleware'
 import { FoundResource } from '@/contracts/connector.ts'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+
+import { Validation } from '@/services/validation'
+import { ValidationMiddleware } from '@/services/resources/validation-middleware'
 
 describe('Test validation middleware', () => {
   const validationService = new Validation()
@@ -16,6 +16,7 @@ describe('Test validation middleware', () => {
   test('Expect [beforeCall] to register formName.', () => {
     const clearFormSpy = jest.spyOn(validationService, 'clearForm')
     const testResource: FoundResource = {
+      connection: 'test',
       url: '/',
       method: Methods.Get,
       shorthand: 'formName',

@@ -1,18 +1,17 @@
-import { injectable } from 'inversify'
-
-import { FoundResource, ConnectorMiddleware } from '@/contracts/connector.ts'
+import { ConnectorMiddleware, FoundResource } from '@/contracts/connector.ts'
 import { Headers, IResponse, Payload } from '@/contracts/http'
-import { TemporaryUnavailableError } from '@/exceptions/errors'
 import { IEventbus } from '@/contracts/eventbus'
 
-@injectable()
+import { Injectable } from '@/container'
+import { TemporaryUnavailableError } from '@/exceptions/errors'
+
+@Injectable()
 export class EventbusMiddleware implements  ConnectorMiddleware {
   constructor (protected eventbus: IEventbus) {}
 
   /**
    * Method to be called after call execution.
    * It handles side effects.
-   * @param response
    */
   public afterCall (response: IResponse): void {
     if (response.status === 503) {
@@ -26,13 +25,8 @@ export class EventbusMiddleware implements  ConnectorMiddleware {
   /**
    * Method to be called before call execution.
    * It can transform headers and body for a given resource.
-   * @param resource
-   * @param headers
-   * @param body
    */
   public beforeCall (resource: FoundResource, headers: Headers, body: Payload) {
     return { headers, body }
   }
 }
-
-export const eventbusMiddleware: symbol = Symbol.for('EventbusMiddleware')

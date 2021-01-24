@@ -1,7 +1,8 @@
 import 'reflect-metadata'
 import { Authorization, FoundResource } from '@/contracts/connector.ts'
-import { AuthMiddleware } from '@/services/resources/auth-middleware'
 import { Headers, IResponse, Methods, Payload } from '@/contracts/http'
+
+import { AuthMiddleware } from '@/services/resources/auth-middleware'
 
 describe('Test auth middleware', () => {
   class TestAuthService implements Authorization {
@@ -10,6 +11,7 @@ describe('Test auth middleware', () => {
       return { Authorization: 'test-auth-token' }
     }
   }
+
   const authService = new TestAuthService()
   const authMiddleware = new AuthMiddleware(authService)
 
@@ -20,9 +22,10 @@ describe('Test auth middleware', () => {
   test('Expect [beforeCall] to return modified headers', () => {
     const authSpy = jest.spyOn(authService, 'getAuthorizationHeader')
     const testResource: FoundResource = {
+      connection: 'test',
       url: '/',
       method: Methods.Get,
-      shorthand: null,
+      shorthand: 'testResource',
       auth: true
     }
     const testHeaders: Headers = { test: 'true' }
@@ -38,9 +41,10 @@ describe('Test auth middleware', () => {
 
   test('Expect [beforeCall] to do nothing', () => {
     const testResource: FoundResource = {
+      connection: 'test',
       url: '/',
       method: Methods.Get,
-      shorthand: null,
+      shorthand: 'testResource',
       auth: false
     }
     const testHeaders: Headers = { test: 'true' }

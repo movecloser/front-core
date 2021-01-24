@@ -2,8 +2,6 @@ import { Duration, Moment } from 'moment'
 import * as moment from 'moment'
 
 import { IDateTime } from '@/contracts/services'
-
-import { IncorrectCall } from '@/exceptions/errors'
 import { Injectable } from '@/container'
 
 /**
@@ -22,10 +20,6 @@ export class DateTime implements IDateTime {
    * Calculate difference between two dates in sec.
    */
   difference (end: string, start: string = ''): number {
-    if (!end) {
-      throw new IncorrectCall('Cannot calculate difference when specific date is not provided')
-    }
-
     const startDate: Moment = start.length ? moment(start) : moment()
     const endDate: Moment = moment(end)
 
