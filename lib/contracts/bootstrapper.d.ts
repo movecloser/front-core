@@ -10,8 +10,8 @@ export interface AppConfig extends AnyObject {
     middlewares?: symbol[];
     modules: IModuleConstructor[];
     resources?: ResourcesRegistry;
-    router?: RouterDriver;
-    store?: StoreDriver;
+    router: RouterDriver;
+    store: StoreDriver;
 }
 export interface BootstrapDriver<Stack> {
     applyModule(name: string, callback: ContainerFactory): void;
