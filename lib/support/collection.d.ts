@@ -6,7 +6,7 @@ import { ICollection, IMeta, MetaPayload } from '../contracts/models';
  * @version 1.0.0
  * @licence MIT
  */
-export declare class Collection<T> extends Array implements ICollection<T> {
+export declare class Collection<T> extends Array<T> implements ICollection<T> {
     protected _meta: MetaPayload;
     constructor(items?: T[], meta?: IMeta);
     /**

@@ -1,90 +1,86 @@
-declare class KernelError {
-    constructor();
-}
-export declare class BadRequestError extends KernelError {
+export declare class BadRequestError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class ConnectionError extends KernelError {
+export declare class ConnectionError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class ConflictError extends KernelError {
+export declare class ConflictError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class DeprecatedError extends KernelError {
+export declare class DeprecatedError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class IncorrectCall extends KernelError {
+export declare class IncorrectCall extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class IncorrectValueError extends KernelError {
+export declare class IncorrectValueError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class InternalServerError extends KernelError {
+export declare class InternalServerError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class MappingError extends KernelError {
+export declare class MappingError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class MissingParameter extends KernelError {
+export declare class MissingParameter extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class MissingPropertyError extends KernelError {
+export declare class MissingPropertyError extends Error {
     key: string;
     message: string;
     name: string;
     constructor(key: string);
 }
-export declare class NotFoundError extends KernelError {
+export declare class NotFoundError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class NotImplementedError extends KernelError {
+export declare class NotImplementedError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class PermissionDeniedError extends KernelError {
+export declare class PermissionDeniedError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class TemporaryUnavailableError extends KernelError {
+export declare class TemporaryUnavailableError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class TooManyRequestsError extends KernelError {
+export declare class TooManyRequestsError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class UnauthorizedError extends KernelError {
+export declare class UnauthorizedError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export declare class UnprocessableEntityError extends KernelError {
+export declare class UnprocessableEntityError extends Error {
     message: string;
     name: string;
     constructor(message: string);
 }
-export {};

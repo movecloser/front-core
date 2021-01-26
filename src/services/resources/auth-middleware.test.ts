@@ -36,7 +36,7 @@ describe('Test auth middleware', () => {
 
     expect(authSpy).toHaveBeenCalledTimes(1)
     expect(headers).toHaveProperty('test')
-    expect(headers).toHaveProperty('AuthTokenProvider')
+    expect(headers).toHaveProperty('Authorization')
     expect(body).toEqual(testBody)
   })
 

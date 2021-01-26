@@ -7,19 +7,21 @@ import { ICollection, IMeta, MetaPayload } from '../contracts/models'
  * @version 1.0.0
  * @licence MIT
  */
-export class Collection<T> extends Array implements ICollection<T> {
+export class Collection<T> extends Array<T> implements ICollection<T> {
   protected _meta: MetaPayload = {}
 
   /* istanbul ignore next */
   constructor (items?: T[], meta?: IMeta) {
-    // @ts-ignore
-    super(...items)
+    super(0)
+    Object.setPrototypeOf(this, Object.create(Collection.prototype));
+
+    if (items) {
+      this.push(...items)
+    }
 
     if (meta) {
       this.meta = meta
     }
-
-    Object.setPrototypeOf(this, Object.create(Collection.prototype));
   }
 
   /**
