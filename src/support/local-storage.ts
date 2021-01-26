@@ -11,7 +11,7 @@ export class LocalStorage {
    * Resolves the value for the given key.
    * Returns 'null' if the key is not set.
    */
-  get (key: string): string | null {
+  static get (key: string): string | null {
     if (!WindowService.isDefined) {
       return null
     }
@@ -22,7 +22,7 @@ export class LocalStorage {
   /**
    * Checks if the given key has ever been set.
    */
-  isSet (key: string): boolean {
+  static isSet (key: string): boolean {
     if (!WindowService.isDefined) {
       return false
     }
@@ -33,7 +33,7 @@ export class LocalStorage {
   /**
    * Removes this value the given key.
    */
-  remove (key: string): void {
+  static remove (key: string): void {
     if (!WindowService.isDefined) {
       return
     }
@@ -44,7 +44,7 @@ export class LocalStorage {
   /**
    * Sets the value for the given key.
    */
-  set (key: string, value: string): void {
+  static set (key: string, value: string): void {
     if (WindowService.isDefined) {
       window.localStorage.setItem(key, value)
     }

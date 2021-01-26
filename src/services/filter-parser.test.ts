@@ -72,6 +72,17 @@ describe('Test filter parser method', () => {
     expect(() => parse(toParse)).toThrow(IncorrectValueError)
   })
 
+  test('Expect [parse] method to throw MissingParameter when incorrect value provided', () => {
+    const toParse: FiltersConfig = {
+      rate: {
+        // @ts-ignore
+        test: true
+      }
+    }
+
+    expect(() => parse(toParse)).toThrow(MissingParameter)
+  })
+
   test('Expect [parse] method to throw IncorrectValueError when incorrect FiltersConfig[] provided', () => {
     const toParse: FiltersConfig = {
       rate: [

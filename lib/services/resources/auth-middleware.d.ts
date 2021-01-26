@@ -1,8 +1,9 @@
-import { Authorization, FoundResource, ConnectorMiddleware } from '../../contracts/connector';
+import { AuthProvider } from '../../contracts/authentication';
+import { FoundResource, ConnectorMiddleware } from '../../contracts/connector';
 import { Headers, IResponse, Payload } from '../../contracts/http';
 export declare class AuthMiddleware implements ConnectorMiddleware {
-    protected authService: Authorization;
-    constructor(authService: Authorization);
+    protected authProvider: AuthProvider;
+    constructor(authProvider: AuthProvider);
     /**
      * Method to be called after call execution.
      * It handles side effects.

@@ -10,10 +10,10 @@ import { MappingConfig } from '../contracts/support';
  * @licence MIT
  */
 export declare abstract class Repository<M> {
-    protected resources: IConnector;
+    protected connector: IConnector;
     protected useAdapter: boolean;
     protected map: MappingConfig;
-    protected constructor(resources: IConnector, useAdapter?: boolean);
+    protected constructor(connector: IConnector, useAdapter?: boolean);
     /**
      * Compose collection based on mapping settings.
      */

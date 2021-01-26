@@ -2,6 +2,7 @@ import { EventbusType, IEventbus } from './contracts/eventbus'
 import {
   AppConfig, BootstrapDriver,
   IBootstrapper as Abstract,
+  ProvidersFactory,
   RoutesStack,
   StoreStack
 } from './contracts/bootstrapper'
@@ -49,6 +50,13 @@ export class Bootstrapper implements Abstract {
     const observers: symbol[] = []
     const useRouter: boolean = !!router
     const useStore: boolean = !!store
+
+    if (this.config.has('services')) {
+      providers.push({
+        binder: this.config.byFile<ProvidersFactory>('services'),
+        async: false
+      })
+    }
 
     for (let m of modules) {
       const module: IModule = new m()

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { RouteConfig } from 'vue-router'
 
 import { BootstrapDriver, ContainerFactory, RoutesStack } from '../../contracts/bootstrapper'

@@ -1,11 +1,12 @@
 import 'reflect-metadata'
-import { Authorization, FoundResource } from '../../contracts/connector'
+import { AuthProvider } from '../../contracts/authentication'
+import { FoundResource } from '../../contracts/connector'
 import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
 
 import { AuthMiddleware } from './auth-middleware'
 
 describe('Test auth middleware', () => {
-  class TestAuthService implements Authorization {
+  class TestAuthService implements AuthProvider {
     public check = () => false;
     public getAuthorizationHeader = () => {
       return { Authorization: 'test-auth-token' }
@@ -35,7 +36,7 @@ describe('Test auth middleware', () => {
 
     expect(authSpy).toHaveBeenCalledTimes(1)
     expect(headers).toHaveProperty('test')
-    expect(headers).toHaveProperty('Authorization')
+    expect(headers).toHaveProperty('AuthTokenProvider')
     expect(body).toEqual(testBody)
   })
 

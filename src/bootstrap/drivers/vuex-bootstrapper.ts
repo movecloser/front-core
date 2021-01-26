@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { BootstrapDriver, ContainerFactory, StoreStack } from '../../contracts/bootstrapper'
 import { Container } from '../../container'
 

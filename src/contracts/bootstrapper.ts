@@ -14,6 +14,7 @@ export interface AppConfig extends AnyObject {
   resources?: ResourcesRegistry
   router: RouterDriver
   store: StoreDriver
+  services?: ProvidersFactory
 }
 
 export interface BootstrapDriver<Stack> {

@@ -1,3 +1,4 @@
+export * from './authentication';
 export * from './bootstrapper';
 export * from './configuration';
 export * from './connector';

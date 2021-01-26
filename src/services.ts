@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { ApiConnectorType, ConnectorMiddleware, IConnector } from './contracts/connector'
 import {
   EventbusMiddlewareType,

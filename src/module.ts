@@ -1,5 +1,6 @@
 import { ContainerFactory, ProvidersFactory } from './contracts/bootstrapper'
 
+/* istanbul ignore next */
 export function AppModule (registry: ModuleRegistry) {
   return function _AppModule (target: ModuleConstructor): IModuleConstructor {
     return <typeof target><ModuleConstructor>class extends target {
