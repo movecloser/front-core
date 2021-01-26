@@ -1,12 +1,5 @@
 import { Headers, IResponse, Methods, Payload } from './http';
 export declare const ApiConnectorType: unique symbol;
-export interface AuthHeader {
-    Authorization: string;
-}
-export interface Authorization {
-    check(): boolean;
-    getAuthorizationHeader(): AuthHeader;
-}
 export interface ConnectorMiddleware {
     afterCall: (response: IResponse) => void;
     beforeCall: (resource: FoundResource, headers: Headers, body: Payload) => ({

@@ -8,7 +8,7 @@
     "test": "jest --config jestconfig.json"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "inversify": "^5.0.1",
     "moment": "^2.27.0",
@@ -22,9 +22,9 @@
     "ts-jest": "^26.3.0",
     "ts-lint": "^4.5.1",
     "typescript": "^4.0.2",
+    "vue": "^2.6.12",
     "vue-router": "^3.4.3",
-    "vuex": "^3.5.1",
-    "vue": "^2.6.12"
+    "vuex": "^3.5.1"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

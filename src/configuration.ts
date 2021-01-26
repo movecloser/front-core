@@ -40,11 +40,11 @@ export class Configuration implements IConfiguration {
     }
 
     let foundValue: any = this.config
-
     const keys: string[] = key.split('.')
+
     for (const k of keys) {
-      if (foundValue.hasOwnProperty(k) && typeof foundValue[k] !== 'undefined') {
-        foundValue = foundValue[key]
+      if (foundValue && foundValue.hasOwnProperty(k) && typeof foundValue[k] !== 'undefined') {
+        foundValue = foundValue[k]
         continue
       }
 

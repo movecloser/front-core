@@ -21,7 +21,10 @@ export abstract class Repository<M> {
 
   protected map: MappingConfig = {}
 
-  protected constructor (protected resources: IConnector, useAdapter: boolean = true) {
+  protected constructor (protected connector: IConnector, useAdapter: boolean = true) {
+    // TODO inject connector factory
+    // https://github.com/inversify/InversifyJS/blob/master/wiki/factory_injection.md
+
     if (useAdapter) {
       this.useAdapter = useAdapter
     }

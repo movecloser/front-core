@@ -8,6 +8,7 @@ import { VuexBootstrapper } from './drivers/vuex-bootstrapper'
 /**
  * Decide which of predefined router driver to use.
  */
+/* istanbul ignore next */
 export const routerFactory = (routerType: RouterDriver, container: Container): any => {
   switch (routerType) {
     case RouterDriver.VueRouter:
@@ -22,6 +23,7 @@ export const routerFactory = (routerType: RouterDriver, container: Container): a
 /**
  * Decide which of predefined store driver to use.
  */
+/* istanbul ignore next */
 export const storeFactory = (storeType: StoreDriver, container: Container ): any => {
   switch (storeType) {
     case StoreDriver.Vuex:

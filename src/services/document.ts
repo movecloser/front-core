@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { IDocument } from '../contracts/services'
 
 import { Injectable } from '../container'

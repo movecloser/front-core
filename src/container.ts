@@ -1,4 +1,4 @@
-import { AsyncContainerModule, Container as Inversify, ContainerModule } from 'inversify'
+import { AsyncContainerModule, Container as Inversify, ContainerModule, interfaces } from 'inversify'
 import { IContainer, ContainerOptions } from './contracts/container'
 
 /**
@@ -19,7 +19,7 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
    * @param config
    */
   public createContainer (config: ContainerOptions = {}): void {
-    this.container = new Inversify(config)
+    this.container = new Inversify(config as interfaces.ContainerOptions)
   }
 
   /**
@@ -27,7 +27,7 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
    * @param binder
    * @param async
    */
-  public createModule (binder: any, async: boolean = false): ContainerModule| AsyncContainerModule {
+  public createModule (binder: any, async: boolean = false): ContainerModule | AsyncContainerModule {
     if (async) {
       return new AsyncContainerModule(binder)
     }

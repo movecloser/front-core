@@ -17,6 +17,34 @@ describe('Test Http class', () => {
     console.log = log
   });
 
+  test('Expect [defaultDestination] method to return requested driver.', () => {
+    const http = new HttpConnector({
+      'test-driver': () => {
+        // @ts-ignore
+        return new TestDriver(true)
+      },
+    }, 'test-driver')
+
+    const defaultDestination: string = http.defaultDestination()
+
+    expect(defaultDestination).toBe('test-driver')
+  })
+
+  test('Expect [defaultDestination] method to throw error.', () => {
+    const http = new HttpConnector()
+    let error: any
+
+    try {
+      http.defaultDestination()
+    } catch (err) {
+      error = err
+    }
+
+    expect(() => {
+      throw error
+    }).toThrow(IncorrectCall)
+  })
+
   test('Expect [destination] method to return requested driver.', () => {
     const http = new HttpConnector({
       'test-driver': () => {
