@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router'
 
 import { Module } from './Module'
 import { ModuleRoute, RoutesFactoryProps } from './contracts'
