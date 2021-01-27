@@ -1,7 +1,7 @@
-import { RouterDriver, StoreDriver } from '../contracts/bootstrapper'
-
 import { Container } from '../container'
+import { RouterDriver, StoreDriver } from '../contracts/bootstrapper'
 import { NoneBootstrapper } from './drivers/none-bootstrapper'
+import { ReactRouterBootstrapper } from './drivers/react-router-bootstraper'
 import { VueRouterBootstrapper } from './drivers/vue-router-bootstrapper'
 import { VuexBootstrapper } from './drivers/vuex-bootstrapper'
 
@@ -13,6 +13,8 @@ export const routerFactory = (routerType: RouterDriver, container: Container): a
   switch (routerType) {
     case RouterDriver.VueRouter:
       return new VueRouterBootstrapper(container)
+    case RouterDriver.ReactRouter:
+      return new ReactRouterBootstrapper(container)
     case RouterDriver.None:
       return new NoneBootstrapper()
     default:

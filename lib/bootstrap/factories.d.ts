@@ -1,5 +1,5 @@
-import { RouterDriver, StoreDriver } from '../contracts/bootstrapper';
 import { Container } from '../container';
+import { RouterDriver, StoreDriver } from '../contracts/bootstrapper';
 /**
  * Decide which of predefined router driver to use.
  */
