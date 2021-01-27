@@ -39,6 +39,7 @@ export type StoreStack = AnyObject | any[]
 
 export enum RouterDriver {
   None = 'none',
+  ReactRouter = 'react-router',
   VueRouter = 'vue-router'
 }
 
