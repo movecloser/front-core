@@ -96,6 +96,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
     }
     const tokenLifeTime = this.calculateTokenLifetime(token)
 
+    /* istanbul ignore else */
     if (this.isTokenValid(tokenLifeTime)) {
       this.setupRefreshment(tokenLifeTime, token)
 
@@ -163,7 +164,9 @@ export class AuthService<U extends IUser> implements Authentication <U> {
         token = JSON.parse(
           LocalStorage.get(this._config.tokenName) as string
         )
+        /* istanbul ignore next */
       } catch (error) {
+        /* istanbul ignore next */
         token = null
       }
 
@@ -177,6 +180,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
 
       const tokenLifeTime = this.calculateTokenLifetime(token)
 
+      /* istanbul ignore next */
       if (this.isTokenValid(tokenLifeTime)) {
         this.setupRefreshment(tokenLifeTime, token)
 
@@ -204,7 +208,9 @@ export class AuthService<U extends IUser> implements Authentication <U> {
         type: AuthEventType.Refresh,
         token: token
       })
+      /* istanbul ignore else */
     } else if (tokenLifeTime > this._config.refreshThreshold) {
+      /* istanbul ignore next */
       setTimeout(() => {
         this._auth$.next({
           type: AuthEventType.Refresh,

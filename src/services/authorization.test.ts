@@ -15,21 +15,21 @@ describe('Test AuthService class.', () => {
     [key: string]: string
   }
 
-  // let localStorage!: TestStorage
-  //
-  // beforeEach(() => {
-  //   window.localStorage.getItem = (key: string) => {
-  //     return localStorage[key]
-  //   }
-  //
-  //   window.localStorage.setItem = (key: string, value: string) => {
-  //     localStorage[key] = value
-  //   }
-  // })
-  //
-  // afterEach(() => {
-  //   localStorage = {} as TestStorage
-  // })
+  let localStorage!: TestStorage
+
+  beforeEach(() => {
+    window.localStorage.getItem = (key: string) => {
+      return localStorage[key]
+    }
+
+    window.localStorage.setItem = (key: string, value: string) => {
+      localStorage[key] = value
+    }
+  })
+
+  afterEach(() => {
+    localStorage = {} as TestStorage
+  })
 
   test('Expect [check] to do fail.', () => {
     const auth = new AuthService(config, new DateTime())
@@ -53,7 +53,6 @@ describe('Test AuthService class.', () => {
 
   test('Expect [deleteToken] to do work.', () => {
     const auth = new AuthService(config, new DateTime())
-
     //@ts-ignore
     const nextSpy = jest.spyOn(auth._auth$, 'next')
     // @ts-ignore
@@ -111,17 +110,44 @@ describe('Test AuthService class.', () => {
 
   test('Expect [setToken] to do work.', () => {
     const auth = new AuthService(config, new DateTime())
+    const expires = new Date();
+    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold + 1) * 1000);
 
     auth.setToken({
       accessToken: 'test-token',
-      expiresAt: new Date().toUTCString(),
+      expiresAt: expires.toUTCString(),
+      tokenType: 'Bearer',
+    })
+
+    // @ts-ignore
+    expect(auth._token).toEqual({
+      accessToken: 'test-token',
+      expiresAt: expires.toUTCString(),
+      tokenType: 'Bearer',
+    })
+  })
+
+  test('Expect [setToken] to trigger refresh.', () => {
+    const auth = new AuthService(config, new DateTime())
+    const expires = new Date();
+    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500));
+
+    auth.setToken({
+      accessToken: 'test-token',
+      expiresAt: expires.toUTCString(),
+      tokenType: 'Bearer',
+    })
+
+    // @ts-ignore
+    expect(auth._token).toEqual({
+      accessToken: 'test-token',
+      expiresAt: expires.toUTCString(),
       tokenType: 'Bearer',
     })
   })
 
   test('Expect [setUser] to do work.', () => {
     const auth = new AuthService(config, new DateTime())
-
     // @ts-ignore
     auth.setUser({ user: 'test' })
 
@@ -131,7 +157,6 @@ describe('Test AuthService class.', () => {
 
   test('Expect [get User] to do work.', () => {
     const auth = new AuthService(config, new DateTime())
-
     // @ts-ignore
     auth._user = { user: 'test' }
 
@@ -143,7 +168,6 @@ describe('Test AuthService class.', () => {
 
   test('Expect [getUserId] to do work.', () => {
     const auth = new AuthService(config, new DateTime())
-
     // @ts-ignore
     auth._user = { user: 'test', id: '1' }
 
@@ -155,7 +179,6 @@ describe('Test AuthService class.', () => {
 
   test('Expect [getUserId] to do return null.', () => {
     const auth = new AuthService(config, new DateTime())
-
     // @ts-ignore
     auth._user = { user: 'test' }
 
@@ -165,4 +188,57 @@ describe('Test AuthService class.', () => {
     expect(user).toBe(null)
   })
 
+  test('Expect [isTokenValid] to be false.', () => {
+    const auth = new AuthService(config, new DateTime())
+    // @ts-ignore
+    const nextSpy = jest.spyOn(auth._auth$, 'next')
+    const token = {
+      accessToken: 'test-token',
+      expiresAt: new Date().toUTCString(),
+    }
+
+    // @ts-ignore
+    const result = auth.isTokenValid(auth.calculateTokenLifetime(token))
+
+    expect(result).toBe(false)
+    expect(nextSpy).toHaveBeenCalledTimes(1)
+  })
+
+  test('Expect [isTokenValid] to be true.', () => {
+    const auth = new AuthService(config, new DateTime())
+    const token = {
+      accessToken: 'test-token',
+      expiresAt: new Date('9999').toUTCString(),
+    }
+
+    // @ts-ignore
+    const result = auth.isTokenValid(auth.calculateTokenLifetime(token))
+
+    expect(result).toBe(true)
+  })
+
+  test('Expect [retrieveToken] to be true.', () => {
+    const auth = new AuthService(config, new DateTime())
+
+    // @ts-ignore
+    auth.retrieveToken()
+
+    // @ts-ignore
+    expect(auth._token).toEqual(null)
+  })
+
+  test('Expect [retrieveToken] to be true.', () => {
+    const token = {
+      accessToken: 'test-token',
+      expiresAt: new Date('9999').toUTCString(),
+    }
+    window.localStorage.setItem(config.tokenName, JSON.stringify(token))
+    const auth = new AuthService(config, new DateTime())
+
+    // @ts-ignore
+    auth.retrieveToken()
+
+    // @ts-ignore
+    expect(auth._token).toEqual(token)
+  })
 })
