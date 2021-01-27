@@ -1,5 +1,7 @@
 /* istanbul ignore file */
 
+// TODO: add tests and remove ignore
+
 import { IDocument, IWindow } from '../contracts/services'
 import { Injectable } from '../container'
 

@@ -136,6 +136,7 @@ export class ApiConnector implements IConnector {
         'There is no such resource in resources [list].'
       )
     }
+    /* istanbul ignore else */
     if (!this._list[resource].methods[action]) {
       throw new Error(
         'There is no such action in actions [list].'

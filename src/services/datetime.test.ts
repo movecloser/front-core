@@ -5,7 +5,6 @@ import { DateTime } from './datetime'
 
 const dateTime = new DateTime()
 
-// @TODO: Kuba te testy trzeba jeszcze raz przemyśleć ;)
 describe('Tests for DateTime service', () => {
   test('Expect [difference] method to return time difference in seconds', () => {
     const end = moment().add(3, 'seconds').format()
@@ -23,20 +22,6 @@ describe('Tests for DateTime service', () => {
     expect(typeof result).toBe('number')
     expect(Math.abs(result)).toBe(5)
   })
-
-  // test('Expect [difference] method to throw error when no argument is provided', () => {
-  //   expect(() => {
-  //     // @ts-ignore
-  //     dateTime.difference().format()
-  //   }).toThrow(TypeError)
-  // })
-  //
-  // test('Expect [difference] method to throw error when incorrect argument value provided', () => {
-  //   expect(() => {
-  //     // @ts-ignore
-  //     dateTime.difference(123).format()
-  //   }).toThrow(TypeError)
-  // })
 
   test('Expect [now] method to return moment instance', () => {
     const result = dateTime.now
