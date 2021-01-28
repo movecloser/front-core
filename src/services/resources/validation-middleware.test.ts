@@ -48,7 +48,7 @@ describe('Test validation middleware', () => {
 
     expect(pushErrorsSpy).toBeCalledTimes(1)
     expect(pushErrorsSpy).toBeCalledWith(
-      'formName', { message: 'Test error.' }
+      'formName', { message: 'Test error.' }, null
     )
   })
 
@@ -65,10 +65,7 @@ describe('Test validation middleware', () => {
 
     validationMiddleware.afterCall(testResponse)
 
-    expect(pushErrorsSpy).toBeCalledTimes(1)
-    expect(pushErrorsSpy).toBeCalledWith(
-      'formName', {}
-    )
+    expect(pushErrorsSpy).toBeCalledTimes(0)
   })
 
   test('Expect [afterCall] to do nothing.', () => {

@@ -31,10 +31,12 @@ export class ValidationMiddleware implements ConnectorMiddleware {
    * It handles side effects.
    */
   public afterCall (response: IResponse): void {
-    if (response.status === 422) {
+    if (response.status === 422 && response.errors !== null) {
       this.validationService.pushErrors(
         this.formName,
-        response.errors !== null ? response.errors.errors : {}
+        typeof response.errors.errors === 'object'
+          ? response.errors.errors : {},
+        typeof response.errors.messsage === 'string' ? response.errors.message : null
       )
     }
   }

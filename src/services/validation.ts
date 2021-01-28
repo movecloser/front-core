@@ -1,5 +1,5 @@
 import { BehaviorSubject, Subscription } from 'rxjs'
-import { filter } from 'rxjs/operators'
+import { filter, map } from 'rxjs/operators'
 
 import {
   ErrorsPayload,
@@ -9,17 +9,18 @@ import {
   ValidationEventType
 } from '../contracts/validation'
 
-import { IncorrectCall } from '../exceptions/errors'
 import { Injectable } from '../container'
 
 /**
  * Validation service is responsible for sending 422 response to correct form.
  *
  * @author  Kuba Fogel <kuba.fogel@movecloser.pl>
+ * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  * @version 1.0.0
  */
 @Injectable()
 export class Validation implements IValidation {
+  protected callbackMessage: string = 'Cannot recognize error message.'
   private _stream$!: BehaviorSubject<ValidationEvent>
 
   constructor () {
@@ -33,9 +34,6 @@ export class Validation implements IValidation {
 
   /**
    * Clear errors of given form.
-   *
-   * @param  {string} form
-   * @return void
    */
   clearForm (form: string): void {
     this._stream$.next({
@@ -46,118 +44,71 @@ export class Validation implements IValidation {
 
   /**
    * Subscribe to give form for clear events.
-   *
-   * @param  {string} form
-   * @param  {function} callback
-   * @return {Subscription}
    */
   onClear (form: string, callback: () => void): Subscription {
-    if (!callback || typeof callback !== 'function') {
-      throw new IncorrectCall(
-        '[onClear] method requires argument (function) that will be fired, when clear event will occur.'
-      )
-    }
-
     return this._stream$.pipe(
-      filter(
-        (event: ValidationEvent) => event.form === form || event.type === ValidationEventType.Clear)
-    ).subscribe(() => {
-      callback()
-    })
+      filter<ValidationEvent>(event => event.form === form || event.type === ValidationEventType.Clear)
+    ).subscribe(() => callback)
   }
 
   /**
    * Subscribe to give form and field for errors` events.
-   *
-   * @param  {string} form
-   * @param  {string} field
-   * @param  {ValidationErrorCallback} callback
-   * @return {Subscription}
    */
   onErrors (form: string, field: string, callback: ValidationErrorCallback): Subscription {
-    if (!callback || typeof callback !== 'function') {
-      throw new IncorrectCall(
-        '[onErrors] method requires argument (function) that will be fired, when error event will occur.'
-      )
-    }
-
     return this._stream$.pipe(
-      filter(
-        (event: ValidationEvent) => event.form === form ||
+      filter<ValidationEvent>(event =>
+        event.form === form &&
         event.type === ValidationEventType.Error
       ),
-      filter((event: ValidationEvent) => {
-        if (!event.hasOwnProperty('errors') || typeof event.errors === 'undefined') {
-          return false
-        }
-
-        return event.errors.hasOwnProperty(field)
+      filter<ValidationEvent>(event =>
+        typeof event.errors !== 'undefined' && field in event.errors
+      ),
+      map<ValidationEvent, string[]>(event => {
+        // @ts-ignore  The value is checked above.
+        return Array.isArray(event.errors[field]) ?
+          // @ts-ignore
+          event.errors[field] : [ event.message || this.callbackMessage ]
       })
-    ).subscribe((event: ValidationEvent) => {
-      if (form === event.form) {
-        const errors: string[] = []
-        /* istanbul ignore next */
-        if (
-          event.hasOwnProperty('errors') &&
-          typeof event.errors !== 'undefined' &&
-          event.errors.hasOwnProperty(field) &&
-          Array.isArray(event.errors[field])
-        ) {
-          errors.push(
-            ...event.errors[field]
-          )
-        }
-
-        callback(errors)
-      }
+    ).subscribe((errors: string[]) => {
+      return callback(errors)
     })
   }
 
   /**
-   * Subscribe to stream form
-   *
-   * @param  {string} form
-   * @param  {function} callback
-   * @return {Subscription}
+   * Subscribe to stream form.
    */
   onFormErrors (form: string, callback: ValidationErrorCallback): Subscription {
-    if (!callback || typeof callback !== 'function') {
-      throw new IncorrectCall(
-        '[onFormErrors] method requires argument (function) that will be fired, when error event will occur.'
-      )
-    }
-
     return this._stream$.pipe(
-      filter((event: ValidationEvent) =>
-        event.form === form || event.type === ValidationEventType.Error)
+      filter<ValidationEvent>(event =>
+        event.form === form &&
+        event.type === ValidationEventType.Error
+      )
     ).subscribe((event: ValidationEvent) => {
       const errors: string[] = []
-      /* istanbul ignore next */
-      if (
-        event.hasOwnProperty('errors')
-        && typeof event.errors !== 'undefined')
-      {
-        errors.push(
-          ...event.errors['message']
-        )
+
+      if (event.message) {
+        errors.push(event.message)
       }
 
-      callback(errors)
+      if (typeof event.errors === 'object' && event.errors !== null) {
+        for (const list of Object.values(event.errors)) {
+          errors.push(...list)
+        }
+      }
+
+      callback(errors.length ? errors : [ this.callbackMessage ])
     })
   }
 
   /**
    * Push errors to validation stream$.
-   *
-   * @param  {string} form
-   * @param  {ErrorsPayload} errors
-   * @return void
    */
-  pushErrors (form: string, errors: ErrorsPayload): void {
+  pushErrors (form: string, errors: ErrorsPayload, message: string|null = null): void {
     this._stream$.next({
       form: form,
       type: ValidationEventType.Error,
-      errors: errors
-    })
+      errors: errors,
+      ...( message ? { message } : {})
+  })
   }
 }

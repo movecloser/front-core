@@ -38,7 +38,7 @@ export abstract class Repository<M> {
 
     return new Collection<IModel<M>>(
       (this.useAdapter ? mapCollection(rawCollection, this.map) : rawCollection)
-        .map((item: any) => new modelConstructor(item))
+        .map((item: any) => modelConstructor.hydrate(item))
     )
   }
 
@@ -53,6 +53,6 @@ export abstract class Repository<M> {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
 
-    return new modelConstructor(this.useAdapter ? mapModel(rawModel, this.map) : rawModel)
+    return modelConstructor.hydrate(this.useAdapter ? mapModel(rawModel, this.map) : rawModel)
   }
 }

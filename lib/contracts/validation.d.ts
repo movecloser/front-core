@@ -7,13 +7,14 @@ export interface IValidation {
     onClear(form: string, callback: () => void): Subscription;
     onErrors(form: string, field: string, callback: ValidationErrorCallback): Subscription;
     onFormErrors(form: string, callback: (...args: any[]) => void): Subscription;
-    pushErrors(form: string, errors: ErrorsPayload): void;
+    pushErrors(form: string, errors: ErrorsPayload, message?: string | null): void;
 }
 export declare type ValidationErrorCallback = (errors: string[]) => void;
 export declare const ValidationType: unique symbol;
 export interface ValidationEvent {
     form: string;
     type: ValidationEventType;
+    message?: string;
     errors?: ErrorsPayload;
 }
 export declare enum ValidationEventType {

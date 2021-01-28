@@ -9,7 +9,7 @@ export interface IValidation {
   onClear (form: string, callback: () => void): Subscription
   onErrors (form: string, field: string, callback: ValidationErrorCallback): Subscription
   onFormErrors (form: string, callback: (...args: any[]) => void): Subscription
-  pushErrors (form: string, errors: ErrorsPayload): void
+  pushErrors (form: string, errors: ErrorsPayload, message?: string|null): void
 }
 
 export type ValidationErrorCallback = (errors: string[]) => void
@@ -17,8 +17,9 @@ export type ValidationErrorCallback = (errors: string[]) => void
 export const ValidationType = Symbol.for('IValidation')
 
 export interface ValidationEvent {
-  form: string,
-  type: ValidationEventType,
+  form: string
+  type: ValidationEventType
+  message?: string
   errors?: ErrorsPayload
 }
 
