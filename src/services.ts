@@ -47,8 +47,8 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
 
       bind<IConnector>(ApiConnectorType).toDynamicValue((context: Interfaces.Context) => {
         const middlewares: ConnectorMiddleware[] = []
-        const stack = (config.has('middleware')
-          ? config.byFile<symbol[]>('middleware') : [])
+        const stack = (config.has('middlewares')
+          ? config.byFile<symbol[]>('middlewares') : [])
 
         for (const symbol of stack) {
           middlewares.push(
