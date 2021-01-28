@@ -63,7 +63,7 @@ export class Bootstrapper implements Abstract {
 
       if (module.providers) {
         providers.push({
-          binder: module.providers,
+          binder: module.providers(this.config),
           async: module.providersAsync
         })
       }

@@ -72,4 +72,4 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
   }
 }
 
-export { injectable as Injectable } from 'inversify'
+export { inject as Inject, injectable as Injectable } from 'inversify'

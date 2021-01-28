@@ -18,6 +18,11 @@ export function AppModule (registry: ModuleRegistry) {
           typeof registry.providers !== 'undefined'
         ) ? registry.providers : null
 
+        this.providersAsync = (
+          registry.hasOwnProperty('providersAsync') &&
+          typeof registry.providersAsync !== 'undefined'
+        ) ? registry.providersAsync : false
+
         this.routes = (
           registry.hasOwnProperty('routes') &&
           typeof registry.routes !== 'undefined'

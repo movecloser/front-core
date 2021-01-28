@@ -1,4 +1,4 @@
-import { IConnector } from '../contracts/connector';
+import { ConnectorFactory, IConnector } from '../contracts/connector';
 import { ICollection, IModel, ModelConstructor, ModelPayload } from '../contracts/models';
 import { MappingConfig } from '../contracts/support';
 /**
@@ -11,9 +11,9 @@ import { MappingConfig } from '../contracts/support';
  */
 export declare abstract class Repository<M> {
     protected connector: IConnector;
-    protected useAdapter: boolean;
     protected map: MappingConfig;
-    protected constructor(connector: IConnector, useAdapter?: boolean);
+    protected useAdapter: boolean;
+    protected constructor(connectorFactory: ConnectorFactory);
     /**
      * Compose collection based on mapping settings.
      */

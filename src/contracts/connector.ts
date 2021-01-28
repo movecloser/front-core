@@ -2,6 +2,10 @@ import { Headers, IResponse, Methods, Payload } from './http'
 
 export const ApiConnectorType = Symbol.for('IConnector')
 
+export const ApiConnectorFactory = Symbol.for('ApiConnectorFactory')
+
+export type ConnectorFactory = () => IConnector
+
 export interface ConnectorMiddleware {
   afterCall: (response: IResponse) => void
   beforeCall: (

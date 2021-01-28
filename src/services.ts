@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { ApiConnectorType, ConnectorMiddleware, IConnector } from './contracts/connector'
+import { ApiConnectorFactory, ApiConnectorType, ConnectorMiddleware, IConnector } from './contracts/connector'
 import {
   EventbusMiddlewareType,
   InternalServerErrorMiddlewareType,
@@ -39,6 +39,12 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
   return (bind: Interfaces.Bind) => {
     // Api Connector
     if (config.has('resources')) {
+      bind<Interfaces.Factory<IConnector>>(ApiConnectorFactory).toFactory((context: Interfaces.Context) => {
+        return () => {
+          return context.container.get<IConnector>(ApiConnectorType)
+        }
+      })
+
       bind<IConnector>(ApiConnectorType).toDynamicValue((context: Interfaces.Context) => {
         const middlewares: ConnectorMiddleware[] = []
         const stack = (config.has('middleware')

@@ -1,9 +1,9 @@
-import { IConnector } from '../contracts/connector'
+import { ApiConnectorFactory, ConnectorFactory, IConnector } from '../contracts/connector'
 import { ICollection, IModel, ModelConstructor, ModelPayload } from '../contracts/models'
 import { MappingConfig } from '../contracts/support'
 
 import { Collection } from './collection'
-import { Injectable } from '../container'
+import { Inject, Injectable } from '../container'
 import { mapCollection, mapModel } from './adapter'
 import { MappingError } from '../exceptions/errors'
 
@@ -17,17 +17,12 @@ import { MappingError } from '../exceptions/errors'
  */
 @Injectable()
 export abstract class Repository<M> {
+  protected connector: IConnector
+  protected map: MappingConfig = {}
   protected useAdapter: boolean = false
 
-  protected map: MappingConfig = {}
-
-  protected constructor (protected connector: IConnector, useAdapter: boolean = true) {
-    // TODO inject connector factory
-    // https://github.com/inversify/InversifyJS/blob/master/wiki/factory_injection.md
-
-    if (useAdapter) {
-      this.useAdapter = useAdapter
-    }
+  protected constructor (@Inject(ApiConnectorFactory) connectorFactory: ConnectorFactory) {
+    this.connector = connectorFactory()
   }
 
   /**
