@@ -8,6 +8,7 @@
         "dom",
         "esnext"
       ],
+      "jsx": "react",
       "module": "commonjs",
       "declaration": true,
       "outDir": "./lib",
@@ -18,5 +19,5 @@
       "allowSyntheticDefaultImports": true
     },
     "include": ["src"],
-    "exclude": ["node_modules", "src/platforms", "**/*.test.ts"]
+    "exclude": ["node_modules", "src/platforms/vue", "**/*.test.ts"]
 }
