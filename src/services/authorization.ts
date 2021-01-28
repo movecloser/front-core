@@ -41,6 +41,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
    * Clears Token and sets logged-out state.
    */
   public deleteToken (): void {
+    /* istanbul ignore else */
     if (WindowService.isDefined) {
       LocalStorage.remove(this._config.tokenName)
     }
@@ -86,6 +87,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
    * @param token
    */
   public setToken (token: Token) {
+    /* istanbul ignore else */
     if (WindowService.isDefined) {
       LocalStorage.set(
         this._config.tokenName,
@@ -94,6 +96,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
     }
     const tokenLifeTime = this.calculateTokenLifetime(token)
 
+    /* istanbul ignore else */
     if (this.isTokenValid(tokenLifeTime)) {
       this.setupRefreshment(tokenLifeTime, token)
 
@@ -153,6 +156,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
    * Sets token retrieved from device localstorage.
    */
   protected retrieveToken (): void {
+    /* istanbul ignore else */
     if (WindowService.isDefined) {
       let token: any
 
@@ -160,12 +164,14 @@ export class AuthService<U extends IUser> implements Authentication <U> {
         token = JSON.parse(
           LocalStorage.get(this._config.tokenName) as string
         )
+        /* istanbul ignore next */
       } catch (error) {
+        /* istanbul ignore next */
         token = null
       }
 
       for (const key of ['accessToken', 'expiresAt', 'tokenType']) {
-        if (key in token || token[key] !== null) {
+        if (token && (key in token || token[key] !== null)) {
           continue
         }
 
@@ -174,6 +180,7 @@ export class AuthService<U extends IUser> implements Authentication <U> {
 
       const tokenLifeTime = this.calculateTokenLifetime(token)
 
+      /* istanbul ignore next */
       if (this.isTokenValid(tokenLifeTime)) {
         this.setupRefreshment(tokenLifeTime, token)
 
@@ -201,7 +208,9 @@ export class AuthService<U extends IUser> implements Authentication <U> {
         type: AuthEventType.Refresh,
         token: token
       })
+      /* istanbul ignore else */
     } else if (tokenLifeTime > this._config.refreshThreshold) {
+      /* istanbul ignore next */
       setTimeout(() => {
         this._auth$.next({
           type: AuthEventType.Refresh,

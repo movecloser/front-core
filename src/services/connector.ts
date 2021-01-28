@@ -82,12 +82,14 @@ export class ApiConnector implements IConnector {
     )
 
     return {
+      /* istanbul ignore next */
       connection: typeof connection !== 'undefined' ? connection : this._http.defaultDestination(),
       method: endpoint.method,
       url: url,
       shorthand: ('shorthand' in endpoint && typeof endpoint.shorthand !== 'undefined')
         ? endpoint.shorthand : ApiConnector.resolveShorthand(resource, action),
       auth: ('auth' in endpoint && typeof endpoint.auth !== 'undefined')
+        /* istanbul ignore next */
         ? endpoint.auth : false
     }
   }
@@ -136,6 +138,7 @@ export class ApiConnector implements IConnector {
         'There is no such resource in resources [list].'
       )
     }
+    /* istanbul ignore else */
     if (!this._list[resource].methods[action]) {
       throw new Error(
         'There is no such action in actions [list].'

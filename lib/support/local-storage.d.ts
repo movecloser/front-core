@@ -1,7 +1,8 @@
 /**
  * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
- * @version 1.0.0
+ * @author Kuba Fogel <kuba.fogel@movecloser.pl>
+ * @version 2.0.0
  * @licence MIT
  */
 export declare class LocalStorage {

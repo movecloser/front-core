@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Container } from '../../container'
 import {
   BootstrapDriver,
