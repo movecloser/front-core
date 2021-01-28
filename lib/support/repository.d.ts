@@ -13,7 +13,7 @@ export declare abstract class Repository<M> {
     protected connector: IConnector;
     protected map: MappingConfig;
     protected useAdapter: boolean;
-    protected constructor(connectorFactory: ConnectorFactory);
+    constructor(connectorFactory: ConnectorFactory);
     /**
      * Compose collection based on mapping settings.
      */

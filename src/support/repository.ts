@@ -21,7 +21,7 @@ export abstract class Repository<M> {
   protected map: MappingConfig = {}
   protected useAdapter: boolean = false
 
-  protected constructor (@Inject(ApiConnectorFactory) connectorFactory: ConnectorFactory) {
+  constructor (@Inject(ApiConnectorFactory) connectorFactory: ConnectorFactory) {
     this.connector = connectorFactory()
   }
 
