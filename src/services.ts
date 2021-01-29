@@ -30,6 +30,8 @@ import { InternalServerErrorMiddleware } from './services/resources/internal-ser
 import { Validation } from './services/validation'
 import { ValidationMiddleware } from './services/resources/validation-middleware'
 import { WindowService } from './services/window'
+import { Authentication, AuthServiceType, User } from './contracts'
+import { AuthService } from './services/authorization'
 
 /**
  * List of services included into movecloser/core
@@ -62,6 +64,16 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
           middlewares
         )
       })
+    }
+
+    // Authentication
+    if (config.has('auth')) {
+      bind<Authentication<User>>(AuthServiceType).toDynamicValue((context: Interfaces.Context) => {
+        return new AuthService<User>(
+          config.byFile('auth'),
+          context.container.get(DateTimeType),
+        )
+      }).inSingletonScope()
     }
 
     // Datetime

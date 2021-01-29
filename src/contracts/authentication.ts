@@ -38,8 +38,15 @@ export interface IUser {
   id: string | number
 }
 
+export interface User {
+  id: string | number
+  name: string
+}
+
 export interface Token {
   accessToken: string
   expiresAt: string
   tokenType: string
 }
+
+export const AuthServiceType = Symbol.for('Authentication')
