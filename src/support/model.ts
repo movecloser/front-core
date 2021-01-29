@@ -45,7 +45,7 @@ export abstract class Model<T> implements IModel<T> {
     }
 
     for (const [ key, value ] of Object.entries(mappedPayload)) {
-      model.set(key, value)
+      model.set(key, value === undefined ? model.initialValues[key] : value)
     }
 
     return model

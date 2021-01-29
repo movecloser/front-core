@@ -147,6 +147,18 @@ describe('Test abstract model class', () => {
     })
   })
 
+  test('Expect [hydrate] method to update properties using default values, when undefined as value occurs.', () => {
+    const model = TestModel.hydrate({
+      id: undefined
+    })
+
+    expect(model.toObject()).toEqual({
+      id: 0,
+      name: 'n/a',
+      value: 1
+    })
+  })
+
   test('Expect [initialValues] to be set as provided', () => {
     const model = new TestModel()
     const initialValues = {
