@@ -1,3 +1,4 @@
+import { Payload } from '../contracts';
 export declare class BadRequestError extends Error {
     message: string;
     name: string;
@@ -63,6 +64,13 @@ export declare class PermissionDeniedError extends Error {
     message: string;
     name: string;
     constructor(message: string);
+}
+export declare class ResourceActionFailed extends Error {
+    message: string;
+    status: number | string;
+    payload: Payload;
+    name: string;
+    constructor(message: string, status: number | string, payload: Payload);
 }
 export declare class TemporaryUnavailableError extends Error {
     message: string;
