@@ -12,7 +12,11 @@ import {
   NotFoundError,
   NotImplementedError,
   PermissionDeniedError,
-  TemporaryUnavailableError, TooManyRequestsError, UnauthorizedError, UnprocessableEntityError
+  ResourceActionFailed,
+  TemporaryUnavailableError,
+  TooManyRequestsError,
+  UnauthorizedError,
+  UnprocessableEntityError
 } from './errors'
 
 describe('Test error classes', () => {
@@ -154,6 +158,21 @@ describe('Test error classes', () => {
       throw error
     }).toThrowError(PermissionDeniedError)
     expect(error.message).toBe(message)
+  })
+
+  test('Expect [ResourceActionFailed] to contain specific message', () => {
+    const message = 'Resource Action Failed'
+    const status = '200'
+    const payload = {
+      test: true
+    }
+    const error = new ResourceActionFailed(message, status, payload)
+
+    expect(() => {
+      throw error
+    }).toThrowError(ResourceActionFailed)
+    expect(error.message).toBe(message)
+    expect(error.payload).toEqual(payload)
   })
 
   test('Expect [TemporaryUnavailableError] to contain specific message', () => {

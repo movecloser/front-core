@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import { Subscription } from 'rxjs'
+// import { TestScheduler } from 'rxjs/testing';
 
 import { IValidation, ValidationEventType } from '../contracts/validation'
 import { Validation } from './validation'
@@ -36,6 +37,7 @@ describe('Tests for Validation service', () => {
     expect(result.form).toBe(formName)
     // @ts-ignore
     expect(result.type).toBe(ValidationEventType.Clear)
+
   })
 
   // TODO: @Kuba te testy trzeba przepisać zgodnie z rekomendacją RxJS:
