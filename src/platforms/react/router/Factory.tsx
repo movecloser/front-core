@@ -17,6 +17,9 @@ export function Factory (props: RoutesFactoryProps) {
     if (!props.useGuards) return true
     // Let's determine if auth has an access to the module. If not we cannot register
     // it's routing.
+    if (typeof m.accessor === 'undefined' || !m.accessor.length) {
+      return true
+    }
     return typeof props.auth !== 'undefined' && m.accessor
       ? props.auth.canAccess(m.accessor) : false
   })
