@@ -16,10 +16,10 @@ import { LocalStorage } from '../support/local-storage'
 import { WindowService } from './window'
 
 @Injectable()
-export class AuthService<U extends IUser> implements Authentication <U> {
+export class AuthService implements Authentication <IUser> {
   private _auth$!: BehaviorSubject<AuthEvent>
   private _token: Token | null = null
-  private _user: U | null = null
+  private _user: IUser | null = null
 
   constructor (private _config: AuthConfig, private _date: IDateTime) {
     this._auth$ = new BehaviorSubject<AuthEvent>({
@@ -108,14 +108,14 @@ export class AuthService<U extends IUser> implements Authentication <U> {
    * Sets user in state.
    * @param user
    */
-  public setUser (user: U) {
+  public setUser<U extends IUser> (user: U) {
     this._user = user
   }
 
   /**
    * Returns user from state.
    */
-  public get user (): U | null {
+  public get user (): IUser | null {
     return this._user
   }
 

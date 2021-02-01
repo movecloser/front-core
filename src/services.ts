@@ -30,7 +30,7 @@ import { InternalServerErrorMiddleware } from './services/resources/internal-ser
 import { Validation } from './services/validation'
 import { ValidationMiddleware } from './services/resources/validation-middleware'
 import { WindowService } from './services/window'
-import { Authentication, AuthServiceType, User } from './contracts'
+import { Authentication, AuthServiceType, IUser } from './contracts'
 import { AuthService } from './services/authorization'
 
 /**
@@ -68,8 +68,8 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
 
     // Authentication
     if (config.has('auth')) {
-      bind<Authentication<User>>(AuthServiceType).toDynamicValue((context: Interfaces.Context) => {
-        return new AuthService<User>(
+      bind<Authentication<IUser>>(AuthServiceType).toDynamicValue((context: Interfaces.Context) => {
+        return new AuthService(
           config.byFile('auth'),
           context.container.get(DateTimeType),
         )

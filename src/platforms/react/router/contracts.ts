@@ -1,4 +1,6 @@
-export interface GuardUser {
+import { IUser } from '../../../contracts'
+
+export interface GuardUser extends IUser {
   canAccess (module: string): boolean
   canPerform (action: string): boolean
 }
