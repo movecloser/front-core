@@ -1,6 +1,6 @@
 import { AuthConfig, Authentication, AuthHeader, IUser, Token } from '../contracts/authentication';
 import { IDateTime } from '../contracts/services';
-export declare class AuthService<U extends IUser> implements Authentication<U> {
+export declare class AuthService implements Authentication<IUser> {
     private _config;
     private _date;
     private _auth$;
@@ -32,11 +32,11 @@ export declare class AuthService<U extends IUser> implements Authentication<U> {
      * Sets user in state.
      * @param user
      */
-    setUser(user: U): void;
+    setUser<U extends IUser>(user: U): void;
     /**
      * Returns user from state.
      */
-    get user(): U | null;
+    get user(): IUser | null;
     /**
      * Calculates for how long token will be still valid.
      * @private
