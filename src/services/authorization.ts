@@ -185,6 +185,10 @@ export class AuthService implements Authentication <IUser> {
           continue
         }
 
+        this._auth$.next({
+          type: AuthEventType.Booted
+        })
+
         return
       }
 
