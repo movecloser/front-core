@@ -1,10 +1,11 @@
-export interface ICollection<Type> {
+export interface ICollection<Type> extends Array<Type> {
     first(): Type | false;
     getItem(callback: (item: Type, index?: number) => boolean): Type | false;
     hasItem(callback: (item: Type, index?: number) => boolean): boolean;
     hasItems(): boolean;
     isEmpty(): boolean;
     last(): Type | false;
+    meta: IMeta;
 }
 export interface IMeta {
     [key: string]: any;

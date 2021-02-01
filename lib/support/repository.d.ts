@@ -1,5 +1,5 @@
 import { ConnectorFactory, IConnector } from '../contracts/connector';
-import { ICollection, IModel, ModelConstructor, ModelPayload } from '../contracts/models';
+import { ICollection, IMeta, IModel, ModelConstructor, ModelPayload } from '../contracts/models';
 import { MappingConfig } from '../contracts/support';
 /**
  * Repository is service class that provides loading data via store.
@@ -17,7 +17,7 @@ export declare abstract class Repository<M> {
     /**
      * Compose collection based on mapping settings.
      */
-    protected composeCollection(rawCollection: any[], modelConstructor: ModelConstructor<M>): ICollection<IModel<M>>;
+    protected composeCollection(rawCollection: any[], modelConstructor: ModelConstructor<M>, meta: IMeta): ICollection<IModel<M>>;
     /**
      * Compose model based on mapping settings.
      */

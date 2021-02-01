@@ -9,8 +9,8 @@ import {
   DateTimeType,
   DocumentType,
   IDateTime,
-  IDocument,
-  IWindow,
+  IDocument, IModal,
+  IWindow, ModalRegistry, ModalType,
   WindowType
 } from './contracts/services'
 import { EventbusType, IEventbus } from './contracts/eventbus'
@@ -32,6 +32,7 @@ import { ValidationMiddleware } from './services/resources/validation-middleware
 import { WindowService } from './services/window'
 import { Authentication, AuthServiceType, IUser } from './contracts'
 import { AuthService } from './services/authorization'
+import { ModalConnector }  from './services/modal-connector'
 
 /**
  * List of services included into movecloser/core
@@ -109,6 +110,20 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
             context.container.get<IValidation>(ValidationType)
           )
         })
+    }
+
+    // Modals
+    if (config.has('modals')) {
+      bind<IModal>(ModalType).toDynamicValue(() => {
+        const registry = config.byFile<ModalRegistry<any>>('modals')
+
+        type Keys = keyof typeof registry
+        type Values = typeof registry[Keys]
+
+        return new ModalConnector(
+          registry as ModalRegistry<Values>
+        )
+      }).inSingletonScope()
     }
 
     // Validation

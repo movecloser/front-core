@@ -1,46 +1,14 @@
 import { BehaviorSubject } from 'rxjs'
-import { injectable } from 'inversify'
-import { VueConstructor } from 'vue'
+import { IModal, ModalPayload, ModalRegistry, ModalState } from '../contracts'
+import { Injectable } from '../container'
 
-export interface IModal {
-  component: VueConstructor
-  isOpened: boolean
-  name: string|null
-  payload: ModalPayload
-  close (key?: string|null): void
-  open (key: string, payload?: ModalPayload): void
-  openAsync (key: string, promise: Promise<any>, payload?: ModalPayload): void
-  subscribe (callback: (open: ModalState) => any): void
-}
-
-export interface IModalComponent {
-  payload: ModalPayload
-}
-
-export interface ModalPayload {
-  closable?: boolean
-  [key: string]: any
-}
-
-export interface ModalRegistry {
-  [key: string]: VueConstructor
-}
-
-export interface ModalState {
-  component: string|null
-  opened: boolean
-  payload: ModalPayload
-}
-
-export const ModalType = Symbol.for('IModal')
-
-@injectable()
-export class ModalConnector {
-  protected _registry!: ModalRegistry
+@Injectable()
+export class ModalConnector implements IModal{
+  protected _registry!: ModalRegistry<any>
   protected _state!: ModalState
   protected _stream$: BehaviorSubject<ModalState>
 
-  constructor (registry: ModalRegistry) {
+  constructor (registry: ModalRegistry<any>) {
     this._registry = registry
     this._stream$ = new BehaviorSubject<ModalState>({
       component: null,
@@ -53,7 +21,11 @@ export class ModalConnector {
     })
   }
 
-  close (key: string|null = null): void {
+  /**
+   *
+   * @param key
+   */
+  public close (key: string|null = null): void {
     if (key === null || !key.length || this._state.component === key) {
       this._stream$.next({
         component: null,
@@ -65,7 +37,10 @@ export class ModalConnector {
     this._unlockScroll()
   }
 
-  get component (): VueConstructor {
+  /**
+   *
+   */
+  public component<C> (): C  {
     if (this._state.component === null) {
       throw new Error('Modal is not opened. Check if [isOpened] before calling for modal component.')
     }
@@ -77,15 +52,26 @@ export class ModalConnector {
     return this._registry[this._state.component]
   }
 
-  get isOpened (): boolean {
+  /**
+   *
+   */
+  public get isOpened (): boolean {
     return this._state.opened && this._state.component !== null
   }
 
-  get name (): string|null {
+  /**
+   *
+   */
+  public get name (): string|null {
     return this._state.component
   }
 
-  open (key: string, payload: ModalPayload = {}): void {
+  /**
+   *
+   * @param key
+   * @param payload
+   */
+  public open (key: string, payload: ModalPayload = {}): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }
@@ -99,7 +85,13 @@ export class ModalConnector {
     this._lockScroll()
   }
 
-  openAsync (key: string, promise: Promise<any>, payload: ModalPayload = {}): void {
+  /**
+   *
+   * @param key
+   * @param promise
+   * @param payload
+   */
+   public openAsync (key: string, promise: Promise<any>, payload: ModalPayload = {}): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }
@@ -113,11 +105,18 @@ export class ModalConnector {
     })
   }
 
-  get payload (): ModalPayload {
+  /**
+   *
+   */
+  public get payload (): ModalPayload {
     return this._state.payload
   }
 
-  subscribe (callback: (open: ModalState) => any): void {
+  /**
+   *
+   * @param callback
+   */
+  public subscribe (callback: (open: ModalState) => any): void {
     this._stream$.subscribe((state: ModalState) => {
       callback(state)
     })

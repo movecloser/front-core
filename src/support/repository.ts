@@ -1,5 +1,5 @@
 import { ApiConnectorFactory, ConnectorFactory, IConnector } from '../contracts/connector'
-import { ICollection, IModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import { ICollection, IMeta, IModel, ModelConstructor, ModelPayload } from '../contracts/models'
 import { MappingConfig } from '../contracts/support'
 
 import { Collection } from './collection'
@@ -30,7 +30,8 @@ export abstract class Repository<M> {
    */
   protected composeCollection (
     rawCollection: any[],
-    modelConstructor: ModelConstructor<M>
+    modelConstructor: ModelConstructor<M>,
+    meta: IMeta
   ): ICollection<IModel<M>> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
@@ -38,7 +39,8 @@ export abstract class Repository<M> {
 
     return new Collection<IModel<M>>(
       (this.useAdapter ? mapCollection(rawCollection, this.map) : rawCollection)
-        .map((item: any) => modelConstructor.hydrate(item))
+        .map((item: any) => modelConstructor.hydrate(item)),
+      meta
     )
   }
 

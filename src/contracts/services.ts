@@ -18,6 +18,38 @@ export interface IDocument {
   removeEventListener (name: any, handler: (this: Document, ev: any) => any, options?: any): void
 }
 
+export interface IModal {
+  component <C> (): C
+  isOpened: boolean
+  name: string|null
+  payload: ModalPayload
+  close (key?: string|null): void
+  open (key: string, payload?: ModalPayload): void
+  openAsync (key: string, promise: Promise<any>, payload?: ModalPayload): void
+  subscribe (callback: (open: ModalState) => any): void
+}
+
+export interface IModalComponent {
+  payload: ModalPayload
+}
+
+export interface ModalPayload {
+  closable?: boolean
+  [key: string]: any
+}
+
+export interface ModalRegistry<ComponentConstructor> {
+  [key: string]: ComponentConstructor
+}
+
+export interface ModalState {
+  component: string|null
+  opened: boolean
+  payload: ModalPayload
+}
+
+export const ModalType = Symbol.for('IModal')
+
 export interface IWindow {
   addEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void
 
