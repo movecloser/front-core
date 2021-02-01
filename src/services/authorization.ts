@@ -94,6 +94,7 @@ export class AuthService implements Authentication <IUser> {
         JSON.stringify(this.token)
       )
     }
+    // TODO: check if expiresAt is not null
     const tokenLifeTime = this.calculateTokenLifetime(token)
 
     /* istanbul ignore else */
@@ -178,6 +179,7 @@ export class AuthService implements Authentication <IUser> {
         return
       }
 
+      // TODO: check if expiresAt is not null
       const tokenLifeTime = this.calculateTokenLifetime(token)
 
       /* istanbul ignore next */
