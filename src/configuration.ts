@@ -33,8 +33,8 @@ export class Configuration implements IConfiguration {
   public byKey<Expected> (
     key: string,
     shouldThrow: boolean = true,
-    defaultValue: any = null
-  ): Expected {
+    defaultValue: Expected | null = null
+  ): Expected | null {
     if (key.length === 0) {
       throw new Error('Given key is empty.')
     }
@@ -56,7 +56,7 @@ export class Configuration implements IConfiguration {
       break
     }
 
-    return foundValue as Expected
+    return foundValue as typeof foundValue
   }
 
   /**

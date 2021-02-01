@@ -1,4 +1,5 @@
-import { AuthConfig, Authentication, AuthHeader, IUser, Token } from '../contracts/authentication';
+import { Subscription } from 'rxjs';
+import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IUser, Token } from '../contracts/authentication';
 import { IDateTime } from '../contracts/services';
 export declare class AuthService implements Authentication<IUser> {
     private _config;
@@ -19,6 +20,10 @@ export declare class AuthService implements Authentication<IUser> {
      * Returns Auth Headers based on token type.
      */
     getAuthorizationHeader(): AuthHeader;
+    /**
+     * Register new event listener.
+     */
+    listen(callback: AuthEventCallback): Subscription;
     /**
      * Returns Token object from state.
      */

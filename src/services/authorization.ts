@@ -1,11 +1,11 @@
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject, OperatorFunction, Subscription } from 'rxjs'
 
 import { Injectable } from '../container'
 
 import {
   AuthConfig,
   Authentication,
-  AuthEvent,
+  AuthEvent, AuthEventCallback,
   AuthEventType,
   AuthHeader,
   IUser,
@@ -73,6 +73,15 @@ export class AuthService implements Authentication <IUser> {
     tokenHeader += tokenData.accessToken
 
     return { Authorization: tokenHeader }
+  }
+
+  /**
+   * Register new event listener.
+   */
+  public listen (callback: AuthEventCallback): Subscription {
+    return this._auth$.subscribe((event: AuthEvent) => {
+      callback(event)
+    })
   }
 
   /**

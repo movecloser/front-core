@@ -4,6 +4,15 @@ import { Redirect, Route, Switch } from 'react-router'
 import { RouteConfig, RoutesModuleProps } from './contracts'
 
 /**
+ * Compose valid router path by trimming trailling slashes & prevent againts
+ * any slash duplication.
+ */
+export function composeValidPath (parts: string[]): string {
+  const fullPath: string = parts.map((p: string) => p.replace(/^\/+|\/+$/g, '')).join('/')
+  return `/${fullPath}`
+}
+
+/**
  * This component renders single module taking guard function into consideration.
  *
  * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
@@ -19,7 +28,8 @@ export const Module = (props: RoutesModuleProps) => {
             // Let's determine if we should consider redirection. !NOTE: redirection has higher
             // priority over component.
             let shouldRedirect: boolean = typeof r.component !== 'function' || 'redirect' in r
-            const fullPath: string = props.prefix !== '/' ? `${props.prefix}/${r.path}` : r.path
+            const fullPath: string = props.prefix !== '/'
+              ? composeValidPath([ props.prefix, r.path ]) : r.path
 
             if (!shouldRedirect && props.useGuards) {
               // Let's determine if `auth` has access to given Route. There are 2 scenarios:

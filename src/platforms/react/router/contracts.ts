@@ -10,6 +10,7 @@ export interface ModuleRoute {
   layout: (props?: any) => JSX.Element
   prefix: string
   routes: RouteConfig[]
+  skipGlobalPrefix?: boolean
 }
 
 export interface RouteConfig {
@@ -27,6 +28,7 @@ export interface RouteMeta {
 export interface RoutesFactoryProps {
   auth?: GuardUser
   errorPage?: (props?: any) => JSX.Element
+  globalPrefix?: string
   moduleRoutes: ModuleRoute[]
   useGuards: boolean
 }

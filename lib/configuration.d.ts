@@ -21,7 +21,7 @@ export declare class Configuration implements IConfiguration {
      *  Key is string consisting of keys connected by dots.
      *  'http.base.url' or 'router.mode'
      */
-    byKey<Expected>(key: string, shouldThrow?: boolean, defaultValue?: any): Expected;
+    byKey<Expected>(key: string, shouldThrow?: boolean, defaultValue?: Expected | null): Expected | null;
     /**
      * Returns true if given filename exists in config's top level structure.
      */

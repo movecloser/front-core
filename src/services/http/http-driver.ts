@@ -57,7 +57,7 @@ export abstract class HttpDriver implements IHttp {
     return this._call('put', target, data, headers, options)
   }
 
-  protected async abstract _call (
+  protected abstract _call (
     method: string,
     target: string,
     data: Payload,

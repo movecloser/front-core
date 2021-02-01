@@ -1,3 +1,4 @@
+import { Subscription } from 'rxjs';
 export interface AuthConfig {
     tokenName: string;
     refreshThreshold: number;
@@ -7,6 +8,7 @@ export interface AuthEvent {
     type: AuthEventType;
     token?: Token;
 }
+export declare type AuthEventCallback = (event: AuthEvent) => void;
 export declare enum AuthEventType {
     Booted = "booted",
     Booting = "booting",
@@ -19,6 +21,7 @@ export interface AuthHeader {
 export interface Authentication<U> extends AuthProvider {
     deleteToken(): void;
     getUserId(): string | number | null;
+    listen(callback: AuthEventCallback): Subscription;
     setToken(token: Token): void;
     setUser(user: U): void;
     token: Token | null;
