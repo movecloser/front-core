@@ -1,6 +1,12 @@
 /* istanbul ignore file */
-import { ApiConnectorFactory, ApiConnectorType, ConnectorMiddleware, IConnector } from './contracts/connector'
 import {
+  ApiConnectorFactory,
+  ApiConnectorType,
+  ConnectorMiddleware,
+  IConnector
+} from './contracts/connector'
+import {
+  AuthMiddleareType,
   EventbusMiddlewareType,
   InternalServerErrorMiddlewareType,
   ValidationMiddlewareType
@@ -21,6 +27,7 @@ import { IValidation, ValidationType } from './contracts/validation'
 import { ProvidersFactory } from './contracts/bootstrapper'
 
 import { ApiConnector } from './services/connector'
+import { AuthMiddleware } from './services/resources/auth-middleware'
 import { DateTime } from './services/datetime'
 import { DocumentService } from './services/document'
 import { Eventbus } from './services/eventbus'
@@ -30,9 +37,9 @@ import { InternalServerErrorMiddleware } from './services/resources/internal-ser
 import { Validation } from './services/validation'
 import { ValidationMiddleware } from './services/resources/validation-middleware'
 import { WindowService } from './services/window'
-import { Authentication, AuthServiceType, IUser } from './contracts'
+import { Authentication, AuthProvider, AuthServiceType, IUser } from './contracts'
 import { AuthService } from './services/authorization'
-import { ModalConnector }  from './services/modal-connector'
+import { ModalConnector } from './services/modal-connector'
 
 /**
  * List of services included into movecloser/core
@@ -42,11 +49,12 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
   return (bind: Interfaces.Bind) => {
     // Api Connector
     if (config.has('resources')) {
-      bind<Interfaces.Factory<IConnector>>(ApiConnectorFactory).toFactory((context: Interfaces.Context) => {
-        return () => {
-          return context.container.get<IConnector>(ApiConnectorType)
-        }
-      })
+      bind<Interfaces.Factory<IConnector>>(ApiConnectorFactory)
+        .toFactory((context: Interfaces.Context) => {
+          return () => {
+            return context.container.get<IConnector>(ApiConnectorType)
+          }
+        })
 
       bind<IConnector>(ApiConnectorType).toDynamicValue((context: Interfaces.Context) => {
         const middlewares: ConnectorMiddleware[] = []
@@ -69,10 +77,16 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
 
     // Authentication
     if (config.has('auth')) {
+      bind<ConnectorMiddleware>(AuthMiddleareType).toDynamicValue((context: Interfaces.Context) => {
+        return new AuthMiddleware(
+          context.container.get<AuthProvider>(AuthServiceType)
+        )
+      })
+
       bind<Authentication<IUser>>(AuthServiceType).toDynamicValue((context: Interfaces.Context) => {
         return new AuthService(
           config.byFile('auth'),
-          context.container.get(DateTimeType),
+          context.container.get(DateTimeType)
         )
       }).inSingletonScope()
     }
