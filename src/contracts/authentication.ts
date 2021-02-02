@@ -14,6 +14,7 @@ export interface AuthEvent {
 export type AuthEventCallback = (event: AuthEvent) => void
 
 export enum AuthEventType {
+  Authenticated = 'authenticated',
   Booted = 'booted',
   Booting = 'booting',
   Invalidated = 'invalidated',
@@ -45,7 +46,7 @@ export interface IUser {
 
 export interface Token {
   accessToken: string
-  expiresAt: string
+  expiresAt: string|null
   tokenType: string
 }
 

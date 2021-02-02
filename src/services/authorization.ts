@@ -103,15 +103,20 @@ export class AuthService implements Authentication <IUser> {
         JSON.stringify(this.token)
       )
     }
-    // TODO: check if expiresAt is not null
-    const tokenLifeTime = this.calculateTokenLifetime(token)
+    if (this.isRefreshable(token)) {
+      const tokenLifeTime = this.calculateTokenLifetime(token)
 
-    /* istanbul ignore else */
-    if (this.isTokenValid(tokenLifeTime)) {
-      this.setupRefreshment(tokenLifeTime, token)
-
-      this._token = token
+      /* istanbul ignore else */
+      if (this.isTokenValid(tokenLifeTime)) {
+        this.setupRefreshment(tokenLifeTime, token)
+      }
     }
+
+    this._token = token
+
+    this._auth$.next({
+      type: AuthEventType.Authenticated
+    })
   }
 
   /**
@@ -134,7 +139,7 @@ export class AuthService implements Authentication <IUser> {
    * @private
    */
   private calculateTokenLifetime (token: Token): number {
-    return this._date.difference(token.expiresAt)
+    return this._date.difference(token.expiresAt as string)
   }
 
   /**
@@ -192,13 +197,16 @@ export class AuthService implements Authentication <IUser> {
         return
       }
 
-      // TODO: check if expiresAt is not null
-      const tokenLifeTime = this.calculateTokenLifetime(token)
+      if (this.isRefreshable(token)) {
+        const tokenLifeTime = this.calculateTokenLifetime(token)
 
-      /* istanbul ignore next */
-      if (this.isTokenValid(tokenLifeTime)) {
-        this.setupRefreshment(tokenLifeTime, token)
+        /* istanbul ignore next */
+        if (this.isTokenValid(tokenLifeTime)) {
+          this.setupRefreshment(tokenLifeTime, token)
 
+          this._token = token
+        }
+      } else {
         this._token = token
       }
 
@@ -206,6 +214,10 @@ export class AuthService implements Authentication <IUser> {
         type: AuthEventType.Booted
       })
     }
+  }
+
+  protected isRefreshable (token: Token): boolean {
+    return token.hasOwnProperty('expiresAt') && token.expiresAt !== null
   }
 
   /**

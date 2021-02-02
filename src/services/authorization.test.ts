@@ -1,8 +1,9 @@
 import 'reflect-metadata'
 
 import { AuthService } from './authorization'
-import { AuthConfig } from '../contracts'
+import { AuthConfig, AuthEvent } from '../contracts'
 import { DateTime } from './datetime'
+import { Subscription } from 'rxjs'
 
 describe('Test AuthService class.', () => {
   const config: AuthConfig = {
@@ -108,7 +109,16 @@ describe('Test AuthService class.', () => {
     expect(result).toEqual({ 'Authorization': '' })
   })
 
-  test('Expect [setToken] to do work.', () => {
+  test('Expect [getAuthorizationHeader] to do fail.', () => {
+    const auth = new AuthService(config, new DateTime())
+
+    const result = auth.listen((event: AuthEvent) => {})
+
+    expect(result).toBeInstanceOf(Subscription)
+  })
+
+
+  test('Expect [listen] to return Subscription.', () => {
     const auth = new AuthService(config, new DateTime())
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold + 1) * 1000);
@@ -142,6 +152,25 @@ describe('Test AuthService class.', () => {
     expect(auth._token).toEqual({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
+      tokenType: 'Bearer',
+    })
+  })
+
+  test('Expect [setToken] to use non-refreshable token.', () => {
+    const auth = new AuthService(config, new DateTime())
+    const expires = new Date();
+    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500));
+
+    auth.setToken({
+      accessToken: 'test-token',
+      expiresAt: null,
+      tokenType: 'Bearer',
+    })
+
+    // @ts-ignore
+    expect(auth._token).toEqual({
+      accessToken: 'test-token',
+      expiresAt: null,
       tokenType: 'Bearer',
     })
   })
@@ -231,6 +260,21 @@ describe('Test AuthService class.', () => {
     const token = {
       accessToken: 'test-token',
       expiresAt: new Date('9999').toUTCString(),
+    }
+    window.localStorage.setItem(config.tokenName, JSON.stringify(token))
+    const auth = new AuthService(config, new DateTime())
+
+    // @ts-ignore
+    auth.retrieveToken()
+
+    // @ts-ignore
+    expect(auth._token).toEqual(token)
+  })
+
+  test('Expect [retrieveToken] to be true.', () => {
+    const token = {
+      accessToken: 'test-token',
+      expiresAt: null
     }
     window.localStorage.setItem(config.tokenName, JSON.stringify(token))
     const auth = new AuthService(config, new DateTime())
