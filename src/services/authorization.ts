@@ -194,6 +194,7 @@ export class AuthService implements Authentication <IUser> {
 
         for (const key of ['accessToken', 'tokenType']) {
           if (!token || !token.hasOwnProperty(key) || token[key] === null) {
+            this.deleteToken()
             break
           }
 
@@ -201,7 +202,9 @@ export class AuthService implements Authentication <IUser> {
           payload.token = token
         }
       /* istanbul ignore next */
-      } catch (error) {}
+      } catch (error) {
+        this.deleteToken()
+      }
 
       this._auth$.next(payload)
     }
