@@ -34,7 +34,7 @@ export class ModalConnector implements IModal{
       })
     }
 
-    this._unlockScroll()
+    this.unlockScroll()
   }
 
   /**
@@ -68,7 +68,7 @@ export class ModalConnector implements IModal{
 
   /**
    *
-   * @param key
+   // * @param key
    * @param payload
    */
   public open (key: string, payload: ModalPayload = {}): void {
@@ -82,7 +82,7 @@ export class ModalConnector implements IModal{
       payload: payload
     })
 
-    this._lockScroll()
+    this.lockScroll()
   }
 
   /**
@@ -128,7 +128,8 @@ export class ModalConnector implements IModal{
    *
    * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
    */
-  private _lockScroll (): void {
+  private lockScroll (): void {
+    /* istanbul ignore else */
     if (typeof window !== 'undefined') {
       document.body.style.overflowY = 'hidden'
     }
@@ -140,7 +141,8 @@ export class ModalConnector implements IModal{
    *
    * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
    */
-  private _unlockScroll (): void {
+  private unlockScroll (): void {
+    /* istanbul ignore else */
     if (typeof window !== 'undefined') {
       document.body.style.overflowY = 'auto'
     }
