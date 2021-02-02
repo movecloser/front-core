@@ -16,6 +16,7 @@ export type AuthEventCallback = (event: AuthEvent) => void
 export enum AuthEventType {
   Authenticated = 'authenticated',
   Booted = 'booted',
+  BootedWithToken = 'booted_with_token',
   Booting = 'booting',
   Invalidated = 'invalidated',
   Refresh = 'refresh'

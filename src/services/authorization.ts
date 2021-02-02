@@ -1,11 +1,12 @@
-import { BehaviorSubject, OperatorFunction, Subscription } from 'rxjs'
+import { ReplaySubject, Subscription } from 'rxjs'
 
 import { Injectable } from '../container'
 
 import {
   AuthConfig,
   Authentication,
-  AuthEvent, AuthEventCallback,
+  AuthEvent,
+  AuthEventCallback,
   AuthEventType,
   AuthHeader,
   IUser,
@@ -17,12 +18,13 @@ import { WindowService } from './window'
 
 @Injectable()
 export class AuthService implements Authentication <IUser> {
-  private _auth$!: BehaviorSubject<AuthEvent>
+  private _auth$!: ReplaySubject<AuthEvent>
   private _token: Token | null = null
   private _user: IUser | null = null
 
   constructor (private _config: AuthConfig, private _date: IDateTime) {
-    this._auth$ = new BehaviorSubject<AuthEvent>({
+    this._auth$ = new ReplaySubject<AuthEvent>(2)
+    this._auth$.next({
       type: AuthEventType.Booting
     })
 
@@ -182,32 +184,27 @@ export class AuthService implements Authentication <IUser> {
   protected retrieveToken (): void {
     /* istanbul ignore else */
     if (WindowService.isDefined) {
-      let token: any
+      const payload: AuthEvent = {
+        type: AuthEventType.Booted
+      }
 
       try {
-        token = JSON.parse(
+        const token: any = JSON.parse(
           LocalStorage.get(this._config.tokenName) as string
         )
-        /* istanbul ignore next */
-      } catch (error) {
-        /* istanbul ignore next */
-        token = null
-      }
 
-      for (const key of ['accessToken', 'tokenType']) {
-        if (token === null || !token.hasOwnProperty(key) || token[key] === null) {
-          break
+        for (const key of ['accessToken', 'tokenType']) {
+          if (!token || !token.hasOwnProperty(key) || token[key] === null) {
+            break
+          }
+
+          payload.type = AuthEventType.BootedWithToken
+          payload.token = token
         }
+      /* istanbul ignore next */
+      } catch (error) {}
 
-        this._auth$.next({
-          type: AuthEventType.Refresh,
-          token: token
-        })
-      }
-
-      this._auth$.next({
-        type: AuthEventType.Booted
-      })
+      this._auth$.next(payload)
     }
   }
 
