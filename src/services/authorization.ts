@@ -1,4 +1,4 @@
-import { ReplaySubject, Subscription } from 'rxjs'
+import { BehaviorSubject, Subscription } from 'rxjs'
 
 import { Injectable } from '../container'
 
@@ -18,13 +18,12 @@ import { WindowService } from './window'
 
 @Injectable()
 export class AuthService implements Authentication <IUser> {
-  private _auth$!: ReplaySubject<AuthEvent>
+  private _auth$!: BehaviorSubject<AuthEvent>
   private _token: Token | null = null
   private _user: IUser | null = null
 
   constructor (private _config: AuthConfig, private _date: IDateTime) {
-    this._auth$ = new ReplaySubject<AuthEvent>(2)
-    this._auth$.next({
+    this._auth$ = new BehaviorSubject<AuthEvent>({
       type: AuthEventType.Booting
     })
 
