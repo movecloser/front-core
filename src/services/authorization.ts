@@ -104,13 +104,6 @@ export class AuthService implements Authentication <IUser> {
    * @param token
    */
   public setToken (token: Token) {
-    /* istanbul ignore else */
-    if (WindowService.isDefined) {
-      LocalStorage.set(
-        this._config.tokenName,
-        JSON.stringify(this.token)
-      )
-    }
     if (this.isRefreshable(token)) {
       const tokenLifeTime = this.calculateTokenLifetime(token)
 
@@ -125,6 +118,14 @@ export class AuthService implements Authentication <IUser> {
     this._auth$.next({
       type: AuthEventType.Authenticated
     })
+
+    /* istanbul ignore else */
+    if (WindowService.isDefined) {
+      LocalStorage.set(
+        this._config.tokenName,
+        JSON.stringify(this.token)
+      )
+    }
   }
 
   /**

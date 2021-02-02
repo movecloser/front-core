@@ -266,7 +266,11 @@ describe('Test AuthService class.', () => {
     auth.retrieveToken()
 
     // @ts-ignore
-    expect(auth._token).toEqual(null)
+    expect(auth._token).toEqual({
+      accessToken: 'test-token',
+      expiresAt: null,
+      tokenType: 'Bearer',
+    })
   })
 
   test('Expect [retrieveToken] to be true.', () => {
