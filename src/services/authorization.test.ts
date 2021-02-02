@@ -52,6 +52,19 @@ describe('Test AuthService class.', () => {
     expect(result).toBe(false)
   })
 
+  test('Expect [check] to do check.', () => {
+    const auth = new AuthService(config, new DateTime())
+    // @ts-ignore
+    auth._token = {
+      accessToken: 'test-token',
+      expiresAt: null,
+      tokenType: 'Bearer',
+    }
+    const result = auth.check()
+
+    expect(result).toBe(true)
+  })
+
   test('Expect [deleteToken] to do work.', () => {
     const auth = new AuthService(config, new DateTime())
     //@ts-ignore

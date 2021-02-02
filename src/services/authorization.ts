@@ -33,6 +33,14 @@ export class AuthService implements Authentication <IUser> {
    * Returns if user is logged-in.
    */
   public check (): boolean {
+    if (!this._token) {
+      return false
+    }
+
+    if (!this.isRefreshable(this._token as Token)) {
+      return this._token !== null && !!this._token.accessToken
+    }
+
     return this._token !== null &&
       this.calculateTokenLifetime(this._token) > this._config.validThreshold
   }
