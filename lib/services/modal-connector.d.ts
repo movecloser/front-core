@@ -24,7 +24,7 @@ export declare class ModalConnector implements IModal {
     get name(): string | null;
     /**
      *
-     * @param key
+     // * @param key
      * @param payload
      */
     open(key: string, payload?: ModalPayload): void;
@@ -50,13 +50,13 @@ export declare class ModalConnector implements IModal {
      *
      * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
      */
-    private _lockScroll;
+    private lockScroll;
     /**
      * Unlocks the window's scroll.
      * @private
      *
      * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
      */
-    private _unlockScroll;
+    private unlockScroll;
 }
 export default ModalConnector;
