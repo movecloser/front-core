@@ -242,13 +242,13 @@ describe('Test adapter methods', () => {
     }
 
     const payload = {
-      firstName: 'Stefan'
+      firstName: 'Test Name'
     }
 
     const intention = new TestIntention(payload)
 
     const result = {
-      first_name: 'Stefan'
+      first_name: 'Test Name'
     }
 
     expect(intention.toRequest()).toEqual(result)
@@ -268,7 +268,7 @@ describe('Test adapter methods', () => {
     }
 
     const payload = {
-      firstName: 'Stefan'
+      firstName: 'Test Name'
     }
 
     const intention = new TestIntention(payload)
@@ -361,5 +361,4 @@ describe('Test adapter methods', () => {
 
     expect(() => intention.toRequest()).toThrow(MappingError)
   })
-
 })
