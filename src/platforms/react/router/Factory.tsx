@@ -35,7 +35,7 @@ export function Factory (props: RoutesFactoryProps) {
 
           return (
             <Route key={`route-${i}`} path={prefix}>
-              <Module prefix={m.prefix} layout={m.layout} routes={m.routes} auth={props.auth}
+              <Module prefix={prefix} layout={m.layout} routes={m.routes} auth={props.auth}
                       useGuards={props.useGuards} errorPage={props.errorPage}/>
             </Route>
           )
