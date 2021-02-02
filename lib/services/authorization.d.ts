@@ -61,6 +61,7 @@ export declare class AuthService implements Authentication<IUser> {
      * Sets token retrieved from device localstorage.
      */
     protected retrieveToken(): void;
+    protected isRefreshable(token: Token): boolean;
     /**
      * Sets refresh behaviour for token.
      * @param tokenLifeTime

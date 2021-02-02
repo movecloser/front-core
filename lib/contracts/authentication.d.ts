@@ -10,6 +10,7 @@ export interface AuthEvent {
 }
 export declare type AuthEventCallback = (event: AuthEvent) => void;
 export declare enum AuthEventType {
+    Authenticated = "authenticated",
     Booted = "booted",
     Booting = "booting",
     Invalidated = "invalidated",
@@ -36,7 +37,7 @@ export interface IUser {
 }
 export interface Token {
     accessToken: string;
-    expiresAt: string;
+    expiresAt: string | null;
     tokenType: string;
 }
 export declare const AuthServiceType: unique symbol;
