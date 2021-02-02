@@ -194,29 +194,15 @@ export class AuthService implements Authentication <IUser> {
         token = null
       }
 
-      for (const key of ['accessToken', 'expiresAt', 'tokenType']) {
-        if (token && (key in token || token[key] !== null)) {
-          continue
+      for (const key of ['accessToken', 'tokenType']) {
+        if (token === null || !token.hasOwnProperty(key) || token[key] === null) {
+          break
         }
 
         this._auth$.next({
-          type: AuthEventType.Booted
+          type: AuthEventType.Refresh,
+          token: token
         })
-
-        return
-      }
-
-      if (this.isRefreshable(token)) {
-        const tokenLifeTime = this.calculateTokenLifetime(token)
-
-        /* istanbul ignore next */
-        if (this.isTokenValid(tokenLifeTime)) {
-          this.setupRefreshment(tokenLifeTime, token)
-
-          this._token = token
-        }
-      } else {
-        this._token = token
       }
 
       this._auth$.next({
