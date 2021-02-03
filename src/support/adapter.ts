@@ -74,7 +74,7 @@ export function mapModel<T> (toMap: any, mapping: MappingConfig, preserve: boole
  */
 function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: boolean): void {
   Object.keys(item).forEach(key => {
-    if (!item) return
+    if (!item || !item[key]) return
     mapped[key] = item[key]
   })
 

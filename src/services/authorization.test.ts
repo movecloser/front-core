@@ -4,6 +4,7 @@ import { AuthService } from './authorization'
 import { AuthConfig, AuthEvent } from '../contracts'
 import { DateTime } from './datetime'
 import { Subscription } from 'rxjs'
+import { TestScheduler } from 'rxjs/testing';
 
 describe('Test AuthService class.', () => {
   const config: AuthConfig = {
@@ -266,11 +267,7 @@ describe('Test AuthService class.', () => {
     auth.retrieveToken()
 
     // @ts-ignore
-    expect(auth._token).toEqual({
-      accessToken: 'test-token',
-      expiresAt: null,
-      tokenType: 'Bearer',
-    })
+    expect(auth._token).toEqual(null)
   })
 
   test('Expect [retrieveToken] to be true.', () => {
@@ -284,8 +281,9 @@ describe('Test AuthService class.', () => {
     // @ts-ignore
     auth.retrieveToken()
 
+
     // @ts-ignore
-    expect(auth._token).toEqual(token)
+    expect(auth._token).toEqual(null)
   })
 
   test('Expect [retrieveToken] to be true.', () => {
@@ -300,6 +298,30 @@ describe('Test AuthService class.', () => {
     auth.retrieveToken()
 
     // @ts-ignore
-    expect(auth._token).toEqual(token)
+    expect(auth._token).toEqual(null)
+  })
+
+  test('Expect [retrieveToken] to be fail.', () => {
+    const auth = new AuthService(config, new DateTime())
+    window.localStorage.getItem = () => {
+      throw new Error()
+    }
+
+    const deleteSpy = jest.spyOn(auth, 'deleteToken')
+    // const token = {
+    //   accessToken: 'test-token',
+    //   expiresAt: null
+    // }
+
+    // @ts-ignore
+    window.localStorage.setItem(config.tokenName, () => {})
+    // const auth = new AuthService(config, new DateTime())
+    //
+    // @ts-ignore
+    auth.retrieveToken()
+    //
+    // // @ts-ignore
+    // expect(auth._token).toEqual(token)
+    expect(deleteSpy).toHaveBeenCalledTimes(1)
   })
 })

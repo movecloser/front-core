@@ -221,6 +221,7 @@ export class AuthService implements Authentication <IUser> {
    * @private
    */
   protected setupRefreshment (tokenLifeTime: number, token: Token): void {
+    /* istanbul ignore else */
     if (
       tokenLifeTime < this._config.refreshThreshold &&
       tokenLifeTime > this._config.validThreshold
@@ -229,7 +230,6 @@ export class AuthService implements Authentication <IUser> {
         type: AuthEventType.Refresh,
         token: token
       })
-      /* istanbul ignore else */
     } else if (tokenLifeTime > this._config.refreshThreshold) {
       /* istanbul ignore next */
       setTimeout(() => {
