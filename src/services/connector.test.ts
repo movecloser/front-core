@@ -36,6 +36,16 @@ describe('Test Connector class.', () => {
           auth: true
         }
       }
+    },
+    resource3: {
+      prefix: '',
+      connection: 'test-connection',
+      methods: {
+        test: {
+          url: 'test',
+          method: Methods.Get,
+        }
+      }
     }
   }
   const connector = new ApiConnector(registry, new HttpConnector(), [])
@@ -128,6 +138,34 @@ describe('Test Connector class.', () => {
     })
   })
 
+  test('Expect [findResource] to return resource.', () => {
+    const connector = new ApiConnector(registry, new HttpConnector({}, 'resource3'), [])
+
+    const result = connector.findResource('resource3', 'test')
+
+    expect(result).toEqual({
+      'auth': false,
+      'connection': 'test-connection',
+      'method': 'get',
+      'shorthand': 'testResource3',
+      'url': 'test'
+    })
+  })
+
+  test('Expect [findResource] to return resource.', () => {
+    const connector = new ApiConnector(registry, new HttpConnector({}, 'resource3'), [])
+
+    const result = connector.findResource('resource3', 'test')
+
+    expect(result).toEqual({
+      'auth': false,
+      'connection': 'test-connection',
+      'method': 'get',
+      'shorthand': 'testResource3',
+      'url': 'test'
+    })
+  })
+
   test('Expect [findResource] to merge middlewares.', () => {
     let error
     try {
@@ -147,7 +185,7 @@ describe('Test Connector class.', () => {
       afterCall: () => {}, beforeCall: () => {}
     }])
     // @ts-ignore
-    expect(Object.keys(connector._list).length).toBe(2)
+    expect(Object.keys(connector._list).length).toBe(3)
   })
 
   test('Expect [useResources] to merge resources.', () => {
@@ -155,7 +193,7 @@ describe('Test Connector class.', () => {
     // @ts-ignore
     connector.useResources({ 'test': {} })
     // @ts-ignore
-    expect(Object.keys(connector._list).length).toBe(3)
+    expect(Object.keys(connector._list).length).toBe(4)
   })
 
   test('Expect [buildUrl] to do build url.', () => {
