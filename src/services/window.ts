@@ -53,7 +53,7 @@ export class WindowService implements IWindow {
    * @param {Array} params
    * @return any
    */
-  call (method: string, params: any[]): any {
+  public call (method: string, params: any[]): any {
     if (this._isDefined && Object.prototype.hasOwnProperty.call(window, method)) {
       // @ts-ignore
       return window[method](...params)
@@ -67,7 +67,7 @@ export class WindowService implements IWindow {
    *
    * @return IDocument
    */
-  get document (): IDocument {
+  public get document (): IDocument {
     return this._document
   }
 
@@ -76,8 +76,15 @@ export class WindowService implements IWindow {
    *
    * @return boolean
    */
-  get isClient (): boolean {
+  public get isClient (): boolean {
     return this._isDefined
+  }
+
+  /**
+   * Return pathname from window location.
+   */
+  static get pathname (): string {
+    return WindowService.isDefined ? window.location.pathname : '/'
   }
 
   /**
@@ -85,7 +92,7 @@ export class WindowService implements IWindow {
    *
    * @return window | null
    */
-  get native (): Window | null {
+  public get native (): Window | null {
     return this._isDefined ? window : null
   }
 
@@ -115,7 +122,7 @@ export class WindowService implements IWindow {
    *
    * @return boolean
    */
-  get isMobile (): boolean {
+  public get isMobile (): boolean {
     if (this._isDefined) {
       return window.innerWidth <= 768
     }
@@ -139,7 +146,7 @@ export class WindowService implements IWindow {
    *
    * @return boolean
    */
-  get isServer (): boolean {
+  public get isServer (): boolean {
     return !this._isDefined
   }
 
@@ -160,7 +167,7 @@ export class WindowService implements IWindow {
    *
    * @return void
    */
-  redirect (target: string): void {
+  public redirect (target: string): void {
     if (this.isClient) {
       window.location.href = target
     }
