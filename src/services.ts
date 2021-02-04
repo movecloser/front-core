@@ -151,4 +151,21 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
   }
 }
 
+export {
+  ApiConnector,
+  Authentication,
+  AuthMiddleware,
+  AuthService,
+  DateTime,
+  DocumentService,
+  Eventbus,
+  EventbusMiddleware,
+  HttpConnector,
+  InternalServerErrorMiddleware,
+  ModalConnector,
+  Validation,
+  ValidationMiddleware,
+  WindowService,
+}
+
 export default services
