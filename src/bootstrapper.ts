@@ -68,14 +68,17 @@ export class Bootstrapper implements Abstract {
         })
       }
 
+      /* istanbul ignore else */
       if (module.observers) {
         observers.push(...module.observers)
       }
 
+      /* istanbul ignore else */
       if (useRouter && module.routes) {
         this.routerBootstrapper.applyModule(module.name, module.routes)
       }
 
+      /* istanbul ignore else */
       if (useStore && module.state) {
         this.storeBootstrapper.applyModule(module.name, module.state)
       }
