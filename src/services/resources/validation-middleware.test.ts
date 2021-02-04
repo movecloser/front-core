@@ -68,6 +68,26 @@ describe('Test validation middleware', () => {
     expect(pushErrorsSpy).toBeCalledTimes(0)
   })
 
+  test('Expect [afterCall] to do emit validation errors object.', () => {
+    const pushErrorsSpy = jest.spyOn(validationService, 'pushErrors')
+    const testResponse: IResponse = {
+      data: {},
+      errors: {
+        errors: false,
+        message: 'true'
+      },
+      headers: {},
+      status: 422,
+      hasErrors: () => true,
+      isSuccessful: () => false
+    }
+
+    validationMiddleware.afterCall(testResponse)
+
+    expect(pushErrorsSpy).toBeCalledTimes(1)
+    expect(pushErrorsSpy).toBeCalledWith("formName", {}, "true")
+  })
+
   test('Expect [afterCall] to do nothing.', () => {
     const testResponse: IResponse = {
       data: {},
