@@ -308,20 +308,13 @@ describe('Test AuthService class.', () => {
     }
 
     const deleteSpy = jest.spyOn(auth, 'deleteToken')
-    // const token = {
-    //   accessToken: 'test-token',
-    //   expiresAt: null
-    // }
 
     // @ts-ignore
     window.localStorage.setItem(config.tokenName, () => {})
-    // const auth = new AuthService(config, new DateTime())
     //
     // @ts-ignore
     auth.retrieveToken()
-    //
-    // // @ts-ignore
-    // expect(auth._token).toEqual(token)
+
     expect(deleteSpy).toHaveBeenCalledTimes(1)
   })
 })
