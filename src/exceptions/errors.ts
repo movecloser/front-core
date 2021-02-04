@@ -99,7 +99,6 @@ export class ResourceActionFailed extends Error {
   }
 }
 
-
 export class TemporaryUnavailableError extends Error {
     public name: string = 'TemporaryUnavailableError'
     constructor (public message: string) {

@@ -175,6 +175,19 @@ describe('Test error classes', () => {
     expect(error.payload).toEqual(payload)
   })
 
+  test('Expect [ResourceActionFailed] to contain specific message', () => {
+    const message = 'Resource Action Failed'
+    const status = '200'
+
+    const error = new ResourceActionFailed(message, status)
+
+    expect(() => {
+      throw error
+    }).toThrowError(ResourceActionFailed)
+    expect(error.message).toBe(message)
+    expect(error.payload).toEqual({})
+  })
+
   test('Expect [TemporaryUnavailableError] to contain specific message', () => {
     const message = 'Temporary Unavailable Error'
     const error = new TemporaryUnavailableError(message)
