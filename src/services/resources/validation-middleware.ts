@@ -31,7 +31,6 @@ export class ValidationMiddleware implements ConnectorMiddleware {
    * It handles side effects.
    */
   public afterCall (response: IResponse): void {
-    console.log(response)
     if (response.status === 422 && response.errors !== null) {
       this.validationService.pushErrors(
         this.formName,
