@@ -74,7 +74,6 @@ export function mapModel<T> (toMap: any, mapping: MappingConfig, preserve: boole
  */
 function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: boolean): void {
   Object.keys(item).forEach(key => {
-    if (!item || !item[key]) return
     mapped[key] = item[key]
   })
 
@@ -98,6 +97,18 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
           if (typeof instruction.map === 'undefined' || typeof instruction.value !== 'string') {
             throw new MappingError(
               'Invalid instruction. Map in not a MappingConfig or value is not a string.')
+          }
+
+          if (item[instruction.value] === undefined) {
+            console.warn(`Adapter is SKIPPING field. Key [${instruction.value}] is not present in provided item: `, item)
+            continue
+          }
+
+          if (Array.isArray(item[instruction.value])) {
+            for (const i in item[instruction.value]) {
+              mapByConfig(mapped[key][i], item[instruction.value][i], instruction.map, false)
+            }
+            continue
           }
 
           mapByConfig(mapped[key], item[instruction.value], instruction.map, false)

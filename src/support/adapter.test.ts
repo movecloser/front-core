@@ -207,6 +207,105 @@ describe('Test adapter methods', () => {
     expect(mapped).toEqual(expected)
   })
 
+  test('Expect [mapModel] to use nested mapping adapter, for a iterable field.', () => {
+    const toMap = {
+      type: 'photo_gallery',
+      images: [
+        {
+          url: 'http://imagepath1.com',
+          size: 'xl'
+        },
+        {
+          url: 'http://imagepath2.com',
+          size: 'sm'
+        }
+      ]
+    }
+
+    const nestedMapping: MappingConfig = {
+      imagePath: 'url',
+      size: {
+        type: MappingTypes.Function,
+        value: (item: any) => {
+          return item.size === 'xl' ? 'big' : 'small'
+        }
+      }
+    }
+
+    const mappingConfig: MappingConfig = {
+      type: 'type',
+      images: {
+        type: MappingTypes.Adapter,
+        value: 'images',
+        map: nestedMapping
+      }
+    }
+
+    const expected = {
+      type: 'photo_gallery',
+      images: [
+        {
+          imagePath: 'http://imagepath1.com',
+          size: 'big'
+        },
+        {
+          imagePath: 'http://imagepath2.com',
+          size: 'small'
+        }
+      ]
+    }
+
+    const mapped = mapModel(toMap, mappingConfig)
+
+    expect(mapped).toEqual(expected)
+  })
+
+  test('Expect [mapModel] to skip nested mapping when key does not match with original object.', () => {
+    console.warn = jest.fn()
+
+    const toMap = {
+      type: 'photo_gallery',
+      image: {
+        url: 'http://imagepath.com',
+        size: 'xl'
+      }
+    }
+
+    const nestedMapping: MappingConfig = {
+      imagePath: 'url',
+      size: {
+        type: MappingTypes.Function,
+        value: (item: any) => {
+          return item.size === 'xl' ? 'big' : 'small'
+        }
+      }
+    }
+
+    const mappingConfig: MappingConfig = {
+      type: 'type',
+      image: {
+        type: MappingTypes.Adapter,
+        value: 'image-wrong',
+        map: nestedMapping
+      }
+    }
+
+    const expected = {
+      type: 'photo_gallery',
+      image: {
+        url: 'http://imagepath.com',
+        size: 'xl'
+      }
+    }
+
+    const mapped = mapModel(toMap, mappingConfig)
+
+    expect(mapped).toEqual(expected)
+    // @ts-ignore
+    expect(console.warn.mock.calls.length).toEqual(1)
+    expect(console.warn).toHaveBeenCalledTimes(1)
+  })
+
   test('Expect [mapModel] to throw MappingError when mapping adapter is incomplete.', () => {
     const toMap = {
       type: 'photo_gallery',
