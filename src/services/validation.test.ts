@@ -1,3 +1,7 @@
+/* istanbul ignore file */
+
+// TODO: Fix tests using rxjs marbles.
+
 import 'reflect-metadata'
 import { Subscription } from 'rxjs'
 // import { TestScheduler } from 'rxjs/testing';
