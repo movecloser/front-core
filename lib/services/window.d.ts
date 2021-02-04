@@ -46,6 +46,10 @@ export declare class WindowService implements IWindow {
      */
     get isClient(): boolean;
     /**
+     * Return pathname from window location.
+     */
+    static get pathname(): string;
+    /**
      * Return native window object or null
      *
      * @return window | null
