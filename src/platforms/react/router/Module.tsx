@@ -47,7 +47,7 @@ export const Module = (props: RoutesModuleProps) => {
               <Redirect from={fullPath} to={r.redirect || props.prefix}
                         key={`route-${props.prefix}-${i}`}/>
             ) : (
-              <Route exact path={fullPath} render={(componentProps: any) => (
+              <Route exact={props.strict} path={fullPath} render={(componentProps: any) => (
                 // @ts-ignore
                 <r.component {...componentProps}/>
               )} key={`route-${props.prefix}-${i}`}/>

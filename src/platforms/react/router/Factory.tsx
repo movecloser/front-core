@@ -32,11 +32,13 @@ export function Factory (props: RoutesFactoryProps) {
           // is skipping it or not.
           const prefix: string = hasGlobalPrefix && !Boolean(m.skipGlobalPrefix)
             ? composeValidPath([ props.globalPrefix as string, m.prefix ]) : m.prefix
+          const strict: boolean = m.strict || true
 
           return (
             <Route key={`route-${i}`} path={prefix}>
               <Module prefix={prefix} layout={m.layout} routes={m.routes} auth={props.auth}
-                      useGuards={props.useGuards} errorPage={props.errorPage}/>
+                      useGuards={props.useGuards} strict={strict}
+                      errorPage={props.errorPage}/>
             </Route>
           )
         })

@@ -11,6 +11,7 @@ export interface ModuleRoute {
   prefix: string
   routes: RouteConfig[]
   skipGlobalPrefix?: boolean
+  strict?: boolean
 }
 
 export interface RouteConfig {
@@ -39,5 +40,6 @@ export interface RoutesModuleProps {
   layout: (props?: any) => JSX.Element
   prefix: string
   routes: RouteConfig[]
+  strict: boolean
   useGuards: boolean
 }
