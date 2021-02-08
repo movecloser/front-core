@@ -22,15 +22,14 @@ export interface IModal {
     name: string | null;
     payload: ModalPayload;
     close(key?: string | null): void;
-    open(key: string, payload?: ModalPayload): void;
-    openAsync(key: string, promise: Promise<any>, payload?: ModalPayload): void;
+    open<Payload>(key: string, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void;
+    openAsync<Payload>(key: string, promise: Promise<any>, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void;
     subscribe(callback: (open: ModalState) => any): void;
 }
-export interface IModalComponent {
-    payload: ModalPayload;
+export interface ModalConfig {
+    [key: string]: any;
 }
 export interface ModalPayload {
-    closable?: boolean;
     [key: string]: any;
 }
 export interface ModalRegistry<ComponentConstructor> {
@@ -40,6 +39,7 @@ export interface ModalState {
     component: string | null;
     opened: boolean;
     payload: ModalPayload;
+    config: ModalConfig;
 }
 export declare const ModalType: unique symbol;
 export interface IWindow {

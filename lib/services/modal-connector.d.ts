@@ -1,10 +1,11 @@
 import { BehaviorSubject } from 'rxjs';
-import { IModal, ModalPayload, ModalRegistry, ModalState } from '../contracts';
+import { IModal, ModalConfig, ModalPayload, ModalRegistry, ModalState } from '../contracts';
 export declare class ModalConnector implements IModal {
+    protected _defaultConfig: ModalConfig;
     protected _registry: ModalRegistry<any>;
     protected _state: ModalState;
     protected _stream$: BehaviorSubject<ModalState>;
-    constructor(registry: ModalRegistry<any>);
+    constructor(registry: ModalRegistry<any>, defaultConfig?: {});
     /**
      * Method to trigger closing of a modal.
      * @param key
@@ -33,16 +34,19 @@ export declare class ModalConnector implements IModal {
     getRegistry<C>(): ModalRegistry<C>;
     /**
      * Method to trigger modal opening.
+     * @param key
      * @param payload
+     * @param config
      */
-    open(key: string, payload?: ModalPayload): void;
+    open<Payload>(key: string, payload?: Payload extends ModalPayload ? ModalPayload : any, config?: ModalConfig): void;
     /**
      * Method to asynchronously trigger modals opening.
      * @param key
      * @param promise
      * @param payload
+     * @param config
      */
-    openAsync(key: string, promise: Promise<any>, payload?: ModalPayload): void;
+    openAsync<Payload>(key: string, promise: Promise<any>, payload?: Payload extends ModalPayload ? ModalPayload : any, config?: ModalConfig): void;
     /**
      * Returns payload of currently opened modal.
      */
