@@ -70,7 +70,7 @@ export declare class ResourceActionFailed extends Error {
     status: number | string;
     payload: Payload;
     name: string;
-    constructor(message: string, status: number | string, payload: Payload);
+    constructor(message: string, status: number | string, payload?: Payload);
 }
 export declare class TemporaryUnavailableError extends Error {
     message: string;

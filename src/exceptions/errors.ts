@@ -108,7 +108,11 @@ export class PermissionDeniedError extends Error {
 export class ResourceActionFailed extends Error {
   public name: string = 'ResourceActionFailed'
 
-  constructor (public message: string, public status: number | string, public payload: Payload) {
+  constructor (
+    public message: string,
+    public status: number | string,
+    public payload: Payload = {}
+  ) {
     super();
   }
 }
