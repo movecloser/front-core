@@ -22,7 +22,7 @@ export class ModalConnector implements IModal{
   }
 
   /**
-   *
+   * Method to trigger closing of a modal.
    * @param key
    */
   public close (key: string|null = null): void {
@@ -38,7 +38,7 @@ export class ModalConnector implements IModal{
   }
 
   /**
-   *
+   * Returns current component from state.
    */
   public component<C> (): C  {
     if (this._state.component === null) {
@@ -53,22 +53,40 @@ export class ModalConnector implements IModal{
   }
 
   /**
-   *
+   * Resolve component from registry by it's name.
+   * @param name
+   */
+  public getComponent<C> (name: string): C {
+    if (!this._registry.hasOwnProperty(name)) {
+      throw new Error(`Unregistered modal component [${name}]`)
+    }
+
+    return this._registry[name]
+  }
+
+  /**
+   * Returns boolean if modal is currently opened.
    */
   public get isOpened (): boolean {
     return this._state.opened && this._state.component !== null
   }
 
   /**
-   *
+   * Returns name of current modal component.
    */
   public get name (): string|null {
     return this._state.component
   }
 
   /**
-   *
-   // * @param key
+   * Returns array of registered components.
+   */
+  public getRegistry<C> (): ModalRegistry<C> {
+    return this._registry
+  }
+
+  /**
+   * Method to trigger modal opening.
    * @param payload
    */
   public open (key: string, payload: ModalPayload = {}): void {
@@ -86,7 +104,7 @@ export class ModalConnector implements IModal{
   }
 
   /**
-   *
+   * Method to asynchronously trigger modals opening.
    * @param key
    * @param promise
    * @param payload
@@ -106,14 +124,14 @@ export class ModalConnector implements IModal{
   }
 
   /**
-   *
+   * Returns payload of currently opened modal.
    */
   public get payload (): ModalPayload {
     return this._state.payload
   }
 
   /**
-   *
+   * Method to subscribe for modals stream.
    * @param callback
    */
   public subscribe (callback: (open: ModalState) => any): void {

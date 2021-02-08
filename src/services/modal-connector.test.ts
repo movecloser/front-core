@@ -68,6 +68,27 @@ describe('Tests for ModalConnector service.', () => {
     expect(result).toEqual({})
   })
 
+  test('Expect [getComponent] method to work.', () => {
+    // @ts-ignore
+    // connector._state.component = 'testModal'
+
+    const result = connector.getComponent<any>('testModal')
+
+    expect(result).toEqual({})
+  })
+
+  test('Expect [getComponent] method to throw.', () => {
+    let error
+
+    try {
+      connector.getComponent<any>('wrongName')
+    } catch (err) {
+      error = err
+    }
+
+    expect(error).toBeInstanceOf(Error)
+  })
+
   test('Expect [isOpened] method to work.', () => {
     // @ts-ignore
     connector._state.component = 'testModal'
@@ -153,6 +174,12 @@ describe('Tests for ModalConnector service.', () => {
     const result = connector.payload
 
     expect(result).toEqual({})
+  })
+
+  test('Expect [getRegistry] method to work.', () => {
+    const result = connector.getRegistry<any>()
+
+    expect(result).toEqual({"testModal": {}})
   })
 
   test('Expect [subscribe] method to work.', () => {
