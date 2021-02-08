@@ -20,6 +20,8 @@ export interface IDocument {
 
 export interface IModal {
   component <C> (): C
+  getComponent<C> (name: string): C
+  getRegistry<C> (): ModalRegistry<C>
   isOpened: boolean
   name: string|null
   payload: ModalPayload
