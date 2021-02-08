@@ -95,7 +95,7 @@ export class ModalConnector implements IModal{
    * @param payload
    * @param config
    */
-  public open<Payload> (key: string, payload: Payload extends ModalPayload ? ModalPayload : any = {} as any, config: ModalConfig = {}): void {
+  public open<Payload> (key: string, payload: Payload = {} as any, config: ModalConfig = {}): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }
@@ -117,7 +117,7 @@ export class ModalConnector implements IModal{
    * @param payload
    * @param config
    */
-   public openAsync<Payload> (key: string, promise: Promise<any>, payload: Payload extends ModalPayload ? ModalPayload : any = {} as any, config: ModalConfig = {}): void {
+   public openAsync<Payload> (key: string, promise: Promise<any>, payload: Payload = {} as any, config: ModalConfig = {}): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }

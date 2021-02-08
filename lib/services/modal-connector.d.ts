@@ -38,7 +38,7 @@ export declare class ModalConnector implements IModal {
      * @param payload
      * @param config
      */
-    open<Payload>(key: string, payload?: Payload extends ModalPayload ? ModalPayload : any, config?: ModalConfig): void;
+    open<Payload>(key: string, payload?: Payload, config?: ModalConfig): void;
     /**
      * Method to asynchronously trigger modals opening.
      * @param key
@@ -46,7 +46,7 @@ export declare class ModalConnector implements IModal {
      * @param payload
      * @param config
      */
-    openAsync<Payload>(key: string, promise: Promise<any>, payload?: Payload extends ModalPayload ? ModalPayload : any, config?: ModalConfig): void;
+    openAsync<Payload>(key: string, promise: Promise<any>, payload?: Payload, config?: ModalConfig): void;
     /**
      * Returns payload of currently opened modal.
      */
