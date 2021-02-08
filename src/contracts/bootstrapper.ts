@@ -5,11 +5,14 @@ import { ResourcesRegistry } from './connector'
 
 import { Container } from '../container'
 import { IModuleConstructor } from '../module'
+import { ModalConfig, ModalRegistry } from './services'
 
 export interface AppConfig extends AnyObject {
   container?: ContainerOptions
   http?: IHttpConnectorConfig
-  middlewares?: symbol[],
+  middlewares?: symbol[]
+  modals?: ModalRegistry<any>
+  modalConfig?: ModalConfig
   modules: IModuleConstructor[]
   resources?: ResourcesRegistry
   router: RouterDriver

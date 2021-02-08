@@ -16,7 +16,7 @@ import {
   DocumentType,
   IDateTime,
   IDocument, IModal,
-  IWindow, ModalRegistry, ModalType,
+  IWindow, ModalConfig, ModalRegistry, ModalType,
   WindowType
 } from './contracts/services'
 import { EventbusType, IEventbus } from './contracts/eventbus'
@@ -130,12 +130,14 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
     if (config.has('modals')) {
       bind<IModal>(ModalType).toDynamicValue(() => {
         const registry = config.byFile<ModalRegistry<any>>('modals')
+        const modalConfig = config.byFile('modalConfig') || {}
 
         type Keys = keyof typeof registry
         type Values = typeof registry[Keys]
 
         return new ModalConnector(
-          registry as ModalRegistry<Values>
+          registry as ModalRegistry<Values>,
+          modalConfig as ModalConfig
         )
       }).inSingletonScope()
     }

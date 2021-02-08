@@ -1,19 +1,22 @@
 import { BehaviorSubject } from 'rxjs'
-import { IModal, ModalPayload, ModalRegistry, ModalState } from '../contracts'
+import { IModal, ModalConfig, ModalPayload, ModalRegistry, ModalState } from '../contracts'
 import { Injectable } from '../container'
 
 @Injectable()
 export class ModalConnector implements IModal{
+  protected _defaultConfig!: ModalConfig
   protected _registry!: ModalRegistry<any>
   protected _state!: ModalState
   protected _stream$: BehaviorSubject<ModalState>
 
-  constructor (registry: ModalRegistry<any>) {
+  constructor (registry: ModalRegistry<any>, defaultConfig = {}) {
     this._registry = registry
+    this._defaultConfig = defaultConfig
     this._stream$ = new BehaviorSubject<ModalState>({
       component: null,
       opened: false,
-      payload: {}
+      payload: {},
+      config: {}
     })
 
     this._stream$.subscribe((state: ModalState) => {
@@ -30,7 +33,8 @@ export class ModalConnector implements IModal{
       this._stream$.next({
         component: null,
         opened: false,
-        payload: {}
+        payload: {},
+        config: {}
       })
     }
 
@@ -87,9 +91,11 @@ export class ModalConnector implements IModal{
 
   /**
    * Method to trigger modal opening.
+   * @param key
    * @param payload
+   * @param config
    */
-  public open (key: string, payload: ModalPayload = {}): void {
+  public open<Payload> (key: string, payload: Payload extends ModalPayload ? ModalPayload : any = {} as any, config: ModalConfig = {}): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }
@@ -97,7 +103,8 @@ export class ModalConnector implements IModal{
     this._stream$.next({
       component: key,
       opened: true,
-      payload: payload
+      payload,
+      config: Object.assign(this._defaultConfig, config)
     })
 
     this.lockScroll()
@@ -108,8 +115,9 @@ export class ModalConnector implements IModal{
    * @param key
    * @param promise
    * @param payload
+   * @param config
    */
-   public openAsync (key: string, promise: Promise<any>, payload: ModalPayload = {}): void {
+   public openAsync<Payload> (key: string, promise: Promise<any>, payload: Payload extends ModalPayload ? ModalPayload : any = {} as any, config: ModalConfig = {}): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }
@@ -118,7 +126,8 @@ export class ModalConnector implements IModal{
       this._stream$.next({
         component: key,
         opened: true,
-        payload: payload
+        payload,
+        config: Object.assign(this._defaultConfig, config)
       })
     })
   }
