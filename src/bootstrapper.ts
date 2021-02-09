@@ -53,7 +53,7 @@ export class Bootstrapper implements Abstract {
 
     if (this.config.has('services')) {
       providers.push({
-        binder: this.config.byFile<ProvidersFactory>('services'),
+        binder: this.config.byFile<ProvidersFactory>('services')(this.config),
         async: false
       })
     }
