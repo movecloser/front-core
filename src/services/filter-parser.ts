@@ -1,51 +1,130 @@
-import { FilterParams, Filters, FiltersConfig } from '../contracts/repositories'
+import {
+  ConjunctionOperator,
+  Filter, FilterOperator,
+  FilterParams,
+  FiltersConfig,
+  QueryParams,
+  QueryParserSeparators
+} from '../contracts/filter-parser'
 import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
 
-export const parse = (filters: FiltersConfig): Filters => {
-  let result: Filters = {}
+/**
+ * Compose QueryParams from FiltersConfig.
+ *
+ * @author Kuba Fogel <kuba.fogel@movecloser.pl>
+ * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ */
+export const composeQueryParams = (
+  filters: FiltersConfig,
+  separators: QueryParserSeparators = defaultSeparators
+): QueryParams => {
+  let result: QueryParams = {}
 
   for (const key of Object.keys(filters)) {
-    const config = filters[key]
-    const configType = typeof config
+    const config: Filter = filters[key]
 
     if (config === null || config === 'undefined') {
       throw new IncorrectValueError('Filter value must be defined')
     }
 
-    if (configType === 'string') {
-      result[key] = `${config}`
-      continue
+    switch (typeof config) {
+      case 'string':
+        result[key] = `${config}`
+        continue
+      case 'boolean':
+        result[key] = config ? 1 : 0
+        continue
+      case 'number':
+        result[key] = config
+        continue
+      case 'object':
+        if (!Array.isArray(config)) {
+          result[key] = stringifyFilter(config, separators.operators)
+        } else {
+          result[key] = config.map(
+            (params: FilterParams) => stringifyFilter(params, separators.operators)
+          ).join(separators.values)
+        }
+        continue
+      default:
+        throw new IncorrectValueError(
+          'Provided filters config does not match with FiltersConfig interface'
+        )
     }
-
-    if (configType === 'boolean') {
-      result[key] = config ? 1 : 0
-      continue
-    }
-
-    if (configType === 'number') {
-      // @ts-ignore
-      result[key] = config
-      continue
-    }
-
-    if (configType === 'object' && !Array.isArray(config)) {
-      // @ts-ignore
-      result[key] = parseFilterParams(config)
-      continue
-    }
-
-    if (configType === 'object' && Array.isArray(config)) {
-      result[key] = config.map((params: FilterParams) => parseFilterParams(params)).join(',')
-      continue
-    }
-
-    throw new IncorrectValueError('Provided filters config does not match with FiltersConfig interface')
   }
 
   return result
 }
 
-const parseFilterParams = (config: FilterParams): string => {
+/**
+ * Parse QueryParams to FiltersConfig.
+ *
+ * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ */
+export const parseQueryParams = (
+  query: QueryParams,
+  separators: QueryParserSeparators = defaultSeparators
+): FiltersConfig => {
+  let result: FiltersConfig = {}
+
+  for (const [ key, value ] of Object.entries(query)) {
+    result[key] = parseFilter(
+      String(value).split(separators.values),
+      separators.operators
+    )
+  }
+
+  return result
+}
+
+const defaultSeparators = {
+  operators: ':',
+  values: ','
+}
+
+const parseFilter = (filters: string[], separator: string): Filter => {
+  const decomposeFilter = (filter: string): string | number | FilterParams => {
+    const parts: string[] = filter.split(separator)
+
+    if (parts.length === 1) {
+      return parseValue(parts[0])
+    }
+
+    const params: FilterParams = { value: '' }
+    for (const part of parts) {
+      if (Object.values(ConjunctionOperator).includes(part as ConjunctionOperator)) {
+        params.conjunction = part as ConjunctionOperator
+        continue
+      }
+
+      if (Object.values(FilterOperator).includes(part as FilterOperator)) {
+        params.operator = part as FilterOperator
+        continue
+      }
+
+      params.value = parseValue(part)
+    }
+
+    return params
+  }
+
+  const parseValue = (value: string): string | number => {
+    return isNaN(Number(value)) ? value : Number(value)
+  }
+
+  if (filters.length > 1) {
+    return filters.map((filter: string) => {
+      const decoded = decomposeFilter(filter)
+
+      return typeof decoded === 'object'
+        ? decoded : { value: decoded, conjunction: ConjunctionOperator.Or }
+    })
+  }
+
+  return decomposeFilter(filters.length ? filters[0] : '')
+}
+
+const stringifyFilter = (config: FilterParams, separator: string): string => {
   let filterString = ''
 
   if (!config.hasOwnProperty('operator') || !config.hasOwnProperty('value')) {
@@ -56,10 +135,10 @@ const parseFilterParams = (config: FilterParams): string => {
     throw new IncorrectValueError('Filter value must be defined')
   }
 
-  filterString = `${config['operator']}:${config['value']}`
+  filterString = `${config['operator']}${separator}${config['value']}`
 
   if (config.hasOwnProperty('conjunction')) {
-    filterString =`${config['conjunction']}:${filterString}`
+    filterString = `${config['conjunction']}${separator}${filterString}`
   }
 
   return filterString

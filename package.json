@@ -1,11 +1,12 @@
 {
   "name": "movecloser-core",
-  "version": "1.0.0-rc.46",
+  "version": "1.0.0-rc.47",
   "scripts": {
     "build": "tsc",
     "coverage": "jest --config jestconfig.json --coverage",
     "lint": "ts lint --project \"./tsconfig.json\"",
-    "test": "jest --config jestconfig.json"
+    "test": "jest --config jestconfig.json",
+    "watch-test": "jest --config jestconfig.json --watch"
   },
   "dependencies": {
     "axios": "^0.21.1",
