@@ -8,6 +8,11 @@ import {
 } from '../contracts/filter-parser'
 import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
 
+const defaultSeparators = {
+  operators: ':',
+  values: ','
+}
+
 /**
  * Compose QueryParams from FiltersConfig.
  *
@@ -77,12 +82,7 @@ export function parseQueryParams (
   return result
 }
 
-const defaultSeparators = {
-  operators: ':',
-  values: ','
-}
-
-const parseFilter = (filters: string[], separator: string): Filter => {
+function parseFilter (filters: string[], separator: string): Filter {
   const decomposeFilter = (filter: string): string | number | FilterParams => {
     const parts: string[] = filter.split(separator)
 
@@ -124,7 +124,7 @@ const parseFilter = (filters: string[], separator: string): Filter => {
   return decomposeFilter(filters.length ? filters[0] : '')
 }
 
-const stringifyFilter = (config: FilterParams, separator: string): string => {
+function stringifyFilter (config: FilterParams, separator: string): string {
   let filterString = ''
 
   if (!config.hasOwnProperty('operator') || !config.hasOwnProperty('value')) {
