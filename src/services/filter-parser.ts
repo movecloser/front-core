@@ -14,10 +14,10 @@ import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
  * @author Kuba Fogel <kuba.fogel@movecloser.pl>
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  */
-export const composeQueryParams = (
+export function composeQueryParams (
   filters: FiltersConfig,
   separators: QueryParserSeparators = defaultSeparators
-): QueryParams => {
+): QueryParams {
   let result: QueryParams = {}
 
   for (const key of Object.keys(filters)) {
@@ -61,10 +61,10 @@ export const composeQueryParams = (
  *
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  */
-export const parseQueryParams = (
+export function parseQueryParams (
   query: QueryParams,
   separators: QueryParserSeparators = defaultSeparators
-): FiltersConfig => {
+): FiltersConfig {
   let result: FiltersConfig = {}
 
   for (const [ key, value ] of Object.entries(query)) {

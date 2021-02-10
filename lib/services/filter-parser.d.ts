@@ -5,10 +5,10 @@ import { FiltersConfig, QueryParams, QueryParserSeparators } from '../contracts/
  * @author Kuba Fogel <kuba.fogel@movecloser.pl>
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  */
-export declare const composeQueryParams: (filters: FiltersConfig, separators?: QueryParserSeparators) => QueryParams;
+export declare function composeQueryParams(filters: FiltersConfig, separators?: QueryParserSeparators): QueryParams;
 /**
  * Parse QueryParams to FiltersConfig.
  *
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  */
-export declare const parseQueryParams: (query: QueryParams, separators?: QueryParserSeparators) => FiltersConfig;
+export declare function parseQueryParams(query: QueryParams, separators?: QueryParserSeparators): FiltersConfig;
