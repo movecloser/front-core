@@ -83,6 +83,34 @@ export abstract class Model<T> implements IModel<T> {
    * Method to extract raw data from model
    */
   public toObject (): T {
+    const target: any = {
+      ...this.initialValues
+    }
+
+    for (const [key, value] of Object.entries(this._data)) {
+      if (Array.isArray(value)) {
+        const collection: any[] = []
+
+        for (const element of value) {
+          if (element instanceof Model) {
+            collection.push(element.toObject())
+          } else {
+            collection.push(element)
+          }
+        }
+
+        target[key] = collection
+        continue
+      }
+
+      if (value instanceof Model) {
+        target[key] = value.toObject()
+        continue
+      }
+
+      target[key] = value
+    }
+
     return Object.assign({ ...this.initialValues }, this._data) as T
   }
 
