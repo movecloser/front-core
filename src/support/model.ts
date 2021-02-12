@@ -111,7 +111,7 @@ export abstract class Model<T> implements IModel<T> {
       target[key] = value
     }
 
-    return Object.assign({ ...this.initialValues }, this._data) as T
+    return target as T
   }
 
   /**
