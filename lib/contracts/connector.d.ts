@@ -1,3 +1,4 @@
+import { MetaPayload } from '../contracts/models';
 import { Headers, IResponse, Methods, Payload } from './http';
 export declare const ApiConnectorType: unique symbol;
 export declare const ApiConnectorFactory: unique symbol;
@@ -15,6 +16,7 @@ export declare type FoundResource = {
     method: Methods;
     shorthand: string;
     auth: boolean;
+    meta: MetaPayload;
 };
 export interface IConnector {
     call(resource: string, action: string, params?: Params, body?: Payload, headers?: Headers, responseType?: ResponseType): Promise<IResponse>;
@@ -31,6 +33,7 @@ export declare type Resource = {
     params?: string[];
     shorthand?: string;
     auth?: boolean;
+    meta?: MetaPayload;
 };
 export declare type ResourceDefinition = {
     prefix: string | null;

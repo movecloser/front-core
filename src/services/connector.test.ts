@@ -118,6 +118,7 @@ describe('Test Connector class.', () => {
     expect(result).toEqual({
       'auth': true,
       'connection': 'resource',
+      meta: {},
       'method': 'get',
       'shorthand': 'test',
       'url': 'resource/test'
@@ -132,6 +133,7 @@ describe('Test Connector class.', () => {
     expect(result).toEqual({
       'auth': true,
       'connection': 'resource',
+      meta: {},
       'method': 'get',
       'shorthand': 'testResource2',
       'url': 'test'
@@ -146,6 +148,7 @@ describe('Test Connector class.', () => {
     expect(result).toEqual({
       'auth': false,
       'connection': 'test-connection',
+      meta: {},
       'method': 'get',
       'shorthand': 'testResource3',
       'url': 'test'
@@ -160,6 +163,7 @@ describe('Test Connector class.', () => {
     expect(result).toEqual({
       'auth': false,
       'connection': 'test-connection',
+      meta: {},
       'method': 'get',
       'shorthand': 'testResource3',
       'url': 'test'

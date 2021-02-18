@@ -87,7 +87,9 @@ export class ApiConnector implements IConnector {
       url: url,
       shorthand: ('shorthand' in endpoint && typeof endpoint.shorthand !== 'undefined')
         ? endpoint.shorthand : ApiConnector.resolveShorthand(resource, action),
-      auth: ('auth' in endpoint && typeof endpoint.auth !== 'undefined') ? endpoint.auth : false
+      auth: ('auth' in endpoint && typeof endpoint.auth !== 'undefined') ? endpoint.auth : false,
+      meta: 'meta' in endpoint && typeof endpoint.meta === 'object' && endpoint.meta !== null
+        ? endpoint.meta : {}
     }
   }
 

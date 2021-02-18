@@ -1,3 +1,4 @@
+import { MetaPayload } from '../contracts/models'
 import { Headers, IResponse, Methods, Payload } from './http'
 
 export const ApiConnectorType = Symbol.for('IConnector')
@@ -21,6 +22,7 @@ export type FoundResource = {
   method: Methods
   shorthand: string
   auth: boolean
+  meta: MetaPayload
 }
 
 export interface IConnector {
@@ -47,6 +49,7 @@ export type Resource = {
   params?: string[]
   shorthand?: string
   auth?: boolean
+  meta?: MetaPayload
 }
 
 export type ResourceDefinition = {

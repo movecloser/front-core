@@ -20,7 +20,8 @@ describe('Test validation middleware', () => {
       url: '/',
       method: Methods.Get,
       shorthand: 'formName',
-      auth: true
+      auth: true,
+      meta: {}
     }
     const testHeaders: Headers = { test: 'true' }
     const testBody: Payload = {}

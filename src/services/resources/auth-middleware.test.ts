@@ -27,7 +27,8 @@ describe('Test auth middleware', () => {
       url: '/',
       method: Methods.Get,
       shorthand: 'testResource',
-      auth: true
+      auth: true,
+      meta: {}
     }
     const testHeaders: Headers = { test: 'true' }
     const testBody: Payload = {}
@@ -46,7 +47,8 @@ describe('Test auth middleware', () => {
       url: '/',
       method: Methods.Get,
       shorthand: 'testResource',
-      auth: false
+      auth: false,
+      meta: {}
     }
     const testHeaders: Headers = { test: 'true' }
     const testBody: Payload = {}
