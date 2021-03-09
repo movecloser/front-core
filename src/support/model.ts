@@ -1,4 +1,5 @@
-import { IModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import { createProxy } from './proxy'
+import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models'
 import { MissingPropertyError } from '../exceptions/errors'
 
 /**
@@ -14,8 +15,19 @@ export abstract class Model<T> implements IModel<T> {
     this.boot()
 
     for (const [ key, value ] of Object.entries(payload)) {
-      this.set(key, value)
+      this.__set(key, value)
     }
+  }
+
+  /**
+   * Create instance of Model with Proxy involved.
+   * @param payload
+   */
+  public static create<T extends object> (payload: ModelPayload = {}): MagicModel<T> {
+    return createProxy<IModel<T>, T>(
+      // @ts-ignore
+      new this(payload)
+    )
   }
 
   protected abstract boot (): void
@@ -25,18 +37,14 @@ export abstract class Model<T> implements IModel<T> {
    * @param property
    */
   public get (property: string): any {
-    if (!(property in this._data)) {
-      throw new MissingPropertyError(property)
-    }
-
-    return this._data[property]
+    return this.__get(property)
   }
 
   /**
    * Method to update incomplete properties on existing model instance
    * @param payload
    */
-  public static hydrate<T> (payload: ModelPayload): IModel<T> {
+  public static hydrate<T extends object> (payload: ModelPayload): MagicModel<T> {
     // @ts-ignore
     const model: Model = new this()
     const mappedPayload: ModelPayload = {
@@ -48,7 +56,7 @@ export abstract class Model<T> implements IModel<T> {
       model.set(key, value === undefined ? model.initialValues[key] : value)
     }
 
-    return model
+    return createProxy<IModel<T>, T>(model)
   }
 
   /**
@@ -56,7 +64,41 @@ export abstract class Model<T> implements IModel<T> {
    * @param property
    * @param value
    */
-  public set (property: string, value: any): void {
+  public set (property: string, value: any): boolean {
+    return this.__set(property, value)
+  }
+
+  /**
+   * Method to extract raw data from model
+   */
+  public toObject (): T {
+    return this.__toObject()
+  }
+
+  /**
+   * Return value for given property due to it's accessor.
+   */
+  public __get (property: string): any {
+    if (!(property in this._data)) {
+      throw new MissingPropertyError(property)
+    }
+
+    return this._data[property]
+  }
+
+  /**
+   * Throws when someone trying to invoke class.
+   */
+
+  /* istanbul ignore next */
+  public __invoke (...data: any): any {
+    throw new Error('Model cannot be invoked.')
+  }
+
+  /**
+   * Set value for given property due to additional helper mutators.
+   */
+  public __set (property: string, value: any): boolean {
     if (this.modelProperties.includes(property)) {
       const upperPropertyName: string = property.charAt(0).toUpperCase() + property.slice(1)
       const setterMethod: string = `set${upperPropertyName}Property`
@@ -64,7 +106,7 @@ export abstract class Model<T> implements IModel<T> {
       if (typeof this[setterMethod] === 'function') {
         // @ts-ignore
         this._data[property] = this[setterMethod](value)
-        return
+        return true
       }
 
       const relatesMethod: string = `relatesTo${upperPropertyName}`
@@ -72,22 +114,25 @@ export abstract class Model<T> implements IModel<T> {
       if (typeof this[relatesMethod] === 'function') {
         // @ts-ignore
         this._data[property] = this[relatesMethod](value)
-        return
+        return true
       }
 
       this._data[property] = value
     }
+
+    return false
   }
 
   /**
    * Method to extract raw data from model
    */
-  public toObject (): T {
+  public __toObject (): T {
     const target: any = {
       ...this.initialValues
     }
 
-    for (const [key, value] of Object.entries(this._data)) {
+    for (const [ key, value ] of Object.entries(this._data)) {
+      // TODO: Test it.
       if (Array.isArray(value)) {
         const collection: any[] = []
 
@@ -103,6 +148,7 @@ export abstract class Model<T> implements IModel<T> {
         continue
       }
 
+      // TODO: Test it.
       if (value instanceof Model) {
         target[key] = value.toObject()
         continue
@@ -138,6 +184,7 @@ export abstract class Model<T> implements IModel<T> {
         this.hasOne<R>(model, value)
       )
     }
+
     return collection
   }
 }

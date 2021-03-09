@@ -237,7 +237,7 @@ export class AuthService implements Authentication <IUser> {
           type: AuthEventType.Refresh,
           token: token
         })
-      }, tokenLifeTime - this._config.refreshThreshold * 1000)
+      }, (tokenLifeTime - this._config.refreshThreshold) * 1000)
     }
   }
 }

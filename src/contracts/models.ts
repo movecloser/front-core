@@ -1,3 +1,5 @@
+import { Intersected, Proxable } from './support'
+
 export interface ICollection<Type> extends Array<Type>{
     first (): Type|false
     getItem (callback: (item: Type, index?: number) => boolean): Type|false
@@ -16,12 +18,14 @@ export interface MetaPayload {
     [key: string]: any
 }
 
-export interface IModel<T> {
+export interface IModel<T> extends Proxable<T> {
     initialValues: ModelPayload
     get (key: string): any
     set (property: string, value: any): void
     toObject (): T
 }
+
+export type MagicModel<M extends object> = Intersected<IModel<M>, M>
 
 export interface ModelPayload {
     [key: string]: any
@@ -29,7 +33,7 @@ export interface ModelPayload {
 
 export interface ModelConstructor<Type> {
     new (payload?: ModelPayload): IModel<Type>
-    hydrate<Model> (payload: ModelPayload): IModel<Model>
+    create<Model extends object> (payload: ModelPayload): MagicModel<Model>
+    hydrate<Model extends object> (payload: ModelPayload): MagicModel<Model>
 }
-
 

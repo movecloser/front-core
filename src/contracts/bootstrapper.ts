@@ -20,6 +20,8 @@ export interface AppConfig extends AnyObject {
   services?: ProvidersFactory
 }
 
+export type BootMethod = (container: Container) => void
+
 export interface BootstrapDriver<Stack> {
   applyModule (name: string, callback: ContainerFactory): void
   stack (): Stack

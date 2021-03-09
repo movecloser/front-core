@@ -1,8 +1,12 @@
-import { ContainerFactory, ProvidersFactory } from './contracts/bootstrapper';
+import { BootMethod, ContainerFactory, ProvidersFactory } from './contracts/bootstrapper';
+/**
+ * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ * @version 1.0.0
+ */
 export declare function AppModule(registry: ModuleRegistry): (target: ModuleConstructor) => IModuleConstructor;
 export interface IModule {
+    boot: BootMethod | null;
     name: string;
-    observers: symbol[];
     providers: ProvidersFactory | null;
     providersAsync: boolean;
     routes: RoutesFactory | null;
@@ -10,8 +14,8 @@ export interface IModule {
 }
 export declare type IModuleConstructor = new () => IModule;
 export declare abstract class Module implements IModule {
+    boot: BootMethod | null;
     name: string;
-    observers: symbol[];
     providers: ProvidersFactory | null;
     providersAsync: boolean;
     routes: RoutesFactory | null;
@@ -19,8 +23,8 @@ export declare abstract class Module implements IModule {
 }
 declare type ModuleConstructor = new () => Module;
 export interface ModuleRegistry {
+    boot?: BootMethod;
     name: string;
-    observers?: symbol[];
     providers?: ProvidersFactory;
     providersAsync?: boolean;
     routes?: RoutesFactory;

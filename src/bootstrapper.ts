@@ -1,6 +1,7 @@
-import { EventbusType, IEventbus } from './contracts/eventbus'
 import {
-  AppConfig, BootstrapDriver,
+  AppConfig,
+  BootMethod,
+  BootstrapDriver,
   IBootstrapper as Abstract,
   ProvidersFactory,
   RoutesStack,
@@ -46,8 +47,8 @@ export class Bootstrapper implements Abstract {
       this.container.createModule(services(this.config))
     )
 
+    const bootMethods: BootMethod[] = []
     const providers: any[] = []
-    const observers: symbol[] = []
     const useRouter: boolean = !!router
     const useStore: boolean = !!store
 
@@ -61,16 +62,18 @@ export class Bootstrapper implements Abstract {
     for (let m of modules) {
       const module: IModule = new m()
 
+      // TODO: Test it.
+      if (module.boot) {
+        bootMethods.push(
+          module.boot
+        )
+      }
+
       if (module.providers) {
         providers.push({
           binder: module.providers(this.config),
           async: module.providersAsync
         })
-      }
-
-      /* istanbul ignore else */
-      if (module.observers) {
-        observers.push(...module.observers)
       }
 
       /* istanbul ignore else */
@@ -91,11 +94,9 @@ export class Bootstrapper implements Abstract {
       )
     }
 
-    const eventbus: IEventbus = this.container.get(EventbusType)
-    for (const observer of observers) {
-      eventbus.observe(
-        this.container.get(observer)
-      )
+    // TODO: Test it.
+    for (const boot of bootMethods) {
+      boot(this.container)
     }
   }
 
