@@ -80,7 +80,8 @@ export abstract class Model<T> implements IModel<T> {
    */
   public __get (property: string): any {
     if (!(property in this._data)) {
-      throw new MissingPropertyError(property)
+      console.warn(`Trying to access unset property [${property}]`)
+      return null
     }
 
     return this._data[property]
