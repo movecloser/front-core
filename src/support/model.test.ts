@@ -147,17 +147,20 @@ describe('Test abstract model class', () => {
     })
   })
 
-  test('Expect [hydrate] method to update properties using default values, when undefined as value occurs.', () => {
-    const model = TestModel.hydrate({
-      id: undefined
-    })
+  test(
+    'Expect [hydrate] method to update properties using default values, when undefined as value occurs.',
+    () => {
+      const model = TestModel.hydrate({
+        id: undefined
+      })
 
-    expect(model.toObject()).toEqual({
-      id: 0,
-      name: 'n/a',
-      value: 1
-    })
-  })
+      expect(model.toObject()).toEqual({
+        id: 0,
+        name: 'n/a',
+        value: 1
+      })
+    }
+  )
 
   test('Expect [initialValues] to be set as provided', () => {
     const model = new TestModel()
@@ -179,5 +182,11 @@ describe('Test abstract model class', () => {
     const modelProperties = [ 'id', 'name', 'value', 'type' ]
     //@ts-ignore
     expect(model.modelProperties).toEqual(modelProperties)
+  })
+
+  test('Expect model to be spreadable', () => {
+    const toExpect = { id: 1, name: 'john', value: 12, type: true }
+    const model = TestModel.create(toExpect)
+    expect({ ...model }).toEqual(toExpect)
   })
 })

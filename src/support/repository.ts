@@ -1,5 +1,12 @@
 import { ApiConnectorFactory, ConnectorFactory, IConnector } from '../contracts/connector'
-import { ICollection, IMeta, IModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import {
+  ICollection,
+  IMeta,
+  IModel,
+  MagicModel,
+  ModelConstructor,
+  ModelPayload
+} from '../contracts/models'
 import { MappingConfig } from '../contracts/support'
 
 import { Collection } from './collection'
@@ -16,7 +23,7 @@ import { MappingError } from '../exceptions/errors'
  * @licence MIT
  */
 @Injectable()
-export abstract class Repository<M> {
+export abstract class Repository<M extends object> {
   protected connector: IConnector
   protected map: MappingConfig = {}
   protected useAdapter: boolean = false
@@ -32,12 +39,12 @@ export abstract class Repository<M> {
     rawCollection: any[],
     modelConstructor: ModelConstructor<M>,
     meta: IMeta
-  ): ICollection<IModel<M>> {
+  ): ICollection<MagicModel<M>> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
 
-    return new Collection<IModel<M>>(
+    return new Collection<MagicModel<M>>(
       (this.useAdapter ? mapCollection(rawCollection, this.map) : rawCollection)
         .map((item: any) => modelConstructor.hydrate(item)),
       meta
@@ -50,7 +57,7 @@ export abstract class Repository<M> {
   protected composeModel (
     rawModel: ModelPayload,
     modelConstructor: ModelConstructor<M>
-  ): IModel<M> {
+  ): MagicModel<M> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }

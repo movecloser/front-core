@@ -2,6 +2,7 @@ export interface IIntention<T> {
     toModel: () => T;
     toRequest: () => any;
 }
+export declare type Intersected<A, B> = A & B;
 export declare type MappingConfig = {
     [key: string]: MappingInstruction | string;
 };
@@ -17,5 +18,11 @@ export interface MappingInstruction extends MappingDriver {
 export declare enum MappingTypes {
     Adapter = "adapter",
     Function = "function"
+}
+export interface Proxable<O> extends Object {
+    __get(property: string): any;
+    __invoke(...data: any): any;
+    __set(property: string, value: any): boolean;
+    __toObject(): O;
 }
 export {};

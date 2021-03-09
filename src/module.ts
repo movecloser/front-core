@@ -1,5 +1,9 @@
-import { ContainerFactory, ProvidersFactory } from './contracts/bootstrapper'
+import { BootMethod, ContainerFactory, ProvidersFactory } from './contracts/bootstrapper'
 
+/**
+ * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
+ * @version 1.0.0
+ */
 /* istanbul ignore next */
 export function AppModule (registry: ModuleRegistry) {
   return function _AppModule (target: ModuleConstructor): IModuleConstructor {
@@ -7,11 +11,11 @@ export function AppModule (registry: ModuleRegistry) {
       constructor () {
         super()
         this.name = registry.name
-        this.observers = (
-          registry.hasOwnProperty('observers') &&
-          typeof registry.observers !== 'undefined' &&
-          Array.isArray(registry.observers)
-        ) ? registry.observers : []
+
+        this.boot = (
+          registry.hasOwnProperty('boot') &&
+          typeof registry.boot !== 'undefined'
+        ) ? registry.boot : null
 
         this.providers = (
           registry.hasOwnProperty('providers') &&
@@ -38,8 +42,8 @@ export function AppModule (registry: ModuleRegistry) {
 }
 
 export interface IModule {
+  boot: BootMethod | null
   name: string
-  observers: symbol[]
   providers: ProvidersFactory | null
   providersAsync: boolean
   routes: RoutesFactory | null
@@ -49,8 +53,8 @@ export interface IModule {
 export type IModuleConstructor = new () => IModule
 
 export abstract class Module implements IModule {
+  boot: BootMethod | null = null
   name: string = ''
-  observers: symbol[] = []
   providers: ProvidersFactory | null = null
   providersAsync: boolean = false
   routes: RoutesFactory | null = null
@@ -60,8 +64,8 @@ export abstract class Module implements IModule {
 type ModuleConstructor = new () => Module
 
 export interface ModuleRegistry {
+  boot?: BootMethod
   name: string
-  observers?: symbol[]
   providers?: ProvidersFactory
   providersAsync?: boolean
   routes?: RoutesFactory

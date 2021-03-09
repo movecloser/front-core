@@ -1,11 +1,11 @@
 import 'reflect-metadata'
 
-import { IConfiguration, Interfaces, RouterDriver, StoreDriver } from './contracts'
-import { Bootstrapper } from './bootstrapper'
 import { AppConfig } from './contracts/bootstrapper'
+import { AppModule, Module } from './module'
+import { Bootstrapper } from './bootstrapper'
 import { Configuration } from './configuration'
 import { Container } from './container'
-import { AppModule, Module } from './module'
+import { IConfiguration, Interfaces, RouterDriver, StoreDriver } from './contracts'
 
 describe('Test Bootstrapper class.', () => {
   const config: AppConfig = {
@@ -65,9 +65,6 @@ describe('Test Bootstrapper class.', () => {
   test('Expect [boot] method to bootstrap app with service.', async () => {
     @AppModule({
       name: 'test',
-      observers: [
-        Symbol.for('IEventbus')
-      ],
       providers: (config: IConfiguration) => {
         return (bind: Interfaces.Bind) => {}
       },
@@ -94,9 +91,6 @@ describe('Test Bootstrapper class.', () => {
   test('Expect [boot] method to bootstrap app with module.', async () => {
     @AppModule({
       name: 'test',
-      observers: [
-        Symbol.for('IEventbus')
-      ],
       providers: (config: IConfiguration) => {
         return (bind: Interfaces.Bind) => {}
       },
@@ -123,8 +117,6 @@ describe('Test Bootstrapper class.', () => {
   test('Expect [boot] method to bootstrap app without providers.', async () => {
     @AppModule({
       name: 'test',
-      // @ts-ignore
-      observers: null,
       // @ts-ignore
       providers: null,
       providersAsync: true,

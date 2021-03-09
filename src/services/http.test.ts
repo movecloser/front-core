@@ -76,7 +76,6 @@ describe('Test Http class', () => {
   test('Expect [register] method to add new driver.', () => {
     const http = new HttpConnector()
 
-    // @ts-ignore
     http.register('test-driver', new TestDriver(false))
 
     // @ts-ignore
@@ -300,10 +299,10 @@ describe('Test Http class', () => {
     }, 'test-driver')
 
     // @ts-ignore
-    await http.get('/test', {}, {}, {})
+    await http.get('/test', {}, {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('get', "/test", {}, {}, {})
+    expect(mockedCallFn).toBeCalledWith('get', "/test", {}, {}, null)
   })
 
   test('Expect [post] method to return response.', async () => {
