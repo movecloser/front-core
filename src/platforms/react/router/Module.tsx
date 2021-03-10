@@ -27,7 +27,8 @@ export const Module = (props: RoutesModuleProps) => {
           props.routes.map((r: RouteConfig, i: number) => {
             // Let's determine if we should consider redirection. !NOTE: redirection has higher
             // priority over component.
-            let shouldRedirect: boolean = typeof r.component !== 'function' || 'redirect' in r
+            let shouldRedirect: boolean = 'redirect' in r
+              || (typeof r.component !== 'function' && typeof r.component !== 'object')
             const fullPath: string = props.prefix !== '/'
               ? composeValidPath([ props.prefix, r.path ]) : r.path
 

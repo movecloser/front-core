@@ -1,3 +1,4 @@
+import { LazyExoticComponent } from 'react'
 import { IUser } from '../../../contracts'
 
 export interface GuardUser extends IUser {
@@ -16,7 +17,7 @@ export interface ModuleRoute {
 
 export interface RouteConfig {
   path: string
-  component?: (props?: any) => JSX.Element
+  component?: ((props?: any) => JSX.Element)|LazyExoticComponent<any>
   guard?: (auth: GuardUser) => boolean
   meta?: RouteMeta
   redirect?: string
