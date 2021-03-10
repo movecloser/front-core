@@ -1,6 +1,6 @@
-import { composeQueryParams, parseQueryParams } from './filter-parser'
 import { ConjunctionOperator, FilterOperator, FiltersConfig } from '../contracts/filter-parser'
 import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
+import { composeQueryParams, parseQueryParams } from './filter-parser'
 
 describe('Test filter parser method', () => {
   test(
@@ -59,6 +59,25 @@ describe('Test filter parser method', () => {
       const expected = {
         rate: 'lt:3,or:gt:4'
       }
+
+      expect(composeQueryParams(toParse)).toEqual(expected)
+    }
+  )
+
+  test(
+    'Expect [composeQueryParams] method to trim empty params',
+    () => {
+      const toParse: FiltersConfig = {
+        rate: [
+          {
+            operator: FilterOperator.Equal,
+            value: ''
+          }
+        ],
+        test: ''
+      }
+
+      const expected = {}
 
       expect(composeQueryParams(toParse)).toEqual(expected)
     }

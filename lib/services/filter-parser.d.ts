@@ -5,7 +5,7 @@ import { FiltersConfig, QueryParams, QueryParserSeparators } from '../contracts/
  * @author Kuba Fogel <kuba.fogel@movecloser.pl>
  * @author Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  */
-export declare function composeQueryParams(filters: FiltersConfig, separators?: QueryParserSeparators): QueryParams;
+export declare function composeQueryParams(filters: FiltersConfig, separators?: QueryParserSeparators, trimEmptyValues?: boolean): QueryParams;
 /**
  * Parse QueryParams to FiltersConfig.
  *

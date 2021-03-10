@@ -1,6 +1,7 @@
 import {
   ConjunctionOperator,
-  Filter, FilterOperator,
+  Filter,
+  FilterOperator,
   FilterParams,
   FiltersConfig,
   QueryParams,
@@ -21,7 +22,8 @@ const defaultSeparators = {
  */
 export function composeQueryParams (
   filters: FiltersConfig,
-  separators: QueryParserSeparators = defaultSeparators
+  separators: QueryParserSeparators = defaultSeparators,
+  trimEmptyValues: boolean = true
 ): QueryParams {
   let result: QueryParams = {}
 
@@ -34,6 +36,8 @@ export function composeQueryParams (
 
     switch (typeof config) {
       case 'string':
+        if (trimEmptyValues && !String(config).length) continue
+
         result[key] = `${config}`
         continue
       case 'boolean':
@@ -44,11 +48,19 @@ export function composeQueryParams (
         continue
       case 'object':
         if (!Array.isArray(config)) {
+          if (trimEmptyValues && !String(config.value).length) continue
+
           result[key] = stringifyFilter(config, separators.operators)
         } else {
-          result[key] = config.map(
+          const toSet = config.filter(
+            (params: FilterParams) => trimEmptyValues ? String(params.value).length : true
+          ).map(
             (params: FilterParams) => stringifyFilter(params, separators.operators)
           ).join(separators.values)
+
+          if (trimEmptyValues && !toSet) continue
+
+          result[key] = toSet
         }
         continue
       default:
@@ -124,18 +136,26 @@ function parseFilter (filters: string[], separator: string): Filter {
   return decomposeFilter(filters.length ? filters[0] : '')
 }
 
-function stringifyFilter (config: FilterParams, separator: string): string {
+function stringifyFilter (
+  config: FilterParams,
+  separator: string,
+  trimEqual: boolean = false
+): string {
   let filterString = ''
 
   if (!config.hasOwnProperty('operator') || !config.hasOwnProperty('value')) {
     throw new MissingParameter('Keys [operator] and [value] are required.')
   }
 
-  if (config.value === null || config.value === 'undefined') {
+  if (config.value === null || config.value === 'undefined' || config.value === '') {
     throw new IncorrectValueError('Filter value must be defined')
   }
 
-  filterString = `${config['operator']}${separator}${config['value']}`
+  filterString = `${config['value']}`
+
+  if (config['operator'] !== FilterOperator.Equal || !trimEqual) {
+    filterString = `${config['operator']}${separator}${filterString}`
+  }
 
   if (config.hasOwnProperty('conjunction')) {
     filterString = `${config['conjunction']}${separator}${filterString}`
