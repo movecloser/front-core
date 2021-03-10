@@ -12,7 +12,7 @@ export declare abstract class Model<T> implements IModel<T> {
      * Create instance of Model with Proxy involved.
      * @param payload
      */
-    static create<T extends object>(payload?: ModelPayload): MagicModel<T>;
+    static create<T extends object, M extends IModel<T> = IModel<T>>(payload?: ModelPayload): MagicModel<T, M>;
     protected abstract boot(): void;
     /**
      * Model property getter
@@ -23,7 +23,7 @@ export declare abstract class Model<T> implements IModel<T> {
      * Method to update incomplete properties on existing model instance
      * @param payload
      */
-    static hydrate<T extends object>(payload: ModelPayload): MagicModel<T>;
+    static hydrate<T extends object, M extends IModel<T> = IModel<T>>(payload: ModelPayload): MagicModel<T, M>;
     /**
      * Model property setter
      * @param property

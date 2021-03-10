@@ -23,8 +23,8 @@ export abstract class Model<T> implements IModel<T> {
    * Create instance of Model with Proxy involved.
    * @param payload
    */
-  public static create<T extends object> (payload: ModelPayload = {}): MagicModel<T> {
-    return createProxy<IModel<T>, T>(
+  public static create<T extends object, M extends IModel<T> = IModel<T>> (payload: ModelPayload = {}): MagicModel<T, M> {
+    return createProxy<M, T>(
       // @ts-ignore
       new this(payload)
     )
@@ -44,7 +44,7 @@ export abstract class Model<T> implements IModel<T> {
    * Method to update incomplete properties on existing model instance
    * @param payload
    */
-  public static hydrate<T extends object> (payload: ModelPayload): MagicModel<T> {
+  public static hydrate<T extends object, M extends IModel<T> = IModel<T>> (payload: ModelPayload): MagicModel<T, M> {
     // @ts-ignore
     const model: Model = new this()
     const mappedPayload: ModelPayload = {
@@ -56,7 +56,7 @@ export abstract class Model<T> implements IModel<T> {
       model.set(key, value === undefined ? model.initialValues[key] : value)
     }
 
-    return createProxy<IModel<T>, T>(model)
+    return createProxy<M, T>(model)
   }
 
   /**

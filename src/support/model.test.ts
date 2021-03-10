@@ -71,7 +71,7 @@ describe('Test abstract model class', () => {
     expect(model.get('name')).toBe('test')
     expect(model.get('type')).toBeTruthy()
     expect(model.get('value')).toBe(2)
-    expect(() => model.get('off')).toThrow(MissingPropertyError)
+    expect(model.get('off')).toBe(null)
   })
 
   test('Expect Model setter to use [setterMethod]', () => {
@@ -115,11 +115,11 @@ describe('Test abstract model class', () => {
     expect(model.get(key)[0].get('name')).toBe('Nested Value 1')
   })
 
-  test('Expect Model getter to throw error when property doesn\'t belong to model', () => {
+  test('Expect Model getter to return null when property doesn\'t belong to model', () => {
     const model = new TestModel()
     const key = ''
 
-    expect(() => model.get(key)).toThrowError(MissingPropertyError)
+    expect(model.get(key)).toBe(null)
   })
 
   test('Expect [toObject] method to return plain js object', () => {
@@ -185,8 +185,8 @@ describe('Test abstract model class', () => {
   })
 
   test('Expect model to be spreadable', () => {
-    const toExpect = { id: 1, name: 'john', value: 12, type: true }
-    const model = TestModel.create(toExpect)
+    const toExpect: ITest = { id: 1, name: 'john', value: 12, type: true }
+    const model = TestModel.create<ITest>(toExpect)
     expect({ ...model }).toEqual(toExpect)
   })
 })

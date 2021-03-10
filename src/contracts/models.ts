@@ -25,7 +25,7 @@ export interface IModel<T> extends Proxable<T> {
     toObject (): T
 }
 
-export type MagicModel<M extends object> = Intersected<IModel<M>, M>
+export type MagicModel<MData extends object, MClass extends IModel<MData> = IModel<MData>> = Intersected<MClass, MData>
 
 export interface ModelPayload {
     [key: string]: any

@@ -20,7 +20,7 @@ export interface IModel<T> extends Proxable<T> {
     set(property: string, value: any): void;
     toObject(): T;
 }
-export declare type MagicModel<M extends object> = Intersected<IModel<M>, M>;
+export declare type MagicModel<MData extends object, MClass extends IModel<MData> = IModel<MData>> = Intersected<MClass, MData>;
 export interface ModelPayload {
     [key: string]: any;
 }
