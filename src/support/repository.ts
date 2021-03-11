@@ -23,7 +23,7 @@ import { MappingError } from '../exceptions/errors'
  * @licence MIT
  */
 @Injectable()
-export abstract class Repository<M extends object> {
+export abstract class Repository<MData extends object, MClass extends IModel<MData> = IModel<MData>> {
   protected connector: IConnector
   protected map: MappingConfig = {}
   protected useAdapter: boolean = false
@@ -37,14 +37,14 @@ export abstract class Repository<M extends object> {
    */
   protected composeCollection (
     rawCollection: any[],
-    modelConstructor: ModelConstructor<M>,
+    modelConstructor: ModelConstructor<MData, MClass>,
     meta: IMeta
-  ): ICollection<MagicModel<M>> {
+  ): ICollection<MagicModel<MData, MClass>> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
 
-    return new Collection<MagicModel<M>>(
+    return new Collection<MagicModel<MData, MClass>>(
       (this.useAdapter ? mapCollection(rawCollection, this.map) : rawCollection)
         .map((item: any) => modelConstructor.hydrate(item)),
       meta
@@ -56,8 +56,8 @@ export abstract class Repository<M extends object> {
    */
   protected composeModel (
     rawModel: ModelPayload,
-    modelConstructor: ModelConstructor<M>
-  ): MagicModel<M> {
+    modelConstructor: ModelConstructor<MData, MClass>
+  ): MagicModel<MData, MClass> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
