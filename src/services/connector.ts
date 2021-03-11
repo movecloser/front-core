@@ -134,13 +134,13 @@ export class ApiConnector implements IConnector {
   private checkIfActionOfResourceExists (resource: string, action: string): void {
     if (!this._list[resource]) {
       throw new Error(
-        'There is no such resource in resources [list].'
+        `There is no such resource [${resource}] in resources list.`
       )
     }
     /* istanbul ignore else */
     if (!this._list[resource].methods[action]) {
       throw new Error(
-        'There is no such action in actions [list].'
+        `There is no such action [${resource} ${action}] in actions list.`
       )
     }
   }

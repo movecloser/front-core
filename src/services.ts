@@ -72,7 +72,7 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
           context.container.get<IHttpConnector>(HttpConnectorType),
           middlewares
         )
-      })
+      }).inSingletonScope()
     }
 
     // Authentication
