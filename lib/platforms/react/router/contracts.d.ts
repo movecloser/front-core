@@ -15,7 +15,7 @@ export interface ModuleRoute {
 export interface RouteConfig {
     path: string;
     component?: ((props?: any) => JSX.Element) | LazyExoticComponent<any>;
-    guard?: (auth: GuardUser) => boolean;
+    guard?: <User extends GuardUser = GuardUser>(auth: User) => boolean;
     meta?: RouteMeta;
     redirect?: string;
 }
