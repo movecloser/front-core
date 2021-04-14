@@ -224,7 +224,7 @@ describe('Test Connector class.', () => {
     }
 
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toBe('There is no such resource in resources [list].')
+    expect(error.message).toBe('There is no such resource [invalid-resource] in resources list.')
   })
 
   test('Expect [checkIfActionOfResourceExists] to throw Error', () => {
@@ -237,7 +237,7 @@ describe('Test Connector class.', () => {
     }
 
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toBe('There is no such action in actions [list].')
+    expect(error.message).toBe('There is no such action [resource invalid-action] in actions list.')
 
   })
 
