@@ -51,6 +51,17 @@ class TestNestedModel extends Model<ITest> {
 }
 
 describe('Test abstract model class', () => {
+  const warn = console.warn
+
+  beforeEach(() => {
+    console.warn = jest.fn();
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    console.warn = warn
+  });
+
   test('Expect Model setter to set a value.', () => {
     const model = new TestModel()
     model.set('id', 0)
