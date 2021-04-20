@@ -8,25 +8,29 @@ import {
   AuthEvent,
   AuthEventCallback,
   AuthEventType,
-  AuthHeader,
+  AuthHeader, IToken, ITokenConstructor,
   IUser,
-  Token
+  Token,
+  TokenDriver
 } from '../contracts/authentication'
-import { IDateTime } from '../contracts/services'
 import { LocalStorage } from '../support/local-storage'
+import { SingleToken } from './token/single'
+import { tokenDriversMap } from './token/driver-map'
 import { WindowService } from './window'
 
 @Injectable()
 export class AuthService implements Authentication <IUser> {
   private _auth$!: BehaviorSubject<AuthEvent>
-  private _token: Token | null = null
+  private _driver!: ITokenConstructor | null
+  private _token: IToken | null = null
   private _user: IUser | null = null
 
-  constructor (private _config: AuthConfig, private _date: IDateTime) {
+  constructor (private _config: AuthConfig) {
     this._auth$ = new BehaviorSubject<AuthEvent>({
       type: AuthEventType.Booting
     })
 
+    this.setDriver(_config.tokenDriver)
     this.retrieveToken()
   }
 
@@ -38,12 +42,12 @@ export class AuthService implements Authentication <IUser> {
       return false
     }
 
-    if (!this.isRefreshable(this._token as Token)) {
+    if (!this._token.isRefreshable()) {
       return this._token !== null && !!this._token.accessToken
     }
 
     return this._token !== null &&
-      this.calculateTokenLifetime(this._token) > this._config.validThreshold
+      this._token.calculateTokenLifetime() > this._config.validThreshold
   }
 
   /**
@@ -97,7 +101,24 @@ export class AuthService implements Authentication <IUser> {
    * Returns Token object from state.
    */
   public get token (): Token | null {
-    return this._token
+    return this._token ? this._token.token : null
+  }
+
+  /**
+   * Sets Token Driver to be used by Auth Service.
+   * @param driver
+   */
+  public setDriver (driver: TokenDriver): this {
+    const driversMap = tokenDriversMap
+
+    if (driver && driversMap[driver]) {
+      this._driver = driversMap[driver]
+      return this
+    }
+
+    this._driver = SingleToken
+
+    return this
   }
 
   /**
@@ -105,16 +126,22 @@ export class AuthService implements Authentication <IUser> {
    * @param token
    */
   public setToken (token: Token) {
-    if (this.isRefreshable(token)) {
-      const tokenLifeTime = this.calculateTokenLifetime(token)
+    if (!this._driver) {
+      throw new Error('Token Driven not set.')
+    }
+
+    const newToken: IToken = new this._driver(token)
+
+    if (newToken.isRefreshable()) {
+      const tokenLifeTime = (newToken.calculateTokenLifetime())
 
       /* istanbul ignore else */
       if (this.isTokenValid(tokenLifeTime)) {
-        this.setupRefreshment(tokenLifeTime, token)
+        this.setupRefreshment(tokenLifeTime, newToken)
       }
     }
 
-    this._token = token
+    this._token = newToken
 
     this._auth$.next({
       type: AuthEventType.Authenticated
@@ -142,14 +169,6 @@ export class AuthService implements Authentication <IUser> {
    */
   public get user (): IUser | null {
     return this._user
-  }
-
-  /**
-   * Calculates for how long token will be still valid.
-   * @private
-   */
-  private calculateTokenLifetime (token: Token): number {
-    return this._date.difference(token.expiresAt as string)
   }
 
   /**
@@ -187,21 +206,20 @@ export class AuthService implements Authentication <IUser> {
         type: AuthEventType.Booted
       }
 
+      if (!this._driver) {
+        throw new Error('Token Driver not set.')
+      }
+
       try {
-        const token: any = JSON.parse(
-          LocalStorage.get(this._config.tokenName) as string
-        )
+        const token = this._driver.recreateFromStorage(this._config.tokenName)
 
-        for (const key of ['accessToken', 'tokenType']) {
-          if (!token || !token.hasOwnProperty(key) || token[key] === null) {
-            this.deleteToken()
-            break
-          }
-
-          payload.type = AuthEventType.BootedWithToken
-          payload.token = token
+        if (token === null) {
+          this.deleteToken()
         }
-      /* istanbul ignore next */
+
+        payload.type = AuthEventType.BootedWithToken
+        payload.token = new this._driver(token)
+        /* istanbul ignore next */
       } catch (error) {
         this.deleteToken()
       }
@@ -210,34 +228,48 @@ export class AuthService implements Authentication <IUser> {
     }
   }
 
-  protected isRefreshable (token: Token): boolean {
-    return token.hasOwnProperty('expiresAt') && token.expiresAt !== null
-  }
-
   /**
    * Sets refresh behaviour for token.
    * @param tokenLifeTime
    * @param token
    * @private
    */
-  protected setupRefreshment (tokenLifeTime: number, token: Token): void {
+  protected setupRefreshment (tokenLifeTime: number, token: IToken): void {
     /* istanbul ignore else */
     if (
       tokenLifeTime < this._config.refreshThreshold &&
       tokenLifeTime > this._config.validThreshold
     ) {
+      this.compareWithStorage(token)
+
+    } else if (tokenLifeTime > this._config.refreshThreshold) {
+      /* istanbul ignore next */
+      setTimeout(() => {
+        this.compareWithStorage(token)
+
+      }, (tokenLifeTime - this._config.refreshThreshold) * 1000)
+    }
+  }
+
+  /**
+   * Decides whether to use new token or existing one.
+   */
+  private compareWithStorage (token: IToken) {
+    if (!this._driver) {
+      throw new Error('Token Driver not set.')
+    }
+
+    const storageToken = new this._driver( this._driver.recreateFromStorage(this._config.tokenName))
+    const storageTokenLifetime = storageToken.calculateTokenLifetime()
+    const tokenLifeTime = token.calculateTokenLifetime()
+
+    if (storageToken && storageTokenLifetime > tokenLifeTime) {
+      this.setToken(storageToken.token)
+    } else {
       this._auth$.next({
         type: AuthEventType.Refresh,
         token: token
       })
-    } else if (tokenLifeTime > this._config.refreshThreshold) {
-      /* istanbul ignore next */
-      setTimeout(() => {
-        this._auth$.next({
-          type: AuthEventType.Refresh,
-          token: token
-        })
-      }, (tokenLifeTime - this._config.refreshThreshold) * 1000)
     }
   }
 }

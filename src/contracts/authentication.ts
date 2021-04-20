@@ -4,11 +4,12 @@ export interface AuthConfig {
   tokenName: string
   refreshThreshold: number // 15s
   validThreshold: number   // 1s
+  tokenDriver: TokenDriver
 }
 
 export interface AuthEvent {
   type: AuthEventType
-  token?: Token
+  token?: IToken
 }
 
 export type AuthEventCallback = (event: AuthEvent) => void
@@ -30,6 +31,7 @@ export interface Authentication<U> extends AuthProvider {
   deleteToken (): void
   getUserId (): string | number | null
   listen (callback: AuthEventCallback): Subscription
+  setDriver (driver: TokenDriver): this
   setToken (token: Token): void
   setUser (user: U): void
   token: Token | null
@@ -49,6 +51,26 @@ export interface Token {
   accessToken: string
   expiresAt: string|null
   tokenType: string
+  refreshToken?: string
+}
+
+export interface ITokenConstructor {
+  new(...args: any[]): IToken
+  recreateFromStorage(tokenName: string): Token | null
+}
+
+export interface IToken {
+  accessToken: string
+  calculateTokenLifetime(): number
+  isRefreshable(): boolean
+  refreshToken: string
+  token: Token
 }
 
 export const AuthServiceType = Symbol.for('Authentication')
+
+export enum TokenDriver {
+  Single = 'single',
+  Double = 'double',
+  Solid = 'solid'
+}

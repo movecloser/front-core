@@ -4,7 +4,9 @@ import { AuthService } from './authorization'
 import { AuthConfig, AuthEvent } from '../contracts'
 import { DateTime } from './datetime'
 import { Subscription } from 'rxjs'
-import { TestScheduler } from 'rxjs/testing';
+// import { TestScheduler } from 'rxjs/testing';
+import { MissingParameter } from '../exceptions/errors'
+import { AbstractToken } from './token/token'
 
 describe('Test AuthService class.', () => {
   const config: AuthConfig = {
@@ -34,48 +36,49 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [check] to do fail.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     const result = auth.check()
 
     expect(result).toBe(false)
   })
 
   test('Expect [check] to do check.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
-    auth._token = {
+    auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
       tokenType: 'Bearer',
-    }
+    }, new DateTime())
+
     const result = auth.check()
 
     expect(result).toBe(false)
   })
 
   test('Expect [check] to do check.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
-    auth._token = {
+    auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: null,
       tokenType: 'Bearer',
-    }
+    }, new DateTime())
     const result = auth.check()
 
     expect(result).toBe(true)
   })
 
   test('Expect [deleteToken] to do work.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     //@ts-ignore
     const nextSpy = jest.spyOn(auth._auth$, 'next')
     // @ts-ignore
-    auth._token = {
+    auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
       tokenType: 'Bearer',
-    }
+    }, new DateTime())
     // @ts-ignore
     auth._user = {}
 
@@ -89,13 +92,13 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do work.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
-    auth._token = {
+    auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
       tokenType: 'Bearer',
-    }
+    }, new DateTime())
 
     const result = auth.getAuthorizationHeader()
 
@@ -103,12 +106,12 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do work.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
-    auth._token = {
+    auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
-    }
+    }, new DateTime())
 
     const result = auth.getAuthorizationHeader()
 
@@ -116,7 +119,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do fail.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
 
     const result = auth.getAuthorizationHeader()
 
@@ -124,7 +127,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do fail.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
 
     const result = auth.listen((event: AuthEvent) => {})
 
@@ -133,7 +136,7 @@ describe('Test AuthService class.', () => {
 
 
   test('Expect [listen] to return Subscription.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold + 1) * 1000);
 
@@ -144,7 +147,7 @@ describe('Test AuthService class.', () => {
     })
 
     // @ts-ignore
-    expect(auth._token).toEqual({
+    expect(auth._token.token).toEqual({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
       tokenType: 'Bearer',
@@ -152,7 +155,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [setToken] to trigger refresh.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500));
 
@@ -163,7 +166,7 @@ describe('Test AuthService class.', () => {
     })
 
     // @ts-ignore
-    expect(auth._token).toEqual({
+    expect(auth._token.token).toEqual({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
       tokenType: 'Bearer',
@@ -171,7 +174,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [setToken] to use non-refreshable token.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     const expires = new Date();
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500));
 
@@ -182,15 +185,32 @@ describe('Test AuthService class.', () => {
     })
 
     // @ts-ignore
-    expect(auth._token).toEqual({
+    expect(auth._token.token).toEqual({
       accessToken: 'test-token',
       expiresAt: null,
       tokenType: 'Bearer',
     })
   })
 
+  test('Expect [setToken] to throw an error (Missing parameter).', () => {
+    const auth = new AuthService(config)
+    let error
+
+    try {
+      //@ts-ignore
+      auth.setToken({
+        expiresAt: null,
+        tokenType: 'Bearer',
+      })
+    } catch (err) {
+      error = err
+    }
+
+    expect(error).toBeInstanceOf(MissingParameter)
+  })
+
   test('Expect [setUser] to do work.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
     auth.setUser({ user: 'test' })
 
@@ -199,7 +219,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [get User] to do work.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
     auth._user = { user: 'test' }
 
@@ -210,7 +230,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getUserId] to do work.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
     auth._user = { user: 'test', id: '1' }
 
@@ -221,7 +241,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getUserId] to do return null.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
     auth._user = { user: 'test' }
 
@@ -232,36 +252,38 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [isTokenValid] to be false.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     // @ts-ignore
     const nextSpy = jest.spyOn(auth._auth$, 'next')
-    const token = {
+    auth.setToken({
+      tokenType: 'xxx',
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
-    }
+    })
 
     // @ts-ignore
-    const result = auth.isTokenValid(auth.calculateTokenLifetime(token))
+    const result = auth.isTokenValid(auth._token.calculateTokenLifetime())
 
     expect(result).toBe(false)
-    expect(nextSpy).toHaveBeenCalledTimes(1)
+    expect(nextSpy).toHaveBeenCalledTimes(3)
   })
 
   test('Expect [isTokenValid] to be true.', () => {
-    const auth = new AuthService(config, new DateTime())
-    const token = {
+    const auth = new AuthService(config)
+    auth.setToken({
+      tokenType: 'xxx',
       accessToken: 'test-token',
       expiresAt: new Date('9999').toUTCString(),
-    }
+    })
 
     // @ts-ignore
-    const result = auth.isTokenValid(auth.calculateTokenLifetime(token))
+    const result = auth.isTokenValid(auth._token.calculateTokenLifetime())
 
     expect(result).toBe(true)
   })
 
   test('Expect [retrieveToken] to be true.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
 
     // @ts-ignore
     auth.retrieveToken()
@@ -276,7 +298,7 @@ describe('Test AuthService class.', () => {
       expiresAt: new Date('9999').toUTCString(),
     }
     window.localStorage.setItem(config.tokenName, JSON.stringify(token))
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
 
     // @ts-ignore
     auth.retrieveToken()
@@ -292,7 +314,7 @@ describe('Test AuthService class.', () => {
       expiresAt: null
     }
     window.localStorage.setItem(config.tokenName, JSON.stringify(token))
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
 
     // @ts-ignore
     auth.retrieveToken()
@@ -302,7 +324,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [retrieveToken] to be fail.', () => {
-    const auth = new AuthService(config, new DateTime())
+    const auth = new AuthService(config)
     window.localStorage.getItem = () => {
       throw new Error()
     }
