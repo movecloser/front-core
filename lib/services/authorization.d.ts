@@ -1,13 +1,12 @@
 import { Subscription } from 'rxjs';
-import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IUser, Token } from '../contracts/authentication';
-import { IDateTime } from '../contracts/services';
+import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IToken, IUser, Token, TokenDriver } from '../contracts/authentication';
 export declare class AuthService implements Authentication<IUser> {
     private _config;
-    private _date;
     private _auth$;
+    private _driver;
     private _token;
     private _user;
-    constructor(_config: AuthConfig, _date: IDateTime);
+    constructor(_config: AuthConfig);
     /**
      * Returns if user is logged-in.
      */
@@ -29,6 +28,11 @@ export declare class AuthService implements Authentication<IUser> {
      */
     get token(): Token | null;
     /**
+     * Sets Token Driver to be used by Auth Service.
+     * @param driver
+     */
+    setDriver(driver: TokenDriver): this;
+    /**
      * Sets Token to state.
      * @param token
      */
@@ -43,11 +47,6 @@ export declare class AuthService implements Authentication<IUser> {
      */
     get user(): IUser | null;
     /**
-     * Calculates for how long token will be still valid.
-     * @private
-     */
-    private calculateTokenLifetime;
-    /**
      * Return id of currently set user.
      */
     getUserId(): string | number | null;
@@ -61,12 +60,15 @@ export declare class AuthService implements Authentication<IUser> {
      * Sets token retrieved from device localstorage.
      */
     protected retrieveToken(): void;
-    protected isRefreshable(token: Token): boolean;
     /**
      * Sets refresh behaviour for token.
      * @param tokenLifeTime
      * @param token
      * @private
      */
-    protected setupRefreshment(tokenLifeTime: number, token: Token): void;
+    protected setupRefreshment(tokenLifeTime: number, token: IToken): void;
+    /**
+     * Decides whether to use new token or existing one.
+     */
+    private compareWithStorage;
 }
