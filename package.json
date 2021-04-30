@@ -1,6 +1,9 @@
 {
   "name": "@movecloser/front-core",
-  "repository": "git@github.com:movecloser/front-core.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:movecloser/front-core.git"
+  },
   "version": "1.0.0-rc.62",
   "scripts": {
     "build": "tsc",
