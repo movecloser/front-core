@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subscription } from 'rxjs'
+import { BehaviorSubject, config, Subscription } from 'rxjs'
 
 import { Injectable } from '../container'
 
@@ -25,13 +25,15 @@ export class AuthService implements Authentication <IUser> {
   private _token: IToken | null = null
   private _user: IUser | null = null
 
-  constructor (private _config: AuthConfig) {
+  constructor (private _config: AuthConfig, private _window: WindowService) {
     this._auth$ = new BehaviorSubject<AuthEvent>({
       type: AuthEventType.Booting
     })
 
     this.setDriver(_config.tokenDriver)
     this.retrieveToken()
+
+    this.registerStorageListener()
   }
 
   /**
@@ -197,6 +199,26 @@ export class AuthService implements Authentication <IUser> {
   }
 
   /**
+   * Listens to storage change.
+   * When new Token appears in other browser tab.
+   */
+  protected registerStorageListener () {
+    if (WindowService.isDefined) {
+      window.addEventListener('storage', () => {
+        if (!this._token || !this._driver) {
+          return
+        }
+
+        const newToken = new this._driver( this._driver.recreateFromStorage(this._config.tokenName))
+
+        if (newToken && newToken!.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
+          this.setToken(newToken.token)
+        }
+      })
+    }
+  }
+
+  /**
    * Sets token retrieved from device localstorage.
    */
   protected retrieveToken (): void {
@@ -253,6 +275,7 @@ export class AuthService implements Authentication <IUser> {
 
   /**
    * Decides whether to use new token or existing one.
+   * Fires only if tab is active.
    */
   private compareWithStorage (token: IToken) {
     if (!this._driver) {
@@ -266,10 +289,12 @@ export class AuthService implements Authentication <IUser> {
     if (storageToken && storageTokenLifetime > tokenLifeTime) {
       this.setToken(storageToken.token)
     } else {
-      this._auth$.next({
-        type: AuthEventType.Refresh,
-        token: token
-      })
+      if (this._window.isActive) {
+        this._auth$.next({
+          type: AuthEventType.Refresh,
+          token: token
+        })
+      }
     }
   }
 }

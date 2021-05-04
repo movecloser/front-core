@@ -18,6 +18,12 @@ export declare class WindowService implements IWindow {
      * @var boolean
      */
     private readonly _isDefined;
+    /**
+     * Indicates whether window tab is focused.
+     *
+     * @var boolean
+     */
+    isActive: boolean;
     constructor(document: IDocument);
     /**
      * Add listener to document object (if defined)
@@ -97,6 +103,11 @@ export declare class WindowService implements IWindow {
      * @return void
      */
     redirect(target: string): void;
+    /**
+     * Register window focus/blur listeners.
+     * @private
+     */
+    private registerTabListeners;
     /**
      * Removes listener from document object (if defined)
      *

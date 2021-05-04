@@ -1,12 +1,14 @@
 import { Subscription } from 'rxjs';
 import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IToken, IUser, Token, TokenDriver } from '../contracts/authentication';
+import { WindowService } from './window';
 export declare class AuthService implements Authentication<IUser> {
     private _config;
+    private _window;
     private _auth$;
     private _driver;
     private _token;
     private _user;
-    constructor(_config: AuthConfig);
+    constructor(_config: AuthConfig, _window: WindowService);
     /**
      * Returns if user is logged-in.
      */
@@ -57,6 +59,11 @@ export declare class AuthService implements Authentication<IUser> {
      */
     protected isTokenValid(tokenLifeTime: number): boolean;
     /**
+     * Listens to storage change.
+     * When new Token appears in other browser tab.
+     */
+    protected registerStorageListener(): void;
+    /**
      * Sets token retrieved from device localstorage.
      */
     protected retrieveToken(): void;
@@ -69,6 +76,7 @@ export declare class AuthService implements Authentication<IUser> {
     protected setupRefreshment(tokenLifeTime: number, token: IToken): void;
     /**
      * Decides whether to use new token or existing one.
+     * Fires only if tab is active.
      */
     private compareWithStorage;
 }
