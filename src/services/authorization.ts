@@ -36,7 +36,12 @@ export class AuthService implements Authentication <IUser> {
     this.registerStorageListener()
     this._window.onFocus(
       () => {
-        console.log('focused')
+        if (this._token) {
+          this._auth$.next({
+            type: AuthEventType.Refresh,
+            token: this._token
+          })
+        }
       }
     )
   }
