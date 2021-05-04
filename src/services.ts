@@ -85,7 +85,8 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
 
       bind<Authentication<IUser>>(AuthServiceType).toDynamicValue((context: Interfaces.Context) => {
         return new AuthService(
-          config.byFile('auth')
+          config.byFile('auth'),
+          context.container.get<WindowService>(WindowType)
         )
       }).inSingletonScope()
     }

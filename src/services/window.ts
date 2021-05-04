@@ -25,13 +25,21 @@ export class WindowService implements IWindow {
    *
    * @var boolean
    */
-  private readonly _isDefined: boolean = true
+  private readonly _isDefined: boolean = false
+
+  /**
+   * Indicates whether window tab is focused.
+   *
+   * @var boolean
+   */
+  public isActive: boolean = true
 
   constructor (document: IDocument) {
     this._document = document
 
-    if (!WindowService.isDefined) {
-      this._isDefined = false
+    if (WindowService.isDefined) {
+      this._isDefined = true
+      this.registerTabListeners()
     }
   }
 
@@ -171,6 +179,30 @@ export class WindowService implements IWindow {
     if (this.isClient) {
       window.location.href = target
     }
+  }
+
+  /**
+   * Register window focus/blur listeners.
+   * @private
+   */
+  private registerTabListeners (): void {
+    window.onfocus = () => {
+      this.isActive = true;
+    };
+
+    window.onblur = () => {
+      this.isActive = false;
+    };
+  }
+
+  /**
+   *
+   * @param callback
+   */
+  public onFocus (callback: () => void): void{
+    window.onfocus = () => {
+      callback()
+    };
   }
 
   /**
