@@ -32,7 +32,6 @@ export class AuthService implements Authentication <IUser> {
 
     this.setDriver(_config.tokenDriver)
     this.retrieveToken()
-
     this.registerStorageListener()
     this._window.onFocus(
       () => {
