@@ -109,6 +109,11 @@ export declare class WindowService implements IWindow {
      */
     private registerTabListeners;
     /**
+     *
+     * @param callback
+     */
+    onFocus(callback: () => void): void;
+    /**
      * Removes listener from document object (if defined)
      *
      * @return void

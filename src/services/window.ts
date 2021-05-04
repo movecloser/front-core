@@ -196,6 +196,16 @@ export class WindowService implements IWindow {
   }
 
   /**
+   *
+   * @param callback
+   */
+  public onFocus (callback: () => void): void{
+    window.onfocus = () => {
+      callback()
+    };
+  }
+
+  /**
    * Removes listener from document object (if defined)
    *
    * @return void
