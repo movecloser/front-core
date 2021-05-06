@@ -53,10 +53,9 @@ export interface ModalState {
 export const ModalType = Symbol.for('IModal')
 
 export interface IWindow {
-  addEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void
-
   call: (method: string, params: any[]) => any
   document: IDocument
+  isActive: boolean
   isClient: boolean
   isDesktop: boolean
   isMobile: boolean
@@ -65,6 +64,8 @@ export interface IWindow {
   isTablet: boolean
   native: Window | null
 
+  addEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void
+  onFocus (callback: () => void): void
   scrollTo(options?: ScrollToOptions): void;
   scrollTo(x: number, y: number): void;
   redirect (target: string): void

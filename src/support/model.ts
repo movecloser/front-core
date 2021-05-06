@@ -1,6 +1,5 @@
 import { createProxy } from './proxy'
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models'
-import { MissingPropertyError } from '../exceptions/errors'
 
 /**
  * @author Kuba Fogel <kuba.foge@movecloser.pl>
@@ -35,9 +34,10 @@ export abstract class Model<T> implements IModel<T> {
   /**
    * Model property getter
    * @param property
+   * @param defaultValue
    */
-  public get (property: string): any {
-    return this.__get(property)
+  public get (property: string, defaultValue: any = null): any {
+    return this.__get(property, defaultValue)
   }
 
   /**
@@ -78,10 +78,9 @@ export abstract class Model<T> implements IModel<T> {
   /**
    * Return value for given property due to it's accessor.
    */
-  public __get (property: string): any {
+  public __get (property: string, defaultValue: any): any {
     if (!(property in this._data)) {
-      console.warn(`Trying to access unset property [${property}]`)
-      return null
+      return defaultValue
     }
 
     return this._data[property]

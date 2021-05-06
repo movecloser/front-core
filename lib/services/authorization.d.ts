@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs';
 import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IToken, IUser, Token, TokenDriver } from '../contracts/authentication';
-import { WindowService } from './window';
+import { IWindow } from '../contracts/services';
 export declare class AuthService implements Authentication<IUser> {
     private _config;
     private _window;
@@ -8,7 +8,7 @@ export declare class AuthService implements Authentication<IUser> {
     private _driver;
     private _token;
     private _user;
-    constructor(_config: AuthConfig, _window: WindowService);
+    constructor(_config: AuthConfig, _window: IWindow);
     /**
      * Returns if user is logged-in.
      */

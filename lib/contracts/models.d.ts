@@ -16,7 +16,7 @@ export interface MetaPayload {
 }
 export interface IModel<T> extends Proxable<T> {
     initialValues: ModelPayload;
-    get(key: string): any;
+    get(key: string, defaultValue?: any): any;
     set(property: string, value: any): void;
     toObject(): T;
 }

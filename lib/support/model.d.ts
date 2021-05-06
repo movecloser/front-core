@@ -17,8 +17,9 @@ export declare abstract class Model<T> implements IModel<T> {
     /**
      * Model property getter
      * @param property
+     * @param defaultValue
      */
-    get(property: string): any;
+    get(property: string, defaultValue?: any): any;
     /**
      * Method to update incomplete properties on existing model instance
      * @param payload
@@ -37,7 +38,7 @@ export declare abstract class Model<T> implements IModel<T> {
     /**
      * Return value for given property due to it's accessor.
      */
-    __get(property: string): any;
+    __get(property: string, defaultValue: any): any;
     /**
      * Throws when someone trying to invoke class.
      */
@@ -56,12 +57,12 @@ export declare abstract class Model<T> implements IModel<T> {
      * @param value
      * @protected
      */
-    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): import("..").Intersected<IModel<object>, object>;
+    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): MagicModel<object, IModel<object>>;
     /**
      * Method to get collection related to given property
      * @param model
      * @param values
      * @protected
      */
-    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): import("..").Intersected<IModel<object>, object>[];
+    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): MagicModel<object, IModel<object>>[];
 }

@@ -199,7 +199,7 @@ export class WindowService implements IWindow {
    *
    * @param callback
    */
-  public onFocus (callback: () => void): void{
+  public onFocus (callback: () => void): void {
     window.addEventListener('focus', () => {
       callback()
     });

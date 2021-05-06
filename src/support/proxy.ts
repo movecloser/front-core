@@ -22,14 +22,17 @@ export function createProxy<Source extends Proxable<any>, Target extends object>
       return target.__invoke(...argArray)
     },
     get (target: Source, p: PropertyKey): any {
-      if (p in Reflect.getPrototypeOf(target)) {
+      if (typeof p === 'symbol') return
+
+      p = String(p)
+      if (p in (Reflect.getPrototypeOf(target) || {})) {
         return function (...arg: any) {
           // @ts-ignore
           return target[p](...arg)
         }
       }
 
-      return target.__get(p as string)
+      return target.__get(p, undefined)
     },
     getOwnPropertyDescriptor (target: Source): PropertyDescriptor | undefined {
       return {
@@ -38,7 +41,7 @@ export function createProxy<Source extends Proxable<any>, Target extends object>
         configurable: true
       }
     },
-    ownKeys (target: Source): PropertyKey[] {
+    ownKeys (target: Source): ArrayLike<string> {
       return [ ...Object.keys(target.__toObject()) ]
     },
     set (target: Source, p: PropertyKey, value: any): boolean {

@@ -1,4 +1,4 @@
-import { BehaviorSubject, config, Subscription } from 'rxjs'
+import { BehaviorSubject, Subscription } from 'rxjs'
 
 import { Injectable } from '../container'
 
@@ -8,11 +8,14 @@ import {
   AuthEvent,
   AuthEventCallback,
   AuthEventType,
-  AuthHeader, IToken, ITokenConstructor,
+  AuthHeader,
+  IToken,
+  ITokenConstructor,
   IUser,
   Token,
   TokenDriver
 } from '../contracts/authentication'
+import { IWindow } from '../contracts/services'
 import { LocalStorage } from '../support/local-storage'
 import { SingleToken } from './token/single'
 import { tokenDriversMap } from './token/driver-map'
@@ -25,7 +28,7 @@ export class AuthService implements Authentication <IUser> {
   private _token: IToken | null = null
   private _user: IUser | null = null
 
-  constructor (private _config: AuthConfig, private _window: WindowService) {
+  constructor (private _config: AuthConfig, private _window: IWindow) {
     this._auth$ = new BehaviorSubject<AuthEvent>({
       type: AuthEventType.Booting
     })
