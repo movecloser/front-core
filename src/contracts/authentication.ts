@@ -31,6 +31,7 @@ export interface Authentication<U> extends AuthProvider {
   deleteToken (): void
   getUserId (): string | number | null
   listen (callback: AuthEventCallback): Subscription
+  refreshToken (): void
   setDriver (driver: TokenDriver): this
   setToken (token: Token): void
   setUser (user: U): void

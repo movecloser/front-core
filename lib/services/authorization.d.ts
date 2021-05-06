@@ -40,6 +40,10 @@ export declare class AuthService implements Authentication<IUser> {
      */
     setToken(token: Token): void;
     /**
+     * Forces token refresh
+     */
+    refreshToken(): void;
+    /**
      * Sets user in state.
      * @param user
      */
