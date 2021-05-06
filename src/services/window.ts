@@ -186,13 +186,13 @@ export class WindowService implements IWindow {
    * @private
    */
   private registerTabListeners (): void {
-    window.onfocus = () => {
+    window.addEventListener('focus', () => {
       this.isActive = true;
-    };
+    });
 
-    window.onblur = () => {
+    window.addEventListener('blur', () => {
       this.isActive = false;
-    };
+    });
   }
 
   /**
@@ -200,9 +200,9 @@ export class WindowService implements IWindow {
    * @param callback
    */
   public onFocus (callback: () => void): void{
-    window.onfocus = () => {
+    window.addEventListener('focus', () => {
       callback()
-    };
+    });
   }
 
   /**

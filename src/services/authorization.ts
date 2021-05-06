@@ -168,6 +168,26 @@ export class AuthService implements Authentication <IUser> {
   }
 
   /**
+   * Forces token refresh
+   */
+  public refreshToken () {
+    if (!this._driver) {
+      throw new Error('Token Driver not set.')
+    }
+
+    if (!this._token) {
+      return
+    }
+
+    if (this._window.isActive) {
+      this._auth$.next({
+        type: AuthEventType.Refresh,
+        token: this._token
+      })
+    }
+  }
+
+  /**
    * Sets user in state.
    * @param user
    */
