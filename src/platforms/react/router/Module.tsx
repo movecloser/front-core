@@ -27,37 +27,36 @@ export const Module = (props: RoutesModuleProps) => {
           props.routes.map((r: RouteConfig, i: number) => {
             // Let's determine if we should consider redirection. !NOTE: redirection has higher
             // priority over component.
-            let shouldRedirect: boolean = 'redirect' in r
-              || (typeof r.component !== 'function' && typeof r.component !== 'object')
-            const fullPath: string = props.prefix !== '/'
-              ? composeValidPath([ props.prefix, r.path ]) : r.path
+              let shouldRedirect;
 
-            if (!shouldRedirect && props.useGuards) {
-              // Let's determine if `auth` has access to given Route. There are 2 scenarios:
-              // 1. There's no user provided but route has guard method.
-              // 2. The guard method returns false.
-              shouldRedirect = (
-                typeof props.auth === 'undefined' && typeof r.guard === 'function'
-              ) || (
-                typeof props.auth !== 'undefined' && typeof r.guard === 'function' &&
-                !r.guard(props.auth)
-              )
-            }
+              if (props.useGuards) {
+                  // Let's determine if `auth` has access to given Route. There are 2 scenarios:
+                  // 1. The booting process hasn't finished, props.auth === undefined
+                  // 2. There's no user provided but route has guard method, props.auth === null
+                  // 3. The guard method returns false.
+                  shouldRedirect = (typeof props.auth === null && typeof r.guard === 'function') || (typeof props.auth !== 'undefined' && typeof r.guard === 'function' &&
+                      !r.guard(props.auth));
+              } else {
+                  shouldRedirect = 'redirect' in r && (typeof r.component !== 'function' && typeof r.component !== 'object');
+              }
+
+              const fullPath = props.prefix !== '/'
+                  ? composeValidPath([props.prefix, r.path]) : r.path;
 
             return shouldRedirect ? (
               <Redirect from={fullPath} to={r.redirect || props.prefix}
-                        key={`route-${props.prefix}-${i}`}/>
+                        key={`route-module-${props.prefix}-${i}`}/>
             ) : (
               <Route exact={props.strict} path={fullPath} render={(componentProps: any) => (
                 // @ts-ignore
                 <r.component {...componentProps}/>
-              )} key={`route-${props.prefix}-${i}`}/>
+              )} key={`route-module-${props.prefix}-${i}`}/>
             )
           })
         }
         {
           props.errorPage ? (
-            <Route component={props.errorPage}/>
+            <Route component={props.errorPage} key={`route-module-${props.prefix}-error-page`}/>
           ) : null
         }
       </Switch>
