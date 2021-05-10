@@ -30,6 +30,7 @@ export interface RouteMeta {
 export interface RoutesFactoryProps {
   auth?: GuardUser
   errorPage?: (props?: any) => JSX.Element
+    fallBackUrl?: string
   globalPrefix?: string
   moduleRoutes: ModuleRoute[]
   useGuards: boolean
