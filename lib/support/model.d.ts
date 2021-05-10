@@ -57,12 +57,12 @@ export declare abstract class Model<T> implements IModel<T> {
      * @param value
      * @protected
      */
-    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): MagicModel<object, IModel<object>>;
+    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): import("..").Intersected<IModel<object>, object>;
     /**
      * Method to get collection related to given property
      * @param model
      * @param values
      * @protected
      */
-    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): MagicModel<object, IModel<object>>[];
+    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): import("..").Intersected<IModel<object>, object>[];
 }

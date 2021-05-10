@@ -1,3 +1,4 @@
+import { TokenDriver } from '../../contracts';
 import { SingleToken } from './single';
 import { DoubleToken } from './double';
 import { SolidToken } from './solid';

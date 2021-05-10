@@ -16,6 +16,7 @@ declare global {
  * @version 1.0.0
  */
 export function createProxy<Source extends Proxable<any>, Target extends object> (target: any) {
+  // @ts-ignore
   return new Proxy<Source, Target>(target, {
     /* istanbul ignore next */
     apply (target: Source, thisArg: any, argArray?: any): any {
@@ -41,6 +42,7 @@ export function createProxy<Source extends Proxable<any>, Target extends object>
         configurable: true
       }
     },
+    // @ts-ignore
     ownKeys (target: Source): ArrayLike<string> {
       return [ ...Object.keys(target.__toObject()) ]
     },
