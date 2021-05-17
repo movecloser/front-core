@@ -138,8 +138,9 @@ export class AuthService implements Authentication <IUser> {
   /**
    * Sets Token to state.
    * @param token
+   * @param isPersistent (optional)
    */
-  public setToken (token: Token) {
+  public setToken (token: Token, isPersistent = true) {
     if (!this._driver) {
       throw new Error('Token Driven not set.')
     }
@@ -162,7 +163,7 @@ export class AuthService implements Authentication <IUser> {
     })
 
     /* istanbul ignore else */
-    if (WindowService.isDefined) {
+    if (WindowService.isDefined && isPersistent) {
       LocalStorage.set(
         this._config.tokenName,
         JSON.stringify(this.token)

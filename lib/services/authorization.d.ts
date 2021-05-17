@@ -37,8 +37,9 @@ export declare class AuthService implements Authentication<IUser> {
     /**
      * Sets Token to state.
      * @param token
+     * @param isPersistent (optional)
      */
-    setToken(token: Token): void;
+    setToken(token: Token, isPersistent?: boolean): void;
     /**
      * Forces token refresh
      */

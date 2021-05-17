@@ -33,7 +33,7 @@ export interface Authentication<U> extends AuthProvider {
   listen (callback: AuthEventCallback): Subscription
   refreshToken (): void
   setDriver (driver: TokenDriver): this
-  setToken (token: Token): void
+  setToken (token: Token, isPersistent?: boolean): void
   setUser (user: U): void
   token: Token | null
   user: U | null
