@@ -266,6 +266,8 @@ describe('Test abstract model class', () => {
 
     const copy = model.clone<TestModel>()
 
+    expect(copy.getId()).toBe(model.getId())
+
     copy.set('id', 99)
 
     expect(model.getId()).not.toBe(copy.getId())
