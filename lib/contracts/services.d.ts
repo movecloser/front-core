@@ -11,7 +11,7 @@ export interface IDateTime {
 }
 export interface IDocument {
     addEventListener(name: any, handler: (this: Document, ev: any) => any, options?: any): void;
-    call(method: string, params: object): any;
+    call(method: string, params?: any[]): any;
     removeEventListener(name: any, handler: (this: Document, ev: any) => any, options?: any): void;
 }
 export interface IModal {

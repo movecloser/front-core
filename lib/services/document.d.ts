@@ -26,7 +26,7 @@ export declare class DocumentService implements IDocument {
      * @param {Array} params
      * @return any
      */
-    call(method: string, params: any[]): any;
+    call(method: string, params?: any[]): any;
     /**
      * Removes listener from document object (if defined)
      *
