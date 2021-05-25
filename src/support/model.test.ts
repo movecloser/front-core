@@ -1,4 +1,4 @@
-import { MissingPropertyError } from '../exceptions/errors'
+import { AbstractIntention } from "./intention";
 import { Model } from './model'
 
 export interface ITest {
@@ -8,11 +8,15 @@ export interface ITest {
   type?: boolean,
 }
 
+interface ITestModel {
+  getId?(): number
+}
+
 interface INested {
   name: string
 }
 
-export class TestModel extends Model<ITest> {
+export class TestModel extends Model<ITest> implements ITestModel {
   public boot (): void {
     this.initialValues = {
       id: 0,
@@ -20,6 +24,10 @@ export class TestModel extends Model<ITest> {
       value: 1
     }
     this.modelProperties = [ 'id', 'name', 'value', 'type' ]
+  }
+
+  public getId () {
+    return this._data.id
   }
 }
 
@@ -47,6 +55,26 @@ class TestModelWithNestedMany extends TestModel {
 class TestNestedModel extends Model<ITest> {
   protected boot (): void {
     this.modelProperties = [ 'name' ]
+  }
+}
+
+interface InvalidIntentionPayload {
+  firstName: string
+}
+
+class TestInvalidIntention extends AbstractIntention<InvalidIntentionPayload> {
+  protected map = {
+    firstName: 'first_name'
+  }
+}
+
+interface ValidIntentionPayload {
+  name: string
+}
+
+class TestValidIntention extends AbstractIntention<ValidIntentionPayload> {
+  protected map = {
+    name: 'name'
   }
 }
 
@@ -199,5 +227,50 @@ describe('Test abstract model class', () => {
     const toExpect: ITest = { id: 1, name: 'john', value: 12, type: true }
     const model = TestModel.create<ITest>(toExpect)
     expect({ ...model }).toEqual(toExpect)
+  })
+
+  test('Expect [applyIntention] not to accept keys not present in modelProperties', () => {
+    const model = new TestModel()
+
+    const toExpect = model.toObject()
+
+    const intention = new TestInvalidIntention({ firstName: 'test' })
+
+    model.applyIntention(intention)
+
+    expect(console.warn).toHaveBeenCalledTimes(1)
+
+    expect(model.toObject()).toEqual(toExpect)
+  })
+
+  test('Expect [applyIntention] to apply properties to model', () => {
+    const model = new TestModel()
+
+    model.set('name', 'test')
+
+    const toExpect = {
+      id: 0,
+      name: 'after test',
+      value: 1
+    }
+
+    model.applyIntention(new TestValidIntention({ name: 'after test' }))
+
+    expect(model.toObject()).toEqual(toExpect)
+  })
+
+  test('Expect [clone] to create an exact copy of the model', () => {
+    const model = new TestModel()
+
+    model.set('id', 10)
+
+    const copy = model.clone<TestModel>()
+
+    copy.set('id', 99)
+
+    expect(model.getId()).not.toBe(copy.getId())
+
+    expect(model).not.toEqual(copy)
+    expect(model === copy).toBe(false)
   })
 })

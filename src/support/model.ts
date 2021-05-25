@@ -1,5 +1,6 @@
 import { createProxy } from './proxy'
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models'
+import { IIntention } from "../contracts";
 
 /**
  * @author Kuba Fogel <kuba.foge@movecloser.pl>
@@ -30,6 +31,41 @@ export abstract class Model<T> implements IModel<T> {
   }
 
   protected abstract boot (): void
+
+  /**
+   * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
+   *
+   * @template T, Payload - model type, intention payload
+   *
+   * @param [intention] {IIntention<Payload>}
+   * @returns {IModel<T>}
+   */
+  public applyIntention<Payload extends object>(intention: IIntention<Payload>) {
+    const toModel = intention.toModel()
+
+    for (const key in toModel) {
+      if (!toModel.hasOwnProperty(key)) continue
+
+      if (!this.modelProperties.includes(key)) {
+        console.warn(`Trying to assign incompatible intention property ${key} to ${this.constructor.name}`)
+        continue
+      }
+
+      this._data[key] = toModel[key]
+    }
+  }
+
+  /**
+   * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
+   *
+   * @template T, - model type
+   *
+   * @returns {IModel<T>}
+   */
+  public clone<T>(): T {
+    // @ts-ignore
+    return new this.constructor(JSON.parse(JSON.stringify(this._data)))
+  }
 
   /**
    * Model property getter
