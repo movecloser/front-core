@@ -16,9 +16,8 @@ export abstract class AbstractToken {
    * Check if token is equipped with all necessary properties.
    * @protected
    */
-  protected checkRequiredProperties (properties: string[]) {
-    properties.forEach((key) =>  {
-      // @ts-ignore
+  protected checkRequiredProperties (properties: (keyof Token)[]) {
+    properties.forEach((key: keyof Token) =>  {
       if (!this._token.hasOwnProperty(key) || !this._token[key]) {
         throw new MissingParameter(`Property [${key}] is missing from Authorization Token.`)
       }
