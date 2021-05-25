@@ -49,10 +49,10 @@ export class Validation implements IValidation {
   /**
    * Subscribe to give form for clear events.
    */
-  onClear (form: string, callback: () => void): Subscription {
+  onClear (form: string, callback: (value: ValidationEvent) => void): Subscription {
     return this._stream$.pipe(
       filter<ValidationEvent>(event => event.form === form || event.type === ValidationEventType.Clear)
-    ).subscribe(() => callback)
+    ).subscribe(callback)
   }
 
   /**
@@ -73,9 +73,7 @@ export class Validation implements IValidation {
           // @ts-ignore
           event.errors[field] : [ event.message || this.callbackMessage ]
       })
-    ).subscribe((errors: string[]) => {
-      return callback(errors)
-    })
+    ).subscribe(callback)
   }
 
   /**
