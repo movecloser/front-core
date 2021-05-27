@@ -14,3 +14,4 @@
 * Fixed typing in the checkRequiredProperties method of the Token
 * Fixed onClear method callback in validation middleware
 * Fixed bug in the hasMany method of the Model: added additional Array.isArray() check
+* IMPORTANT! Fixed method check in get handler of the proxy - hasOwnProperty did not work
