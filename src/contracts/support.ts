@@ -23,7 +23,8 @@ export interface MappingInstruction extends MappingDriver {
 
 export enum MappingTypes {
   Adapter = 'adapter',
-  Function = 'function'
+  Function = 'function',
+  Self = 'self'
 }
 
 export interface Proxable<O> extends Object {

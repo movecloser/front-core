@@ -17,7 +17,8 @@ export interface MappingInstruction extends MappingDriver {
 }
 export declare enum MappingTypes {
     Adapter = "adapter",
-    Function = "function"
+    Function = "function",
+    Self = "self"
 }
 export interface Proxable<O> extends Object {
     __get(property: string, defaultValue: any): any;

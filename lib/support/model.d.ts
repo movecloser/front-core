@@ -1,4 +1,5 @@
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models';
+import { IIntention } from "../contracts";
 /**
  * @author Kuba Fogel <kuba.foge@movecloser.pl>
  * @version 1.0.0
@@ -14,6 +15,23 @@ export declare abstract class Model<T> implements IModel<T> {
      */
     static create<T extends object, M extends IModel<T> = IModel<T>>(payload?: ModelPayload): MagicModel<T, M>;
     protected abstract boot(): void;
+    /**
+     * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
+     *
+     * @template T, Payload - model type, intention payload
+     *
+     * @param [intention] {IIntention<Payload>}
+     * @returns {IModel<T>}
+     */
+    applyIntention<Payload extends object>(intention: IIntention<Payload>): void;
+    /**
+     * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
+     *
+     * @template T, - model type
+     *
+     * @returns {IModel<T>}
+     */
+    clone<T>(): T;
     /**
      * Model property getter
      * @param property
@@ -57,12 +75,12 @@ export declare abstract class Model<T> implements IModel<T> {
      * @param value
      * @protected
      */
-    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): import("..").Intersected<IModel<object>, object>;
+    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): import("../contracts").Intersected<IModel<object>, object>;
     /**
      * Method to get collection related to given property
      * @param model
      * @param values
      * @protected
      */
-    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): import("..").Intersected<IModel<object>, object>[];
+    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): import("../contracts").Intersected<IModel<object>, object>[];
 }

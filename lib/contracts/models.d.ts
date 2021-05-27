@@ -1,4 +1,4 @@
-import { Intersected, Proxable } from './support';
+import { IIntention, Intersected, Proxable } from './support';
 export interface ICollection<Type> extends Array<Type> {
     first(): Type | false;
     getItem(callback: (item: Type, index?: number) => boolean): Type | false;
@@ -15,6 +15,8 @@ export interface MetaPayload {
     [key: string]: any;
 }
 export interface IModel<T> extends Proxable<T> {
+    applyIntention<T, U extends object>(intention: IIntention<U>): void;
+    clone<T>(): T;
     initialValues: ModelPayload;
     get(key: string, defaultValue?: any): any;
     set(property: string, value: any): void;

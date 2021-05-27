@@ -16,7 +16,129 @@ const mappingConfig: MappingConfig = {
   }
 }
 
+const nestedMappingConfig: MappingConfig = {
+  id: 'id',
+  firstName: 'first_name',
+  lastName: 'last_name',
+  children: {
+    type: MappingTypes.Self,
+    value: 'children'
+  }
+}
+
 describe('Test adapter methods', () => {
+  test('Expect [mapModel] method to recursively map a self object', () => {
+    const toMap = {
+      id: 1,
+      first_name: 'John',
+      last_name: 'Testington',
+      children: {
+        id: 2,
+        first_name: 'Mary',
+        last_name: 'Testington',
+        children: {
+          id: 3,
+          first_name: 'Sue',
+          last_name: 'Testington',
+        }
+      }
+    }
+
+    const expected = {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Testington',
+      children: {
+        id: 2,
+        firstName: 'Mary',
+        lastName: 'Testington',
+        children: {
+          id: 3,
+          firstName: 'Sue',
+          lastName: 'Testington',
+        }
+      }
+    }
+
+    const mapped = mapModel(toMap, nestedMappingConfig, false)
+    expect(mapped).toEqual(expected)
+  })
+
+  test('Expect [mapModel] method to recursively map an array of self', () => {
+    const toMap = {
+      id: 1,
+      first_name: 'John',
+      last_name: 'Testington',
+      children: [
+        {
+          id: 2,
+          first_name: 'Mary',
+          last_name: 'Testington',
+          children: [
+            {
+              id: 3,
+              first_name: 'Sue',
+              last_name: 'Testington',
+            },
+            {
+              id: 4,
+              first_name: 'Sue',
+              last_name: 'Testington',
+            }
+          ]
+        },
+        {
+          id: 5,
+          first_name: 'Mary',
+          last_name: 'Testington',
+          children: {
+            id: 6,
+            first_name: 'Sue',
+            last_name: 'Testington',
+          }
+        }
+      ]
+    }
+
+    const expected = {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Testington',
+      children: [
+        {
+          id: 2,
+          firstName: 'Mary',
+          lastName: 'Testington',
+          children: [
+            {
+              id: 3,
+              firstName: 'Sue',
+              lastName: 'Testington',
+            },
+            {
+              id: 4,
+              firstName: 'Sue',
+              lastName: 'Testington',
+            }
+          ]
+        },
+        {
+          id: 5,
+          firstName: 'Mary',
+          lastName: 'Testington',
+          children: {
+            id: 6,
+            firstName: 'Sue',
+            lastName: 'Testington',
+          }
+        }
+      ]
+    }
+
+    const mapped = mapModel(toMap, nestedMappingConfig, false)
+    expect(mapped).toEqual(expected)
+  })
+
   test('Expect [mapModel] method to return properly mapped object (preserve: false)', () => {
     const toMap = {
       id: 1,
