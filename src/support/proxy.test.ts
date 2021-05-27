@@ -72,6 +72,10 @@ describe('New Model class', () => {
     expect(model.greeting).toEqual(textValue)
   })
 
+  test('Expect magic getter to return value', () => {
+    expect(null).toEqual(null)
+  })
+
   test('Expect function getter to return greeting', () => {
     expect(model.__get('greeting')).toEqual(textValue)
   })

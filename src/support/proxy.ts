@@ -16,16 +16,17 @@ declare global {
  * @version 1.0.0
  */
 export function createProxy<Source extends Proxable<any>, Target extends object> (target: any) {
-  // @ts-ignore
   return new Proxy<Source, Target>(target, {
     /* istanbul ignore next */
     apply (target: Source, thisArg: any, argArray?: any): any {
       return target.__invoke(...argArray)
     },
     get (target: Source, p: PropertyKey): any {
+      /* istanbul ignore next */
       if (typeof p === 'symbol') return
 
       p = String(p)
+      /* istanbul ignore next */
       if (p in (Reflect.getPrototypeOf(target) || {})) {
         return function (...arg: any) {
           // @ts-ignore
