@@ -215,10 +215,12 @@ export abstract class Model<T> implements IModel<T> {
   protected hasMany<R> (model: ModelConstructor<R>, values: ModelPayload[]) {
     const collection = []
 
-    for (const value of values) {
-      collection.push(
-        this.hasOne<R>(model, value)
-      )
+    if (Array.isArray(values)) {
+      for (const value of values) {
+        collection.push(
+            this.hasOne<R>(model, value)
+        )
+      }
     }
 
     return collection
