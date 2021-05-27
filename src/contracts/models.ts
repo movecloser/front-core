@@ -1,4 +1,4 @@
-import { Intersected, Proxable } from './support'
+import {IIntention, Intersected, Proxable} from './support'
 
 export interface ICollection<Type> extends Array<Type>{
     first (): Type|false
@@ -19,6 +19,8 @@ export interface MetaPayload {
 }
 
 export interface IModel<T> extends Proxable<T> {
+    applyIntention<T, U extends object>(intention: IIntention<U>): void
+    clone<T>(): T
     initialValues: ModelPayload
     get (key: string, defaultValue?: any): any
     set (property: string, value: any): void

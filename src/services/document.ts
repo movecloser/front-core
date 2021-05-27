@@ -1,7 +1,3 @@
-/* istanbul ignore file */
-
-// TODO: add tests and remove ignore
-
 import { IDocument } from '../contracts/services'
 
 import { Injectable } from '../container'
@@ -46,7 +42,7 @@ export class DocumentService implements IDocument {
    * @param {Array} params
    * @return any
    */
-  call (method: string, params: any[]): any {
+  call (method: string, params?: any[]): any {
     if (this._isDefined) {
       try {
         // @ts-ignore

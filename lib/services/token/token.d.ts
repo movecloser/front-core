@@ -7,7 +7,7 @@ export declare abstract class AbstractToken {
      * Check if token is equipped with all necessary properties.
      * @protected
      */
-    protected checkRequiredProperties(properties: string[]): void;
+    protected checkRequiredProperties(properties: (keyof Token)[]): void;
     /**
      * Retrieve token from storage.
      */
