@@ -27,7 +27,7 @@ export function createProxy<Source extends Proxable<any>, Target extends object>
 
       p = String(p)
       /* istanbul ignore next */
-      if (p in (Reflect.getPrototypeOf(target) || {})) {
+      if (p in (Reflect.getPrototypeOf(target) || {}) && !(p in Object.prototype)) {
         return function (...arg: any) {
           // @ts-ignore
           return target[p](...arg)
@@ -36,11 +36,11 @@ export function createProxy<Source extends Proxable<any>, Target extends object>
 
       return target.__get(p, undefined)
     },
-    getOwnPropertyDescriptor (target: Source): PropertyDescriptor | undefined {
+    getOwnPropertyDescriptor (target: Source, name: string | symbol): PropertyDescriptor | undefined {
       return {
-        value: target.__toObject(),
+        value: target.__toObject()[name],
         enumerable: true,
-        configurable: true
+        configurable: true,
       }
     },
     // @ts-ignore
