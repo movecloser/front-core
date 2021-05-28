@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { ErrorsPayload, IValidation, ValidationErrorCallback } from '../contracts/validation';
+import { ErrorsPayload, IValidation, ValidationErrorCallback, ValidationEvent } from '../contracts/validation';
 /**
  * Validation service is responsible for sending 422 response to correct form.
  *
@@ -18,7 +18,7 @@ export declare class Validation implements IValidation {
     /**
      * Subscribe to give form for clear events.
      */
-    onClear(form: string, callback: () => void): Subscription;
+    onClear(form: string, callback: (value: ValidationEvent) => void): Subscription;
     /**
      * Subscribe to give form and field for errors` events.
      */

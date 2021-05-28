@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { RoutesModuleProps } from './contracts';
 /**
  * Compose valid router path by trimming trailling slashes & prevent againts

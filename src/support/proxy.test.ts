@@ -102,4 +102,9 @@ describe('New Model class', () => {
   test('Expect static works as static', () => {
     expect(TestClass.hi('John')).toEqual('Hello John')
   })
+
+  test('Expect [hasOwnProperty] to work', () => {
+    expect(model.hasOwnProperty('greeting')).toBe(true)
+    expect(model.greeting).toBe('Hello')
+  })
 })

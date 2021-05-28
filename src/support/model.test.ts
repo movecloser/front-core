@@ -1,4 +1,5 @@
 import { AbstractIntention } from "./intention";
+import { IModel, ModelPayload } from "../contracts";
 import { Model } from './model'
 
 export interface ITest {
@@ -28,6 +29,31 @@ export class TestModel extends Model<ITest> implements ITestModel {
 
   public getId () {
     return this._data.id
+  }
+}
+
+interface IRecursive {
+  name: string
+  children: IRecursive[]
+}
+
+interface ITestRecursiveModel extends IModel<INested> {
+  getName(): string
+}
+
+class TestRecursiveModel extends Model<IRecursive> implements ITestRecursiveModel {
+  public boot (): void {
+    this.initialValues = { name: 'test name', children: [] }
+
+    this.modelProperties = [ 'name', 'children' ]
+  }
+
+  public getName(): string {
+    return this._data.name
+  }
+
+  protected relatesToChildren (values: ModelPayload[]) {
+    return this.hasMany(TestRecursiveModel, values)
   }
 }
 
@@ -274,5 +300,30 @@ describe('Test abstract model class', () => {
 
     expect(model).not.toEqual(copy)
     expect(model === copy).toBe(false)
+  })
+
+  test('Expect [hasMany] to create a relation to an array of self', () => {
+    for (const childrenType of [[], null, undefined]) {
+      const testPayload = {
+        name: 'recursive parent',
+        children: [
+          {
+            name: 'recursive child',
+            children: [
+              {
+                name: 'recursive grandchild',
+                children: childrenType
+              }
+            ]
+          }
+        ]
+      }
+
+      const testModel = new TestRecursiveModel(testPayload)
+
+      expect(testModel.get('children')[0] instanceof Model).toBe(true)
+      expect(testModel.get('children')[0].getName()).toBe('recursive child')
+      expect(testModel.get('children')[0].get('children')[0].getName()).toBe('recursive grandchild')
+    }
   })
 })

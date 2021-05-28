@@ -1,10 +1,5 @@
-import {
-  MappingConfig,
-  MappingFunction,
-  MappingInstruction,
-  MappingTypes
-} from '../contracts/support'
-import { MappingError } from '../exceptions/errors'
+import {MappingConfig, MappingFunction, MappingInstruction, MappingTypes} from '../contracts/support'
+import {MappingError} from '../exceptions/errors'
 
 /**
  * Adapter to connect api response with data model required by frontend
@@ -93,8 +88,11 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
 
     if (typeof instruction === 'object' && instruction !== null) {
       switch (instruction.type) {
+        case MappingTypes.Self:
         case MappingTypes.Adapter:
-          if (typeof instruction.map === 'undefined' || typeof instruction.value !== 'string') {
+          const mappingInstruction = instruction.type === MappingTypes.Self ? mapping : instruction.map
+
+          if (typeof mappingInstruction === 'undefined' || typeof instruction.value !== 'string') {
             throw new MappingError(
               'Invalid instruction. Map in not a MappingConfig or value is not a string.')
           }
@@ -106,12 +104,14 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
 
           if (Array.isArray(item[instruction.value])) {
             for (const i in item[instruction.value]) {
-              mapByConfig(mapped[key][i], item[instruction.value][i], instruction.map, false)
+              if (!item[instruction.value].hasOwnProperty(i)) continue
+
+              mapByConfig(mapped[key][i], item[instruction.value][i], mappingInstruction, false)
             }
             continue
           }
 
-          mapByConfig(mapped[key], item[instruction.value], instruction.map, false)
+          mapByConfig(mapped[key], item[instruction.value], mappingInstruction, false)
           continue
 
         case MappingTypes.Function:
