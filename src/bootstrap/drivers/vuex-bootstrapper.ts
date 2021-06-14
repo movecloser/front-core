@@ -14,7 +14,7 @@ export class VuexBootstrapper implements BootstrapDriver<StoreStack> {
    * @param callback
    */
   public applyModule (name: string, callback: ContainerFactory): void {
-    Object.assign(this._stack, { name: callback(this.container) })
+    Object.assign(this._stack, { [name]: callback(this.container) })
   }
 
   /**
