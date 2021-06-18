@@ -36,16 +36,18 @@ export class AuthService implements Authentication <IUser> {
     this.setDriver(_config.tokenDriver)
     this.retrieveToken()
     this.registerStorageListener()
-    this._window.onFocus(
-      () => {
-        if (this._token && this._token.calculateTokenLifetime() <= this._config.refreshThreshold) {
-          this._auth$.next({
-            type: AuthEventType.Refresh,
-            token: this._token
-          })
-        }
-      }
-    )
+    if (WindowService.isDefined) {
+      this._window.onFocus(
+          () => {
+            if (this._token && this._token.calculateTokenLifetime() <= this._config.refreshThreshold) {
+              this._auth$.next({
+                type: AuthEventType.Refresh,
+                token: this._token
+              })
+            }
+          }
+      )
+    }
   }
 
   /**
