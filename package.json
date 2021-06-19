@@ -4,7 +4,7 @@
     "type": "git",
     "url": "git@github.com:movecloser/front-core.git"
   },
-  "version": "1.0.0-rc.71",
+  "version": "1.0.0-rc.72",
   "scripts": {
     "build": "tsc",
     "coverage": "jest --config jestconfig.json --coverage",
