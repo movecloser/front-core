@@ -272,6 +272,7 @@ export class AuthService implements Authentication <IUser> {
 
         if (token === null) {
           this.deleteToken()
+          return
         }
 
         payload.type = AuthEventType.BootedWithToken

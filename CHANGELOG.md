@@ -1,7 +1,15 @@
-#Version 1.0.0-rc.70
+# Changelog
+
+## 1.0.0-rc.73 | 2021-07-17
+
+###Bugfixes:
+* Fixed case when there's no token in localStorage & app is still trying to refresh
+
+---
+
+## 1.0.0-rc.70 | 2021-05-27
 *Contributors: Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>*
 
-*27/05/2021*
 ###Changes:
 * Added clone method to the Model
 * Added applyIntention method to the Model
