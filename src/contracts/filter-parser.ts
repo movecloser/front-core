@@ -12,7 +12,8 @@ export enum FilterOperator {
   LessEqual = 'le',
   LessThan = 'lt',
   Like = 'lk',
-  NotEqual = 'ne'
+  NotEqual = 'ne',
+  NotLike = 'nl'
 }
 
 export interface FilterParams {

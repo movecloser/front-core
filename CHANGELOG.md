@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0-rc.74 | 2021-07-27
+
+###Features:
+* Add 'nl' (not like) operator to filter parser
+
+---
+
 ## 1.0.0-rc.73 | 2021-07-17
 
 ###Bugfixes:
