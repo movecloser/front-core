@@ -10,8 +10,8 @@ export declare enum FilterOperator {
     LessEqual = "le",
     LessThan = "lt",
     Like = "lk",
-    NotLike = "nl",
-    NotEqual = "ne"
+    NotEqual = "ne",
+    NotLike = "nl"
 }
 export interface FilterParams {
     conjunction?: ConjunctionOperator;
