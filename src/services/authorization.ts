@@ -244,10 +244,21 @@ export class AuthService implements Authentication <IUser> {
           return
         }
 
-        const newToken = new this._driver( this._driver.recreateFromStorage(this._config.tokenName))
+        try {
+          const token = this._driver.recreateFromStorage(this._config.tokenName)
 
-        if (newToken && newToken!.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
-          this.setToken(newToken.token)
+          if (token === null) {
+            this.deleteToken()
+            return
+          }
+
+          const newToken = new this._driver(token)
+
+          if (newToken && newToken!.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
+            this.setToken(newToken.token)
+          }
+        } catch (error) {
+          this.deleteToken()
         }
       })
     }
@@ -318,7 +329,14 @@ export class AuthService implements Authentication <IUser> {
       throw new Error('Token Driver not set.')
     }
 
-    const storageToken = new this._driver( this._driver.recreateFromStorage(this._config.tokenName))
+    const localStorageValue = this._driver.recreateFromStorage(this._config.tokenName)
+
+    if (localStorageValue === null) {
+      this.deleteToken()
+      return
+    }
+
+    const storageToken = new this._driver(localStorageValue)
     const storageTokenLifetime = storageToken.calculateTokenLifetime()
     const tokenLifeTime = token.calculateTokenLifetime()
 
