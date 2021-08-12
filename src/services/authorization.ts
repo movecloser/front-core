@@ -234,7 +234,7 @@ export class AuthService implements Authentication <IUser> {
   }
 
   /**
-   * Tries to parse value stored in local storage under this._config.tokenNam,
+   * Tries to parse value stored in local storage under this._config.tokenName key,
    * deletes token and returns null if it can't
    */
   protected parseLocalStorageValue (): Token | null {
