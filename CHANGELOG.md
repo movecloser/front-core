@@ -6,6 +6,7 @@
 * Token: Fixed abstract token constructor arguments types
 * AuthService: Handled the case where the value in local storage was falsy
 * AuthService: Created parseLocalStorageValue method and caught exceptions thrown by it
+* AuthMiddleware: Changed condition to allow turning off `Authorization` header
 
 ---
 
