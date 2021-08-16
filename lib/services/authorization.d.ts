@@ -64,8 +64,7 @@ export declare class AuthService implements Authentication<IUser> {
      */
     protected isTokenValid(tokenLifeTime: number): boolean;
     /**
-     * Tries to parse value stored in local storage under this._config.tokenName key,
-     * deletes token and returns null if it can't
+     * Tries to parse value stored in local storage under this._config.tokenName key
      */
     protected parseLocalStorageValue(): Token;
     /**
