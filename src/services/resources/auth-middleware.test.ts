@@ -7,7 +7,7 @@ import { AuthMiddleware } from './auth-middleware'
 
 describe('Test auth middleware', () => {
   class TestAuthService implements AuthProvider {
-    public check = () => false;
+    public check = () => true;
     public getAuthorizationHeader = () => {
       return { Authorization: 'test-auth-token' }
     }
@@ -21,7 +21,8 @@ describe('Test auth middleware', () => {
   })
 
   test('Expect [beforeCall] to return modified headers', () => {
-    const authSpy = jest.spyOn(authService, 'getAuthorizationHeader')
+    const checkSpy = jest.spyOn(authService, 'check')
+    const headerSpy = jest.spyOn(authService, 'getAuthorizationHeader')
     const testResource: FoundResource = {
       connection: 'test',
       url: '/',
@@ -35,9 +36,32 @@ describe('Test auth middleware', () => {
 
     const { headers, body } = authMiddleware.beforeCall(testResource, testHeaders, testBody)
 
-    expect(authSpy).toHaveBeenCalledTimes(1)
+    expect(checkSpy).toHaveBeenCalledTimes(1)
+    expect(headerSpy).toHaveBeenCalledTimes(1)
     expect(headers).toHaveProperty('test')
     expect(headers).toHaveProperty('Authorization')
+    expect(body).toEqual(testBody)
+  })
+
+  test('Expect [beforeCall] to do nothing even if auth set to true', () => {
+    authService.check = () => false
+    const headerSpy = jest.spyOn(authService, 'getAuthorizationHeader')
+
+    const testResource: FoundResource = {
+      connection: 'test',
+      url: '/',
+      method: Methods.Get,
+      shorthand: 'testResource',
+      auth: true,
+      meta: {}
+    }
+    const testHeaders: Headers = { test: 'true' }
+    const testBody: Payload = {}
+
+    const { headers, body } = authMiddleware.beforeCall(testResource, testHeaders, testBody)
+
+    expect(headerSpy).toHaveBeenCalledTimes(0)
+    expect(headers).toEqual(testHeaders)
     expect(body).toEqual(testBody)
   })
 
