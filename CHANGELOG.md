@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-rc.75 | 2021-08-16
+
+###Bugfixes:
+* Token: Fixed abstract token constructor arguments types
+* AuthService: Handled the case where the value in local storage was falsy
+* AuthService: Created parseLocalStorageValue method and caught exceptions thrown by it
+
+---
+
 ## 1.0.0-rc.74 | 2021-07-27
 
 ###Features:

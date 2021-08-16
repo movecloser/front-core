@@ -234,6 +234,20 @@ export class AuthService implements Authentication <IUser> {
   }
 
   /**
+   * Tries to parse value stored in local storage under this._config.tokenName key,
+   * deletes token and returns null if it can't
+   */
+  protected parseLocalStorageValue (): Token {
+    const localStorageValue = this._driver?.recreateFromStorage(this._config.tokenName)
+
+    if (!localStorageValue) {
+      throw new Error('Incorrect value in local storage')
+    }
+
+    return localStorageValue
+  }
+
+  /**
    * Listens to storage change.
    * When new Token appears in other browser tab.
    */
@@ -244,10 +258,15 @@ export class AuthService implements Authentication <IUser> {
           return
         }
 
-        const newToken = new this._driver( this._driver.recreateFromStorage(this._config.tokenName))
+        try {
+          const localStorageValue = this.parseLocalStorageValue()
+          const newToken = new this._driver(localStorageValue)
 
-        if (newToken && newToken!.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
-          this.setToken(newToken.token)
+          if (newToken && newToken!.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
+            this.setToken(newToken.token)
+          }
+        } catch (error) {
+          this.deleteToken()
         }
       })
     }
@@ -268,15 +287,10 @@ export class AuthService implements Authentication <IUser> {
       }
 
       try {
-        const token = this._driver.recreateFromStorage(this._config.tokenName)
-
-        if (token === null) {
-          this.deleteToken()
-          return
-        }
+        const localStorageValue = this.parseLocalStorageValue()
 
         payload.type = AuthEventType.BootedWithToken
-        payload.token = new this._driver(token)
+        payload.token = new this._driver(localStorageValue)
         /* istanbul ignore next */
       } catch (error) {
         this.deleteToken()
@@ -318,19 +332,24 @@ export class AuthService implements Authentication <IUser> {
       throw new Error('Token Driver not set.')
     }
 
-    const storageToken = new this._driver( this._driver.recreateFromStorage(this._config.tokenName))
-    const storageTokenLifetime = storageToken.calculateTokenLifetime()
-    const tokenLifeTime = token.calculateTokenLifetime()
+    try {
+      const localStorageValue = this.parseLocalStorageValue()
+      const storageToken = new this._driver(localStorageValue)
+      const storageTokenLifetime = storageToken.calculateTokenLifetime()
+      const tokenLifeTime = token.calculateTokenLifetime()
 
-    if (storageToken && storageTokenLifetime > tokenLifeTime) {
-      this.setToken(storageToken.token)
-    } else {
-      if (this._window.isActive) {
-        this._auth$.next({
-          type: AuthEventType.Refresh,
-          token: token
-        })
+      if (storageToken && storageTokenLifetime > tokenLifeTime) {
+        this.setToken(storageToken.token)
+      } else {
+        if (this._window.isActive) {
+          this._auth$.next({
+            type: AuthEventType.Refresh,
+            token: token
+          })
+        }
       }
+    } catch (error) {
+      this.deleteToken()
     }
   }
 }

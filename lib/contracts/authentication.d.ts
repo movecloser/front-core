@@ -46,7 +46,7 @@ export interface Token {
     refreshToken?: string;
 }
 export interface ITokenConstructor {
-    new (...args: any[]): IToken;
+    new (payload: Token): IToken;
     recreateFromStorage(tokenName: string): Token | null;
 }
 export interface IToken {
