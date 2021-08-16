@@ -4,7 +4,6 @@ import { AuthConfig, AuthEvent, IWindow, TokenDriver } from '../contracts'
 import { MissingParameter } from '../exceptions/errors'
 
 import { AuthService } from './authorization'
-import { DateTime } from './datetime'
 
 describe('Test AuthService class.', () => {
   const config: AuthConfig = {
@@ -52,7 +51,7 @@ describe('Test AuthService class.', () => {
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
       tokenType: 'Bearer',
-    }, new DateTime())
+    })
 
     const result = auth.check()
 
@@ -66,7 +65,7 @@ describe('Test AuthService class.', () => {
       accessToken: 'test-token',
       expiresAt: null,
       tokenType: 'Bearer',
-    }, new DateTime())
+    })
     const result = auth.check()
 
     expect(result).toBe(true)
@@ -80,8 +79,8 @@ describe('Test AuthService class.', () => {
     auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
-      tokenType: 'Bearer',
-    }, new DateTime())
+      tokenType: 'Bearer'
+    })
     // @ts-ignore
     auth._user = {}
 
@@ -101,7 +100,7 @@ describe('Test AuthService class.', () => {
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
       tokenType: 'Bearer',
-    }, new DateTime())
+    })
 
     const result = auth.getAuthorizationHeader()
 
@@ -114,7 +113,7 @@ describe('Test AuthService class.', () => {
     auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
-    }, new DateTime())
+    })
 
     const result = auth.getAuthorizationHeader()
 
