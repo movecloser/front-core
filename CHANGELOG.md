@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-rc.76 | 2021.09.02
+
+###Improvements:
+
+* Changed adapter log level.
+
+---
+
 ## 1.0.0-rc.75 | 2021-08-16
 
 ###Bugfixes:

@@ -98,7 +98,7 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
           }
 
           if (item[instruction.value] === undefined) {
-            console.warn(`Adapter is SKIPPING field. Key [${instruction.value}] is not present in provided item: `, item)
+            console.debug(`Adapter is SKIPPING field. Key [${instruction.value}] is not present in provided item: `, item)
             continue
           }
 
