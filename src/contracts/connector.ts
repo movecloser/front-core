@@ -8,7 +8,7 @@ export const ApiConnectorFactory = Symbol.for('ApiConnectorFactory')
 export type ConnectorFactory = () => IConnector
 
 export interface ConnectorMiddleware {
-  afterCall: (response: IResponse) => void
+  afterCall: (response: IResponse, resource: FoundResource) => void
   beforeCall: (
     resource: FoundResource,
     headers: Headers,
