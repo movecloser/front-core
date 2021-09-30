@@ -60,7 +60,7 @@ export class ApiConnector implements IConnector {
     )
 
     for (const middleware of this._middlewares) {
-      middleware.afterCall(response)
+      middleware.afterCall(response, res)
     }
 
     return response
