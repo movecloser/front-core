@@ -4,7 +4,7 @@ export declare const ApiConnectorType: unique symbol;
 export declare const ApiConnectorFactory: unique symbol;
 export declare type ConnectorFactory = () => IConnector;
 export interface ConnectorMiddleware {
-    afterCall: (response: IResponse) => void;
+    afterCall: (response: IResponse, resource: FoundResource) => void;
     beforeCall: (resource: FoundResource, headers: Headers, body: Payload) => ({
         headers: Headers;
         body: Payload;
