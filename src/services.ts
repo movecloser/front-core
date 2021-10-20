@@ -6,7 +6,7 @@ import {
   IConnector
 } from './contracts/connector'
 import {
-  AuthMiddleareType,
+  AuthMiddlewareType,
   EventbusMiddlewareType,
   InternalServerErrorMiddlewareType,
   ValidationMiddlewareType
@@ -77,7 +77,7 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
 
     // Authentication
     if (config.has('auth')) {
-      bind<ConnectorMiddleware>(AuthMiddleareType).toDynamicValue((context: Interfaces.Context) => {
+      bind<ConnectorMiddleware>(AuthMiddlewareType).toDynamicValue((context: Interfaces.Context) => {
         return new AuthMiddleware(
           context.container.get<AuthProvider>(AuthServiceType)
         )

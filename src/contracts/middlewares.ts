@@ -1,4 +1,4 @@
-export const AuthMiddleareType: symbol = Symbol.for('AuthMiddleware')
+export const AuthMiddlewareType: symbol = Symbol.for('AuthMiddleware')
 
 export const EventbusMiddlewareType: symbol = Symbol.for('EventbusMiddleware')
 
