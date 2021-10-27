@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /* istanbul ignore file */
 
 // TODO: add tests and remove ignore
@@ -187,12 +191,12 @@ export class WindowService implements IWindow {
    */
   private registerTabListeners (): void {
     window.addEventListener('focus', () => {
-      this.isActive = true;
-    });
+      this.isActive = true
+    })
 
     window.addEventListener('blur', () => {
-      this.isActive = false;
-    });
+      this.isActive = false
+    })
   }
 
   /**
@@ -202,7 +206,7 @@ export class WindowService implements IWindow {
   public onFocus (callback: () => void): void {
     window.addEventListener('focus', () => {
       callback()
-    });
+    })
   }
 
   /**

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 
 import { FoundResource } from '../../contracts/connector'
@@ -8,7 +12,7 @@ import { InternalServerErrorMiddleware } from './internal-server-error-middlewar
 
 describe('Test internal server error middleware', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
   })
 
   const errorMiddleware = new InternalServerErrorMiddleware()
@@ -65,6 +69,6 @@ describe('Test internal server error middleware', () => {
     } catch (err) {
       error = err
     }
-    expect(typeof error).toBe("undefined")
+    expect(typeof error).toBe('undefined')
   })
 })

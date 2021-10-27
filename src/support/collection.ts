@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { ICollection, IMeta, MetaPayload } from '../contracts/models'
 
 /**
@@ -13,7 +17,7 @@ export class Collection<T> extends Array<T> implements ICollection<T> {
   /* istanbul ignore next */
   constructor (items?: T[], meta?: IMeta) {
     super(0)
-    Object.setPrototypeOf(this, Object.create(Collection.prototype));
+    Object.setPrototypeOf(this, Object.create(Collection.prototype))
 
     if (items) {
       this.push(...items)

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /* istanbul ignore file */
 
 import { BootstrapDriver, ContainerFactory, StoreStack } from '../../contracts/bootstrapper'
@@ -6,7 +10,8 @@ import { Container } from '../../container'
 export class VuexBootstrapper implements BootstrapDriver<StoreStack> {
   private _stack: StoreStack = {}
 
-  constructor (private container: Container) {}
+  constructor (private container: Container) {
+  }
 
   /**
    * Applies callback to bootstrapper stack.

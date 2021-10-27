@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { ConnectorFactory, IConnector } from '../contracts/connector';
 import { ICollection, IMeta, IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models';
 import { MappingConfig } from '../contracts/support';
@@ -17,9 +21,9 @@ export declare abstract class Repository<MData extends object, MClass extends IM
     /**
      * Compose collection based on mapping settings.
      */
-    protected composeCollection(rawCollection: any[], modelConstructor: ModelConstructor<MData, MClass>, meta: IMeta): ICollection<MagicModel<MData, MClass>>;
+    protected composeCollection<Data extends object = MData, Class extends IModel<Data> = IModel<Data>>(rawCollection: any[], modelConstructor: ModelConstructor<Data, Class>, meta: IMeta): ICollection<MagicModel<Data, Class>>;
     /**
      * Compose model based on mapping settings.
      */
-    protected composeModel(rawModel: ModelPayload, modelConstructor: ModelConstructor<MData, MClass>): MagicModel<MData, MClass>;
+    protected composeModel<Data extends object = MData, Class extends IModel<Data> = IModel<Data>>(rawModel: ModelPayload, modelConstructor: ModelConstructor<Data, Class>): MagicModel<Data, Class>;
 }

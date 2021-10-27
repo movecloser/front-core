@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Headers, IResponse, List, Payload } from '../../contracts/http'
 
 /**
@@ -8,7 +12,7 @@ import { Headers, IResponse, List, Payload } from '../../contracts/http'
  */
 export class Response implements IResponse {
   public readonly data: Payload
-  public readonly errors: Payload|List|null
+  public readonly errors: Payload | List | null
   public readonly headers: Headers
   public readonly status: number
 
@@ -16,7 +20,7 @@ export class Response implements IResponse {
     status: number,
     data: Payload,
     headers: Headers = {},
-    errors: Payload|List|null = null
+    errors: Payload | List | null = null
   ) {
     this.status = status
     this.data = data

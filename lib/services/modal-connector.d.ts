@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { BehaviorSubject } from 'rxjs';
 import { IModal, ModalConfig, ModalPayload, ModalRegistry, ModalState } from '../contracts';
 export declare class ModalConnector implements IModal {
@@ -51,6 +55,10 @@ export declare class ModalConnector implements IModal {
      * Returns payload of currently opened modal.
      */
     get payload(): ModalPayload;
+    /**
+     * Allow to register new modals.
+     */
+    register<C>(register: ModalRegistry<C>): void;
     /**
      * Method to subscribe for modals stream.
      * @param callback

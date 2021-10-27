@@ -1,10 +1,14 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { IToken, Token } from '../../contracts'
 import { AbstractToken } from './token'
 
 /**
  * Double Token Driver Class
  */
-export class DoubleToken  extends AbstractToken implements IToken {
+export class DoubleToken extends AbstractToken implements IToken {
   constructor (token: Token) {
     super(token)
 

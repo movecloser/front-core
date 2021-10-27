@@ -1,13 +1,17 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { AuthProvider } from '../../contracts/authentication'
 import { FoundResource } from '../../contracts/connector'
-import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
+import { Headers, Methods, Payload } from '../../contracts/http'
 
 import { AuthMiddleware } from './auth-middleware'
 
 describe('Test auth middleware', () => {
   class TestAuthService implements AuthProvider {
-    public check = () => true;
+    public check = () => true
     public getAuthorizationHeader = () => {
       return { Authorization: 'test-auth-token' }
     }
@@ -17,7 +21,7 @@ describe('Test auth middleware', () => {
   const authMiddleware = new AuthMiddleware(authService)
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
   })
 
   test('Expect [beforeCall] to return modified headers', () => {
@@ -85,16 +89,7 @@ describe('Test auth middleware', () => {
 
   test('Expect [afterCall]', () => {
     const authSpy = jest.spyOn(authMiddleware, 'afterCall')
-    const testResponse: IResponse = {
-      data: {},
-      errors: null,
-      headers: {},
-      status: 200,
-      hasErrors: () => false,
-      isSuccessful: () => true
-    }
-
-    const result = authMiddleware.afterCall(testResponse)
+    const result = authMiddleware.afterCall()
 
     expect(authSpy).toHaveBeenCalledTimes(1)
     expect(result).toEqual(undefined)

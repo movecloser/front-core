@@ -1,7 +1,11 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
-import { RunHelpers } from "rxjs/internal/testing/TestScheduler";
+import { RunHelpers } from 'rxjs/internal/testing/TestScheduler'
 import { Subscription } from 'rxjs'
-import { TestScheduler } from "rxjs/testing";
+import { TestScheduler } from 'rxjs/testing'
 
 import { IValidation, ValidationEventType } from '../contracts/validation'
 import { Validation } from './validation'
@@ -10,7 +14,8 @@ const testScheduler = new TestScheduler((actual, expected) => {
   expect(actual).toEqual(expected)
 })
 
-const noop = () => {}
+const noop = () => {
+}
 
 describe('Tests for Validation service', () => {
   const validation: IValidation = new Validation()
@@ -47,7 +52,7 @@ describe('Tests for Validation service', () => {
     testScheduler.run((helpers: RunHelpers) => {
       const { expectObservable } = helpers
 
-      const values = { a: { form: formName, type: ValidationEventType.Clear  } }
+      const values = { a: { form: formName, type: ValidationEventType.Clear } }
 
       const expectedObservable = 'a'
 
@@ -91,7 +96,7 @@ describe('Tests for Validation service', () => {
 
     const callback = jest.fn()
 
-    const subscription =  validation.onErrors(formName, fieldName1, callback)
+    const subscription = validation.onErrors(formName, fieldName1, callback)
 
     validation.pushErrors(formName, formErrors)
 
@@ -179,7 +184,7 @@ describe('Tests for Validation service', () => {
 
     const callback = jest.fn()
 
-    const subscription =  validation.onFormErrors(formName, callback)
+    const subscription = validation.onFormErrors(formName, callback)
 
     validation.pushErrors(formName, formErrors)
 
@@ -201,7 +206,7 @@ describe('Tests for Validation service', () => {
     const formName = getFormName()
     const callback = jest.fn()
 
-    const subscription =  validation.onFormErrors(formName, callback)
+    const subscription = validation.onFormErrors(formName, callback)
 
     const event = {
       form: formName,

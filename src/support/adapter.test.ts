@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { MappingConfig, MappingTypes } from '../contracts/support'
 import { MappingError } from '../exceptions/errors'
 
@@ -13,7 +17,8 @@ const mappingConfig: MappingConfig = {
     value: (item: any): any => {
       return `${item['first_name']} ${item['last_name']}`
     }
-  }
+  },
+  permissions: 'roles'
 }
 
 const nestedMappingConfig: MappingConfig = {
@@ -39,7 +44,7 @@ describe('Test adapter methods', () => {
         children: {
           id: 3,
           first_name: 'Sue',
-          last_name: 'Testington',
+          last_name: 'Testington'
         }
       }
     }
@@ -55,7 +60,7 @@ describe('Test adapter methods', () => {
         children: {
           id: 3,
           firstName: 'Sue',
-          lastName: 'Testington',
+          lastName: 'Testington'
         }
       }
     }
@@ -78,12 +83,12 @@ describe('Test adapter methods', () => {
             {
               id: 3,
               first_name: 'Sue',
-              last_name: 'Testington',
+              last_name: 'Testington'
             },
             {
               id: 4,
               first_name: 'Sue',
-              last_name: 'Testington',
+              last_name: 'Testington'
             }
           ]
         },
@@ -94,7 +99,7 @@ describe('Test adapter methods', () => {
           children: {
             id: 6,
             first_name: 'Sue',
-            last_name: 'Testington',
+            last_name: 'Testington'
           }
         }
       ]
@@ -113,12 +118,12 @@ describe('Test adapter methods', () => {
             {
               id: 3,
               firstName: 'Sue',
-              lastName: 'Testington',
+              lastName: 'Testington'
             },
             {
               id: 4,
               firstName: 'Sue',
-              lastName: 'Testington',
+              lastName: 'Testington'
             }
           ]
         },
@@ -129,7 +134,7 @@ describe('Test adapter methods', () => {
           children: {
             id: 6,
             firstName: 'Sue',
-            lastName: 'Testington',
+            lastName: 'Testington'
           }
         }
       ]
@@ -143,13 +148,21 @@ describe('Test adapter methods', () => {
     const toMap = {
       id: 1,
       first_name: 'John',
-      last_name: 'Testington'
+      last_name: 'Testington',
+      roles: {
+        alpha: true,
+        beta: true
+      }
     }
     const expectedWithoutPreserve = {
       id: 1,
       firstName: 'John',
       lastName: 'Testington',
-      fullName: 'John Testington'
+      fullName: 'John Testington',
+      permissions: {
+        alpha: true,
+        beta: true
+      }
     }
     const mapped = mapModel(toMap, mappingConfig, false)
 
@@ -383,7 +396,7 @@ describe('Test adapter methods', () => {
   })
 
   test('Expect [mapModel] to skip nested mapping when key does not match with original object.', () => {
-    console.warn = jest.fn()
+    console.debug = jest.fn()
 
     const toMap = {
       type: 'photo_gallery',
@@ -424,8 +437,8 @@ describe('Test adapter methods', () => {
 
     expect(mapped).toEqual(expected)
     // @ts-ignore
-    expect(console.warn.mock.calls.length).toEqual(1)
-    expect(console.warn).toHaveBeenCalledTimes(1)
+    expect(console.debug.mock.calls.length).toEqual(1)
+    expect(console.debug).toHaveBeenCalledTimes(1)
   })
 
   test('Expect [mapModel] to throw MappingError when mapping adapter is incomplete.', () => {
@@ -520,7 +533,7 @@ describe('Test adapter methods', () => {
       ]
     }
     const intention = new TestIntention(payload)
-    const result = { types: [ 1, 2, 3 ] }
+    const result = { types: [1, 2, 3] }
 
     expect(intention.toRequest()).toEqual(result)
   })

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { AsyncContainerModule, Container as Inversify, ContainerModule, interfaces } from 'inversify'
 import { IContainer, ContainerOptions } from './contracts/container'
 
@@ -39,8 +43,9 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
    * Returns instance of Service by it's identifier.
    * @param identifier
    */
+
   /* istanbul ignore next */
-  public get<ServiceContract>(identifier: any): ServiceContract {
+  public get<ServiceContract> (identifier: any): ServiceContract {
     return this.container.get<ServiceContract>(identifier)
   }
 

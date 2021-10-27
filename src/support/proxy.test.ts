@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { ModelPayload } from '../contracts/models'
 import { Intersected, Proxable } from '../contracts/support'
 
@@ -5,13 +9,13 @@ import { createProxy } from './proxy'
 
 interface TestContract {
   getPerson (): string
-  hello(): string
+  hello (): string
   setPerson (person: string): void
 }
 
 interface TestData extends ModelPayload {
   greeting: string
-  person: string|null
+  person: string | null
 }
 
 const textValue = 'Hello'
@@ -24,7 +28,7 @@ class TestClass implements Proxable<TestData>, TestContract {
     person: null
   }
 
-  public static hi(person: string): string {
+  public static hi (person: string): string {
     const me = new this
     me.__set('person', person)
     return me.hello()
@@ -34,7 +38,7 @@ class TestClass implements Proxable<TestData>, TestContract {
     return this.data.person || ''
   }
 
-  hello(): string {
+  hello (): string {
     return `${this.data.greeting} ${this.data.person}`
   }
 
@@ -52,11 +56,11 @@ class TestClass implements Proxable<TestData>, TestContract {
 
   public __set (property: string, value: any): boolean {
     this.data[property] = value
-    return true;
+    return true
   }
 
   public __toObject (): TestData {
-    return this.data;
+    return this.data
   }
 }
 

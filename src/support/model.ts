@@ -1,6 +1,10 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { createProxy } from './proxy'
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models'
-import { IIntention } from "../contracts";
+import { IIntention } from '../contracts'
 
 /**
  * @author Kuba Fogel <kuba.foge@movecloser.pl>
@@ -14,7 +18,7 @@ export abstract class Model<T> implements IModel<T> {
   constructor (payload: ModelPayload = {}) {
     this.boot()
 
-    for (const [ key, value ] of Object.entries(payload)) {
+    for (const [key, value] of Object.entries(payload)) {
       this.__set(key, value)
     }
   }
@@ -40,7 +44,7 @@ export abstract class Model<T> implements IModel<T> {
    * @param [intention] {IIntention<Payload>}
    * @returns {IModel<T>}
    */
-  public applyIntention<Payload extends object>(intention: IIntention<Payload>) {
+  public applyIntention<Payload extends object> (intention: IIntention<Payload>) {
     const toModel = intention.toModel()
 
     for (const key in toModel) {
@@ -62,7 +66,7 @@ export abstract class Model<T> implements IModel<T> {
    *
    * @returns {IModel<T>}
    */
-  public clone<T>(): T {
+  public clone<T> (): T {
     // @ts-ignore
     return new this.constructor(JSON.parse(JSON.stringify(this._data)))
   }
@@ -88,7 +92,7 @@ export abstract class Model<T> implements IModel<T> {
       ...payload
     }
 
-    for (const [ key, value ] of Object.entries(mappedPayload)) {
+    for (const [key, value] of Object.entries(mappedPayload)) {
       model.set(key, value === undefined ? model.initialValues[key] : value)
     }
 
@@ -167,7 +171,7 @@ export abstract class Model<T> implements IModel<T> {
       ...this.initialValues
     }
 
-    for (const [ key, value ] of Object.entries(this._data)) {
+    for (const [key, value] of Object.entries(this._data)) {
       // TODO: Test it.
       if (Array.isArray(value)) {
         const collection: any[] = []
@@ -218,7 +222,7 @@ export abstract class Model<T> implements IModel<T> {
     if (Array.isArray(values)) {
       for (const value of values) {
         collection.push(
-            this.hasOne<R>(model, value)
+          this.hasOne<R>(model, value)
         )
       }
     }

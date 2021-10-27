@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import { RoutesFactoryProps } from './contracts';
 /**
  * This component uses provided map to print out a module routing.

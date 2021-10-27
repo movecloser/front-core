@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { Subscription } from 'rxjs'
 
@@ -11,8 +15,8 @@ describe('Tests for Eventbus service.', () => {
    * All mocks should be cleared after each test.
    */
   afterEach(() => {
-    jest.useFakeTimers();
-    jest.clearAllMocks();
+    jest.useFakeTimers()
+    jest.clearAllMocks()
   })
 
   /**
@@ -68,7 +72,7 @@ describe('Tests for Eventbus service.', () => {
 
     // @ts-ignore
     expect('test:event-log').toBe(event.name)
-    expect(consoleSpy).toHaveBeenCalledWith("Event: test:event-log", null)
+    expect(consoleSpy).toHaveBeenCalledWith('Event: test:event-log', null)
 
     process.env.APP_EVENT_LOG = 'false'
   })

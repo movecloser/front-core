@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { FoundResource } from '../../contracts/connector'
 import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
@@ -62,6 +66,6 @@ describe('Test eventbus middleware', () => {
     } catch (err) {
       error = err
     }
-    expect(typeof error).toBe("undefined")
+    expect(typeof error).toBe('undefined')
   })
 })

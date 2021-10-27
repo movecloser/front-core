@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Subscription } from 'rxjs'
 
 export interface AuthConfig {
@@ -50,20 +54,20 @@ export interface IUser {
 
 export interface Token {
   accessToken: string
-  expiresAt: string|null
+  expiresAt: string | null
   tokenType: string
   refreshToken?: string
 }
 
 export interface ITokenConstructor {
-  new(payload: Token): IToken
-  recreateFromStorage(tokenName: string): Token | null
+  new (payload: Token): IToken
+  recreateFromStorage (tokenName: string): Token | null
 }
 
 export interface IToken {
   accessToken: string
-  calculateTokenLifetime(): number
-  isRefreshable(): boolean
+  calculateTokenLifetime (): number
+  isRefreshable (): boolean
   refreshToken: string
   token: Token
 }

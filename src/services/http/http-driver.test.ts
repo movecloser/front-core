@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 
 import { Headers, IResponse, Payload } from '../../contracts/http'
@@ -29,12 +33,12 @@ describe('Test HttpDriver class', () => {
 
   beforeEach(() => {
     console.log = jest.fn()
-  });
+  })
 
   afterEach(() => {
     jest.clearAllMocks()
     console.log = log
-  });
+  })
 
   test('Expect [_logResponse] to log', () => {
     const consoleSpy = jest.spyOn(console, 'log')

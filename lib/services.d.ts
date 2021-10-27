@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { ProvidersFactory } from './contracts/bootstrapper';
 import { ApiConnector } from './services/connector';
 import { AuthMiddleware } from './services/resources/auth-middleware';
@@ -18,5 +22,5 @@ import { ModalConnector } from './services/modal-connector';
  * @licence MIT
  */
 export declare const services: ProvidersFactory;
-export { ApiConnector, Authentication, AuthMiddleware, AuthService, DateTime, DocumentService, Eventbus, EventbusMiddleware, HttpConnector, InternalServerErrorMiddleware, ModalConnector, Validation, ValidationMiddleware, WindowService, };
+export { ApiConnector, Authentication, AuthMiddleware, AuthService, DateTime, DocumentService, Eventbus, EventbusMiddleware, HttpConnector, InternalServerErrorMiddleware, ModalConnector, Validation, ValidationMiddleware, WindowService };
 export default services;

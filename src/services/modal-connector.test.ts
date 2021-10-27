@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 
 import ModalConnector from './modal-connector'
@@ -10,9 +14,9 @@ describe('Tests for ModalConnector service.', () => {
   let connector = new ModalConnector(registry)
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
     connector = new ModalConnector(registry)
-  });
+  })
 
   test('Expect [close] method to trigger events.', () => {
     // @ts-ignore
@@ -179,7 +183,13 @@ describe('Tests for ModalConnector service.', () => {
   test('Expect [getRegistry] method to work.', () => {
     const result = connector.getRegistry<any>()
 
-    expect(result).toEqual({"testModal": {}})
+    expect(result).toEqual({ 'testModal': {} })
+  })
+
+  test('Expect [register] to add new modal definition.', () => {
+    connector.register<any>({ 'newModal': {} })
+
+    expect(connector.getRegistry<any>()).toEqual({ 'testModal': {}, 'newModal': {} })
   })
 
   test('Expect [subscribe] method to work.', () => {

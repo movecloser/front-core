@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { Observable, of } from 'rxjs'
 
@@ -6,7 +10,9 @@ import { StreamList } from '../contracts/services'
 import { IncorrectValueError } from '../exceptions/errors'
 import { StreamBus } from './streambus'
 
-const testStreamFactory = function (): Observable<number> { return of(1, 2, 3) }
+const testStreamFactory = function (): Observable<number> {
+  return of(1, 2, 3)
+}
 const streams: StreamList = { 'test$': testStreamFactory }
 const streamBus = new StreamBus(streams)
 
@@ -36,13 +42,15 @@ describe('Tests for Streambus service.', () => {
 
     try {
       stream = streamBus.get('incorrectTest$')
-    } catch(err) {
+    } catch (err) {
       error = err
     }
 
     expect(stream).toBeFalsy()
     expect(error).toBeInstanceOf(IncorrectValueError)
-    expect(() => { throw error }).toThrow(IncorrectValueError)
+    expect(() => {
+      throw error
+    }).toThrow(IncorrectValueError)
   })
 
   /**
@@ -60,13 +68,15 @@ describe('Tests for Streambus service.', () => {
 
     try {
       stream = streamBus.register('newStream$', testStreamFactory)
-    } catch(err) {
+    } catch (err) {
       error = err
     }
 
     expect(stream).toBeFalsy()
     expect(error).toBeInstanceOf(IncorrectValueError)
-    expect(() => { throw error }).toThrow(IncorrectValueError)
+    expect(() => {
+      throw error
+    }).toThrow(IncorrectValueError)
   })
 
   test('Expect [register] to return true when new already registered.', () => {

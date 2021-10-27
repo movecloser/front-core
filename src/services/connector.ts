@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import {
   ConnectorMiddleware,
   FoundResource,
@@ -116,7 +120,7 @@ export class ApiConnector implements IConnector {
     if (endpoint.hasOwnProperty('params') && typeof endpoint.params !== 'undefined') {
       ApiConnector.checkIfAllParamsProvided(endpoint.params, params)
 
-      for (const [ key, value ] of Object.entries(params)) {
+      for (const [key, value] of Object.entries(params)) {
         url = url.replace(`{${key}}`, value as string)
       }
     }

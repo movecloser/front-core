@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { FoundResource } from '../../contracts/connector'
 import { Headers, IResponse, Methods, Payload } from '../../contracts/http'
@@ -10,7 +14,7 @@ describe('Test validation middleware', () => {
   const validationMiddleware = new ValidationMiddleware(validationService)
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
   })
 
   test('Expect [beforeCall] to register formName.', () => {
@@ -86,7 +90,7 @@ describe('Test validation middleware', () => {
     validationMiddleware.afterCall(testResponse)
 
     expect(pushErrorsSpy).toBeCalledTimes(1)
-    expect(pushErrorsSpy).toBeCalledWith("formName", {}, "true")
+    expect(pushErrorsSpy).toBeCalledWith('formName', {}, 'true')
   })
 
   test('Expect [afterCall] to do nothing.', () => {

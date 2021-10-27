@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /* istanbul ignore file */
 
 import { Container } from '../../container'
@@ -12,7 +16,8 @@ import { ModuleRoute } from '../../platforms/react'
 export class ReactRouterBootstrapper implements BootstrapDriver<StoreStack> {
   private _stack: RoutesStack = []
 
-  constructor (private container: Container) {}
+  constructor (private container: Container) {
+  }
 
   /**
    * Applies callback to bootstrapper stack.

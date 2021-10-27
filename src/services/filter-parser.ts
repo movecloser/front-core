@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import {
   ConjunctionOperator,
   Filter,
@@ -84,7 +88,7 @@ export function parseQueryParams (
 ): FiltersConfig {
   let result: FiltersConfig = {}
 
-  for (const [ key, value ] of Object.entries(query)) {
+  for (const [key, value] of Object.entries(query)) {
     result[key] = parseFilter(
       String(value).split(separators.values),
       separators.operators

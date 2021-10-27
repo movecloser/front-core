@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { FoundResource, ConnectorMiddleware } from '../../contracts/connector'
 import { Headers, IResponse, Payload } from '../../contracts/http'
 
@@ -6,7 +10,8 @@ import { InternalServerError } from '../../exceptions/errors'
 
 @Injectable()
 export class InternalServerErrorMiddleware implements ConnectorMiddleware {
-  constructor () {}
+  constructor () {
+  }
 
   /**
    * Method to be called after call execution.
