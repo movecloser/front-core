@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /**
  * @jest-environment node
  */
@@ -27,7 +31,7 @@ describe('Test AxiosDriver class', () => {
   })
 
   // Invalid url
-  test('Expect [_call] method to perform invalid request (Invalid url)', async() => {
+  test('Expect [_call] method to perform invalid request (Invalid url)', async () => {
     const target = 'http://invalid-url/'
     let error: any
 
@@ -38,7 +42,9 @@ describe('Test AxiosDriver class', () => {
       error = err
     }
 
-    expect(() => {throw error}).toThrow(ConnectionError)
+    expect(() => {
+      throw error
+    }).toThrow(ConnectionError)
   })
 
   // Not Found

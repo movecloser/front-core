@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Container } from '../container'
 import { RouterDriver, StoreDriver } from '../contracts/bootstrapper'
 import { NoneBootstrapper } from './drivers/none-bootstrapper'
@@ -26,7 +30,7 @@ export const routerFactory = (routerType: RouterDriver, container: Container): a
  * Decide which of predefined store driver to use.
  */
 /* istanbul ignore next */
-export const storeFactory = (storeType: StoreDriver, container: Container ): any => {
+export const storeFactory = (storeType: StoreDriver, container: Container): any => {
   switch (storeType) {
     case StoreDriver.Vuex:
       return new VuexBootstrapper(container)

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { AsyncContainerModule, Container as Inversify, ContainerModule } from 'inversify'
 import { Container } from './container'
@@ -35,19 +39,21 @@ describe('Test Container class.', () => {
     expect(result).toBeInstanceOf(Inversify)
   })
 
-  test('Expect [loadModule] method to load container.',  async () => {
+  test('Expect [loadModule] method to load container.', async () => {
     // @ts-ignore
-    const spy = jest.spyOn(container.getContainer(),'load')
-    const module = new ContainerModule(() => {})
+    const spy = jest.spyOn(container.getContainer(), 'load')
+    const module = new ContainerModule(() => {
+    })
     await container.loadModule(module)
 
     expect(spy).toHaveBeenCalledTimes(1)
   })
 
-  test('Expect [loadModule] method to load async container.',  async () => {
+  test('Expect [loadModule] method to load async container.', async () => {
     // @ts-ignore
-    const spy = jest.spyOn(container.getContainer(),'loadAsync')
-    const module = new ContainerModule(() => {})
+    const spy = jest.spyOn(container.getContainer(), 'loadAsync')
+    const module = new ContainerModule(() => {
+    })
     await container.loadModule(module, true)
 
     expect(spy).toHaveBeenCalledTimes(1)
@@ -55,8 +61,9 @@ describe('Test Container class.', () => {
 
   test('Expect [unloadModule] method to return container.', () => {
     // @ts-ignore
-    const spy = jest.spyOn(container.getContainer(),'unload')
-    const module = new ContainerModule(() => {})
+    const spy = jest.spyOn(container.getContainer(), 'unload')
+    const module = new ContainerModule(() => {
+    })
     container.unloadModule(module)
 
     expect(spy).toHaveBeenCalledTimes(1)

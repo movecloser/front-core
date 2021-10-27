@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /* istanbul ignore file */
 
 // TODO: Fix tests using rxjs marbles.
@@ -71,7 +75,7 @@ export class Validation implements IValidation {
         // @ts-ignore  The value is checked above.
         return Array.isArray(event.errors[field]) ?
           // @ts-ignore
-          event.errors[field] : [ event.message || this.callbackMessage ]
+          event.errors[field] : [event.message || this.callbackMessage]
       })
     ).subscribe(callback)
   }
@@ -98,19 +102,19 @@ export class Validation implements IValidation {
         }
       }
 
-      callback(errors.length ? errors : [ this.callbackMessage ])
+      callback(errors.length ? errors : [this.callbackMessage])
     })
   }
 
   /**
    * Push errors to validation stream$.
    */
-  pushErrors (form: string, errors: ErrorsPayload, message: string|null = null): void {
+  pushErrors (form: string, errors: ErrorsPayload, message: string | null = null): void {
     this._stream$.next({
       form: form,
       type: ValidationEventType.Error,
       errors: errors,
-      ...( message ? { message } : {})
-  })
+      ...(message ? { message } : {})
+    })
   }
 }

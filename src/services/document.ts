@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { IDocument } from '../contracts/services'
 
 import { Injectable } from '../container'
@@ -47,7 +51,7 @@ export class DocumentService implements IDocument {
       try {
         // @ts-ignore
         return document[method](...params)
-      } catch (error) {
+      } catch (error: any) {
         throw new Error(error)
       }
     }

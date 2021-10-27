@@ -1,5 +1,11 @@
-import {MappingConfig, MappingFunction, MappingInstruction, MappingTypes} from '../contracts/support'
-import {MappingError} from '../exceptions/errors'
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
+import { isObject, merge } from 'lodash'
+
+import { MappingConfig, MappingFunction, MappingInstruction, MappingTypes } from '../contracts/support'
+import { MappingError } from '../exceptions/errors'
 
 /**
  * Adapter to connect api response with data model required by frontend
@@ -69,12 +75,20 @@ export function mapModel<T> (toMap: any, mapping: MappingConfig, preserve: boole
  */
 function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: boolean): void {
   Object.keys(item).forEach(key => {
-    mapped[key] = item[key]
+    if (typeof item[key] === 'object' && !Array.isArray(item[key])) {
+      mapped[key] = merge(mapped[key], item[key])
+    } else {
+      mapped[key] = item[key]
+    }
   })
 
-  for (const [ key, instruction ] of Object.entries(mapping)) {
+  for (const [key, instruction] of Object.entries(mapping)) {
     if (typeof instruction === 'string') {
-      mapped[key] = item[instruction]
+      if (isObject(item[key])) {
+        mapped[key] = merge(mapped[key], item[instruction])
+      } else {
+        mapped[key] = item[instruction]
+      }
 
       if (!preserve) {
         if (key === instruction) {
@@ -98,7 +112,10 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
           }
 
           if (item[instruction.value] === undefined) {
-            console.debug(`Adapter is SKIPPING field. Key [${instruction.value}] is not present in provided item: `, item)
+            console.debug(
+              `Adapter is SKIPPING field. Key [${instruction.value}] is not present in provided item: `,
+              item
+            )
             continue
           }
 
@@ -141,7 +158,7 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
  * @param item
  */
 function mapByStructure (mapped: any, item: any, mapping: MappingConfig): void {
-  for (const [ key, value ] of Object.entries(item)) {
+  for (const [key, value] of Object.entries(item)) {
     if (!mapping.hasOwnProperty(key) || mapping[key] === 'undefined' || mapping[key] === null) {
       continue
     }

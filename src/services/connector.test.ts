@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 
 import { ApiConnector } from './connector'
@@ -43,7 +47,7 @@ describe('Test Connector class.', () => {
       methods: {
         test: {
           url: 'test',
-          method: Methods.Get,
+          method: Methods.Get
         }
       }
     }
@@ -69,7 +73,7 @@ describe('Test Connector class.', () => {
     'resource': () => {
       // @ts-ignore
       return new TestDriver(true)
-    },
+    }
   }, 'resource')
 
   test('Expect [call] to return response.', async () => {
@@ -184,10 +188,16 @@ describe('Test Connector class.', () => {
 
   test('Expect [useMiddlewares] to merge middlewares.', () => {
     const connector = new ApiConnector(registry, new HttpConnector(), [])
-    connector.useMiddlewares([{
-      // @ts-ignore
-      afterCall: () => {}, beforeCall: () => {}
-    }])
+    connector.useMiddlewares([
+      {
+        // @ts-ignore
+        afterCall: () => {
+        },
+        // @ts-ignore
+        beforeCall: () => {
+        }
+      }
+    ])
     // @ts-ignore
     expect(Object.keys(connector._list).length).toBe(3)
   })
@@ -219,7 +229,7 @@ describe('Test Connector class.', () => {
     try {
       // @ts-ignore
       connector.checkIfActionOfResourceExists('invalid-resource', 'invalid-action')
-    } catch (err) {
+    } catch (err: any) {
       error = err
     }
 
@@ -232,7 +242,7 @@ describe('Test Connector class.', () => {
     try {
       // @ts-ignore
       connector.checkIfActionOfResourceExists('resource', 'invalid-action')
-    } catch (err) {
+    } catch (err: any) {
       error = err
     }
 

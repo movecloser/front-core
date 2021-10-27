@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Intersected, Proxable } from '../contracts/support'
 
 declare global {
@@ -40,12 +44,12 @@ export function createProxy<Source extends Proxable<any>, Target extends object>
       return {
         value: target.__toObject()[name],
         enumerable: true,
-        configurable: true,
+        configurable: true
       }
     },
     // @ts-ignore
     ownKeys (target: Source): ArrayLike<string> {
-      return [ ...Object.keys(target.__toObject()) ]
+      return [...Object.keys(target.__toObject())]
     },
     set (target: Source, p: PropertyKey, value: any): boolean {
       return target.__set(p as string, value)

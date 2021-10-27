@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Moment } from 'moment'
 import { Observable } from 'rxjs'
 
@@ -19,15 +23,21 @@ export interface IDocument {
 }
 
 export interface IModal {
-  component <C> (): C
+  component<C> (): C
   getComponent<C> (name: string): C
   getRegistry<C> (): ModalRegistry<C>
   isOpened: boolean
-  name: string|null
+  name: string | null
   payload: ModalPayload
-  close (key?: string|null): void
+  close (key?: string | null): void
   open<Payload> (key: string, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void
-  openAsync<Payload> (key: string, promise: Promise<any>, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void
+  openAsync<Payload> (
+    key: string,
+    promise: Promise<any>,
+    payload?: (Payload extends ModalPayload ? ModalPayload : any),
+    config?: ModalConfig
+  ): void
+  register<C> (register: ModalRegistry<C>): void
   subscribe (callback: (open: ModalState) => any): void
 }
 
@@ -44,7 +54,7 @@ export interface ModalRegistry<ComponentConstructor> {
 }
 
 export interface ModalState {
-  component: string|null
+  component: string | null
   opened: boolean
   payload: ModalPayload
   config: ModalConfig
@@ -66,8 +76,8 @@ export interface IWindow {
 
   addEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void
   onFocus (callback: () => void): void
-  scrollTo(options?: ScrollToOptions): void;
-  scrollTo(x: number, y: number): void;
+  scrollTo (options?: ScrollToOptions): void;
+  scrollTo (x: number, y: number): void;
   redirect (target: string): void
 
   removeEventListener (name: any, handler: (this: Window, ev: any) => any, options?: any): void

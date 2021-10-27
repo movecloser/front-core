@@ -4,7 +4,7 @@
     "type": "git",
     "url": "git@github.com:movecloser/front-core.git"
   },
-  "version": "1.0.0-rc.77",
+  "version": "1.0.0-rc.78",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
@@ -14,9 +14,11 @@
     "watch-test": "jest --config jestconfig.json --watch"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.176",
     "axios": "^0.21.2",
     "core-js": "^3.8.3",
     "inversify": "^5.0.5",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.2"

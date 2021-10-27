@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import {
   AppConfig,
   BootMethod,
@@ -7,7 +11,7 @@ import {
   RoutesStack,
   StoreStack
 } from './contracts/bootstrapper'
-import { IConfiguration } from "./contracts/configuration"
+import { IConfiguration } from './contracts/configuration'
 
 import { Configuration } from './configuration'
 import { Container } from './container'

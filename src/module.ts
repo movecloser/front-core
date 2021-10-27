@@ -1,9 +1,14 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { BootMethod, ContainerFactory, ProvidersFactory } from './contracts/bootstrapper'
 
 /**
  * @author  Łukasz Sitnicki <lukasz.sitnicki@movecloser.pl>
  * @version 1.0.0
  */
+
 /* istanbul ignore next */
 export function AppModule (registry: ModuleRegistry) {
   return function _AppModule (target: ModuleConstructor): IModuleConstructor {

@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.0.0-rc.78 | 2021.10.27
+
+###Improvements:
+
+* Added option to register new modals via `register` method.
+* Fixed security issue of prototype pollution during adapter's mapping.
+
+---
+
 ## 1.0.0-rc.76 | 2021.09.02
 
 ###Improvements:

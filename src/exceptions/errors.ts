@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Payload } from '../contracts'
 
 export class BadRequestError extends Error {
@@ -113,7 +117,7 @@ export class ResourceActionFailed extends Error {
     public status: number | string,
     public payload: Payload = {}
   ) {
-    super();
+    super()
   }
 }
 

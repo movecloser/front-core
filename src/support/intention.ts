@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { IIntention, MappingConfig } from '../contracts/support'
 import { mapIntention } from './adapter'
 
@@ -8,7 +12,7 @@ import { mapIntention } from './adapter'
  * @version 1.0.0
  * @licence MIT
  */
-export abstract class AbstractIntention<T> implements IIntention<T>{
+export abstract class AbstractIntention<T> implements IIntention<T> {
   protected abstract map: MappingConfig
 
   protected payload!: T

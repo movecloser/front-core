@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { BehaviorSubject, Subscription } from 'rxjs'
 
 import { Injectable } from '../container'
@@ -38,14 +42,14 @@ export class AuthService implements Authentication <IUser> {
     this.registerStorageListener()
     if (WindowService.isDefined) {
       this._window.onFocus(
-          () => {
-            if (this._token && this._token.calculateTokenLifetime() <= this._config.refreshThreshold) {
-              this._auth$.next({
-                type: AuthEventType.Refresh,
-                token: this._token
-              })
-            }
+        () => {
+          if (this._token && this._token.calculateTokenLifetime() <= this._config.refreshThreshold) {
+            this._auth$.next({
+              type: AuthEventType.Refresh,
+              token: this._token
+            })
           }
+        }
       )
     }
   }

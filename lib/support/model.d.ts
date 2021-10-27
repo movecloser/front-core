@@ -1,5 +1,9 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models';
-import { IIntention } from "../contracts";
+import { IIntention } from '../contracts';
 /**
  * @author Kuba Fogel <kuba.foge@movecloser.pl>
  * @version 1.0.0
@@ -75,12 +79,12 @@ export declare abstract class Model<T> implements IModel<T> {
      * @param value
      * @protected
      */
-    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): import("../contracts").Intersected<IModel<object>, object>;
+    protected hasOne<R>(model: ModelConstructor<R>, value: ModelPayload): MagicModel<object, IModel<object>>;
     /**
      * Method to get collection related to given property
      * @param model
      * @param values
      * @protected
      */
-    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): import("../contracts").Intersected<IModel<object>, object>[];
+    protected hasMany<R>(model: ModelConstructor<R>, values: ModelPayload[]): MagicModel<object, IModel<object>>[];
 }

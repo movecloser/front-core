@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /* istanbul ignore file */
 
 import { RouteConfig } from 'vue-router'
@@ -8,7 +12,8 @@ import { Container } from '../../container'
 export class VueRouterBootstrapper implements BootstrapDriver<RoutesStack> {
   private _stack: RoutesStack = []
 
-  constructor (private container: Container) {}
+  constructor (private container: Container) {
+  }
 
   /**
    * Applies callback to bootstrapper stack.

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 import { Subscription } from 'rxjs'
 import { AuthConfig, AuthEvent, IWindow, TokenDriver } from '../contracts'
@@ -21,7 +25,8 @@ describe('Test AuthService class.', () => {
   // TODO: @Kuba we need full qualified tests here.
   // @ts-ignore
   const windowMock = jest.fn() as IWindow
-  windowMock.onFocus = (callback: any) => {}
+  windowMock.onFocus = (callback: any) => {
+  }
 
   beforeEach(() => {
     window.localStorage.getItem = (key: string) => {
@@ -50,7 +55,7 @@ describe('Test AuthService class.', () => {
     auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
 
     const result = auth.check()
@@ -64,7 +69,7 @@ describe('Test AuthService class.', () => {
     auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: null,
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
     const result = auth.check()
 
@@ -99,7 +104,7 @@ describe('Test AuthService class.', () => {
     auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
 
     const result = auth.getAuthorizationHeader()
@@ -112,7 +117,7 @@ describe('Test AuthService class.', () => {
     // @ts-ignore
     auth._token = new auth._driver({
       accessToken: 'test-token',
-      expiresAt: new Date().toUTCString(),
+      expiresAt: new Date().toUTCString()
     })
 
     const result = auth.getAuthorizationHeader()
@@ -131,7 +136,8 @@ describe('Test AuthService class.', () => {
   test('Expect [getAuthorizationHeader] to do fail.', () => {
     const auth = new AuthService(config, windowMock)
 
-    const result = auth.listen((event: AuthEvent) => {})
+    const result = auth.listen((event: AuthEvent) => {
+    })
 
     expect(result).toBeInstanceOf(Subscription)
   })
@@ -139,58 +145,58 @@ describe('Test AuthService class.', () => {
 
   test('Expect [listen] to return Subscription.', () => {
     const auth = new AuthService(config, windowMock)
-    const expires = new Date();
-    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold + 1) * 1000);
+    const expires = new Date()
+    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold + 1) * 1000)
 
     auth.setToken({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
 
     // @ts-ignore
     expect(auth._token.token).toEqual({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
   })
 
   test('Expect [setToken] to trigger refresh.', () => {
     const auth = new AuthService(config, windowMock)
-    const expires = new Date();
-    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500));
+    const expires = new Date()
+    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500))
 
     auth.setToken({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
 
     // @ts-ignore
     expect(auth._token.token).toEqual({
       accessToken: 'test-token',
       expiresAt: expires.toUTCString(),
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
   })
 
   test('Expect [setToken] to use non-refreshable token.', () => {
     const auth = new AuthService(config, windowMock)
-    const expires = new Date();
-    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500));
+    const expires = new Date()
+    expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500))
 
     auth.setToken({
       accessToken: 'test-token',
       expiresAt: null,
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
 
     // @ts-ignore
     expect(auth._token.token).toEqual({
       accessToken: 'test-token',
       expiresAt: null,
-      tokenType: 'Bearer',
+      tokenType: 'Bearer'
     })
   })
 
@@ -202,7 +208,7 @@ describe('Test AuthService class.', () => {
       //@ts-ignore
       auth.setToken({
         expiresAt: null,
-        tokenType: 'Bearer',
+        tokenType: 'Bearer'
       })
     } catch (err) {
       error = err
@@ -260,7 +266,7 @@ describe('Test AuthService class.', () => {
     auth.setToken({
       tokenType: 'xxx',
       accessToken: 'test-token',
-      expiresAt: new Date().toUTCString(),
+      expiresAt: new Date().toUTCString()
     })
 
     // @ts-ignore
@@ -275,7 +281,7 @@ describe('Test AuthService class.', () => {
     auth.setToken({
       tokenType: 'xxx',
       accessToken: 'test-token',
-      expiresAt: new Date('9999').toUTCString(),
+      expiresAt: new Date('9999').toUTCString()
     })
 
     // @ts-ignore
@@ -297,7 +303,7 @@ describe('Test AuthService class.', () => {
   test('Expect [retrieveToken] to be true.', () => {
     const token = {
       accessToken: 'test-token',
-      expiresAt: new Date('9999').toUTCString(),
+      expiresAt: new Date('9999').toUTCString()
     }
     window.localStorage.setItem(config.tokenName, JSON.stringify(token))
     const auth = new AuthService(config, windowMock)
@@ -334,7 +340,8 @@ describe('Test AuthService class.', () => {
     const deleteSpy = jest.spyOn(auth, 'deleteToken')
 
     // @ts-ignore
-    window.localStorage.setItem(config.tokenName, () => {})
+    window.localStorage.setItem(config.tokenName, () => {
+    })
     //
     // @ts-ignore
     auth.retrieveToken()

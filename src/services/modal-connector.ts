@@ -1,9 +1,13 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { BehaviorSubject } from 'rxjs'
 import { IModal, ModalConfig, ModalPayload, ModalRegistry, ModalState } from '../contracts'
 import { Injectable } from '../container'
 
 @Injectable()
-export class ModalConnector implements IModal{
+export class ModalConnector implements IModal {
   protected _defaultConfig!: ModalConfig
   protected _registry!: ModalRegistry<any>
   protected _state!: ModalState
@@ -28,7 +32,7 @@ export class ModalConnector implements IModal{
    * Method to trigger closing of a modal.
    * @param key
    */
-  public close (key: string|null = null): void {
+  public close (key: string | null = null): void {
     if (key === null || !key.length || this._state.component === key) {
       this._stream$.next({
         component: null,
@@ -44,7 +48,7 @@ export class ModalConnector implements IModal{
   /**
    * Returns current component from state.
    */
-  public component<C> (): C  {
+  public component<C> (): C {
     if (this._state.component === null) {
       throw new Error('Modal is not opened. Check if [isOpened] before calling for modal component.')
     }
@@ -78,7 +82,7 @@ export class ModalConnector implements IModal{
   /**
    * Returns name of current modal component.
    */
-  public get name (): string|null {
+  public get name (): string | null {
     return this._state.component
   }
 
@@ -117,7 +121,12 @@ export class ModalConnector implements IModal{
    * @param payload
    * @param config
    */
-   public openAsync<Payload> (key: string, promise: Promise<any>, payload: Payload = {} as any, config: ModalConfig = {}): void {
+  public openAsync<Payload> (
+    key: string,
+    promise: Promise<any>,
+    payload: Payload = {} as any,
+    config: ModalConfig = {}
+  ): void {
     if (!this._registry.hasOwnProperty(key)) {
       throw new Error(`Unregistered modal component [${key}]`)
     }
@@ -137,6 +146,13 @@ export class ModalConnector implements IModal{
    */
   public get payload (): ModalPayload {
     return this._state.payload
+  }
+
+  /**
+   * Allow to register new modals.
+   */
+  public register<C> (register: ModalRegistry<C>): void {
+    this._registry = { ...this._registry, ...register }
   }
 
   /**

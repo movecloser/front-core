@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 export interface IIntention<T> {
   toModel: () => T,
   toRequest: () => any
@@ -29,7 +33,7 @@ export enum MappingTypes {
 
 export interface Proxable<O> extends Object {
   __get (property: string, defaultValue: any): any
-  __invoke(...data: any): any
+  __invoke (...data: any): any
   __set (property: string, value: any): boolean
   __toObject (): O
 }

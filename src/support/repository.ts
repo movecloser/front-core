@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { ApiConnectorFactory, ConnectorFactory, IConnector } from '../contracts/connector'
 import {
   ICollection,
@@ -35,16 +39,16 @@ export abstract class Repository<MData extends object, MClass extends IModel<MDa
   /**
    * Compose collection based on mapping settings.
    */
-  protected composeCollection (
+  protected composeCollection<Data extends object = MData, Class extends IModel<Data> = IModel<Data>> (
     rawCollection: any[],
-    modelConstructor: ModelConstructor<MData, MClass>,
+    modelConstructor: ModelConstructor<Data, Class>,
     meta: IMeta
-  ): ICollection<MagicModel<MData, MClass>> {
+  ): ICollection<MagicModel<Data, Class>> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
 
-    return new Collection<MagicModel<MData, MClass>>(
+    return new Collection<MagicModel<Data, Class>>(
       (this.useAdapter ? mapCollection(rawCollection, this.map) : rawCollection)
         .map((item: any) => modelConstructor.hydrate(item)),
       meta
@@ -54,10 +58,10 @@ export abstract class Repository<MData extends object, MClass extends IModel<MDa
   /**
    * Compose model based on mapping settings.
    */
-  protected composeModel (
+  protected composeModel<Data extends object = MData, Class extends IModel<Data> = IModel<Data>> (
     rawModel: ModelPayload,
-    modelConstructor: ModelConstructor<MData, MClass>
-  ): MagicModel<MData, MClass> {
+    modelConstructor: ModelConstructor<Data, Class>
+  ): MagicModel<Data, Class> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }

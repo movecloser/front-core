@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 
 import { IHttp } from '../contracts/http'
@@ -10,19 +14,19 @@ import { mockedCallFn, TestDriver } from './http/http-driver.test'
 describe('Test Http class', () => {
   const log = console.log
   beforeEach(() => {
-    console.log = jest.fn();
-  });
+    console.log = jest.fn()
+  })
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
     console.log = log
-  });
+  })
 
   test('Expect [defaultDestination] method to return requested driver.', () => {
     const http = new HttpConnector({
       'test-driver': () => {
         // @ts-ignore
         return new TestDriver(true)
-      },
+      }
     }, 'test-driver')
 
     const defaultDestination: string = http.defaultDestination()
@@ -251,7 +255,7 @@ describe('Test Http class', () => {
     await http.delete('/test')
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('delete', "/test", {}, {}, null)
+    expect(mockedCallFn).toBeCalledWith('delete', '/test', {}, {}, null)
   })
 
   test('Expect [delete] method to return response.', async () => {
@@ -268,7 +272,7 @@ describe('Test Http class', () => {
     await http.delete('/test', {}, {}, {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('delete', "/test", {}, {}, {})
+    expect(mockedCallFn).toBeCalledWith('delete', '/test', {}, {}, {})
   })
 
   test('Expect [get] method to return response.', async () => {
@@ -285,7 +289,7 @@ describe('Test Http class', () => {
     await http.get('/test')
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('get', "/test", {}, {}, null)
+    expect(mockedCallFn).toBeCalledWith('get', '/test', {}, {}, null)
   })
 
   test('Expect [get] method to return response.', async () => {
@@ -302,7 +306,7 @@ describe('Test Http class', () => {
     await http.get('/test', {}, {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('get', "/test", {}, {}, null)
+    expect(mockedCallFn).toBeCalledWith('get', '/test', {}, {}, null)
   })
 
   test('Expect [post] method to return response.', async () => {
@@ -319,7 +323,7 @@ describe('Test Http class', () => {
     await http.post('/test')
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('post', "/test", {}, {}, null)
+    expect(mockedCallFn).toBeCalledWith('post', '/test', {}, {}, null)
   })
 
   test('Expect [post] method to return response.', async () => {
@@ -336,7 +340,7 @@ describe('Test Http class', () => {
     await http.post('/test', {}, {}, {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('post', "/test", {}, {}, {})
+    expect(mockedCallFn).toBeCalledWith('post', '/test', {}, {}, {})
   })
 
   test('Expect [put] method to return response.', async () => {
@@ -353,7 +357,7 @@ describe('Test Http class', () => {
     await http.put('/test', {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('put', "/test", {}, {}, null)
+    expect(mockedCallFn).toBeCalledWith('put', '/test', {}, {}, null)
   })
 
   test('Expect [put] method to return response.', async () => {
@@ -370,6 +374,6 @@ describe('Test Http class', () => {
     await http.put('/test', {}, {}, {})
 
     expect(mockedCallFn).toBeCalledTimes(1)
-    expect(mockedCallFn).toBeCalledWith('put', "/test", {}, {}, {})
+    expect(mockedCallFn).toBeCalledWith('put', '/test', {}, {}, {})
   })
 })

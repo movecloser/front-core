@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Subscription } from 'rxjs'
 
 export interface ErrorsPayload {
@@ -9,7 +13,7 @@ export interface IValidation {
   onClear (form: string, callback: () => void): Subscription
   onErrors (form: string, field: string, callback: ValidationErrorCallback): Subscription
   onFormErrors (form: string, callback: (...args: any[]) => void): Subscription
-  pushErrors (form: string, errors: ErrorsPayload, message?: string|null): void
+  pushErrors (form: string, errors: ErrorsPayload, message?: string | null): void
 }
 
 export type ValidationErrorCallback = (errors: string[]) => void

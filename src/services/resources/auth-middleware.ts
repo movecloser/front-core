@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { AuthProvider } from '../../contracts/authentication'
 import { FoundResource, ConnectorMiddleware } from '../../contracts/connector'
 import { Headers, Payload } from '../../contracts/http'
@@ -13,7 +17,8 @@ export class AuthMiddleware implements ConnectorMiddleware {
    * Method to be called after call execution.
    * It handles side effects.
    */
-  public afterCall (): void {}
+  public afterCall (): void {
+  }
 
   /**
    * Method to be called before call execution.

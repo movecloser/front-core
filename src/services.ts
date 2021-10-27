@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 /* istanbul ignore file */
 import {
   ApiConnectorFactory,
@@ -167,7 +171,7 @@ export {
   ModalConnector,
   Validation,
   ValidationMiddleware,
-  WindowService,
+  WindowService
 }
 
 export default services

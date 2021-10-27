@@ -1,5 +1,9 @@
-import { AbstractIntention } from "./intention";
-import { IModel, ModelPayload } from "../contracts";
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
+import { AbstractIntention } from './intention'
+import { IModel, ModelPayload } from '../contracts'
 import { Model } from './model'
 
 export interface ITest {
@@ -10,7 +14,7 @@ export interface ITest {
 }
 
 interface ITestModel {
-  getId?(): number
+  getId? (): number
 }
 
 interface INested {
@@ -24,7 +28,7 @@ export class TestModel extends Model<ITest> implements ITestModel {
       name: 'n/a',
       value: 1
     }
-    this.modelProperties = [ 'id', 'name', 'value', 'type' ]
+    this.modelProperties = ['id', 'name', 'value', 'type']
   }
 
   public getId () {
@@ -38,17 +42,17 @@ interface IRecursive {
 }
 
 interface ITestRecursiveModel extends IModel<INested> {
-  getName(): string
+  getName (): string
 }
 
 class TestRecursiveModel extends Model<IRecursive> implements ITestRecursiveModel {
   public boot (): void {
     this.initialValues = { name: 'test name', children: [] }
 
-    this.modelProperties = [ 'name', 'children' ]
+    this.modelProperties = ['name', 'children']
   }
 
-  public getName(): string {
+  public getName (): string {
     return this._data.name
   }
 
@@ -80,7 +84,7 @@ class TestModelWithNestedMany extends TestModel {
 
 class TestNestedModel extends Model<ITest> {
   protected boot (): void {
-    this.modelProperties = [ 'name' ]
+    this.modelProperties = ['name']
   }
 }
 
@@ -108,13 +112,13 @@ describe('Test abstract model class', () => {
   const warn = console.warn
 
   beforeEach(() => {
-    console.warn = jest.fn();
-  });
+    console.warn = jest.fn()
+  })
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks()
     console.warn = warn
-  });
+  })
 
   test('Expect Model setter to set a value.', () => {
     const model = new TestModel()
@@ -244,7 +248,7 @@ describe('Test abstract model class', () => {
 
   test('Expect [modelProperties] to be set as provided', () => {
     const model = new TestModel()
-    const modelProperties = [ 'id', 'name', 'value', 'type' ]
+    const modelProperties = ['id', 'name', 'value', 'type']
     //@ts-ignore
     expect(model.modelProperties).toEqual(modelProperties)
   })

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 export declare const DateTimeType: unique symbol;
@@ -24,6 +28,7 @@ export interface IModal {
     close(key?: string | null): void;
     open<Payload>(key: string, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void;
     openAsync<Payload>(key: string, promise: Promise<any>, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void;
+    register<C>(register: ModalRegistry<C>): void;
     subscribe(callback: (open: ModalState) => any): void;
 }
 export interface ModalConfig {

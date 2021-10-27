@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import 'reflect-metadata'
 
 import { AppConfig } from './contracts/bootstrapper'
@@ -11,7 +15,7 @@ describe('Test Bootstrapper class.', () => {
   const config: AppConfig = {
     modules: [],
     router: RouterDriver.None,
-    store: StoreDriver.None,
+    store: StoreDriver.None
   }
 
   const bootstrapper = new Bootstrapper(config)
@@ -52,7 +56,8 @@ describe('Test Bootstrapper class.', () => {
       router: RouterDriver.None,
       store: StoreDriver.None,
       services: (config: IConfiguration) => {
-        return (bind: Interfaces.Bind) => {}
+        return (bind: Interfaces.Bind) => {
+        }
       }
     }
 
@@ -66,11 +71,13 @@ describe('Test Bootstrapper class.', () => {
     @AppModule({
       name: 'test',
       providers: (config: IConfiguration) => {
-        return (bind: Interfaces.Bind) => {}
+        return (bind: Interfaces.Bind) => {
+        }
       },
       providersAsync: true,
       routes: () => [],
-      state: () => {}
+      state: () => {
+      }
     })
     class TestModule extends Module {}
 
@@ -79,7 +86,7 @@ describe('Test Bootstrapper class.', () => {
         TestModule
       ],
       router: RouterDriver.VueRouter,
-      store: StoreDriver.Vuex,
+      store: StoreDriver.Vuex
     }
 
     const bootstrapper = new Bootstrapper(config)
@@ -92,11 +99,13 @@ describe('Test Bootstrapper class.', () => {
     @AppModule({
       name: 'test',
       providers: (config: IConfiguration) => {
-        return (bind: Interfaces.Bind) => {}
+        return (bind: Interfaces.Bind) => {
+        }
       },
       providersAsync: true,
       routes: () => [],
-      state: () => {}
+      state: () => {
+      }
     })
     class TestModule extends Module {}
 
@@ -105,7 +114,7 @@ describe('Test Bootstrapper class.', () => {
         TestModule
       ],
       router: RouterDriver.None,
-      store: StoreDriver.None,
+      store: StoreDriver.None
     }
 
     const bootstrapper = new Bootstrapper(config)
@@ -121,7 +130,8 @@ describe('Test Bootstrapper class.', () => {
       providers: null,
       providersAsync: true,
       routes: () => [],
-      state: () => {}
+      state: () => {
+      }
     })
     class TestModule extends Module {}
 
@@ -130,7 +140,7 @@ describe('Test Bootstrapper class.', () => {
         TestModule
       ],
       router: RouterDriver.None,
-      store: StoreDriver.None,
+      store: StoreDriver.None
     }
 
     const bootstrapper = new Bootstrapper(config)

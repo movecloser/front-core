@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2021 Move Closer
+ */
+
 import { IDateTime, Token } from '../../contracts'
 import { MissingParameter } from '../../exceptions/errors'
 import { DateTime } from '../datetime'
@@ -17,7 +21,7 @@ export abstract class AbstractToken {
    * @protected
    */
   protected checkRequiredProperties (properties: (keyof Token)[]) {
-    properties.forEach((key: keyof Token) =>  {
+    properties.forEach((key: keyof Token) => {
       if (!this._token.hasOwnProperty(key) || !this._token[key]) {
         throw new MissingParameter(`Property [${key}] is missing from Authorization Token.`)
       }
