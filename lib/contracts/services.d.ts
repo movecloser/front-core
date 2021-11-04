@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 export declare const DateTimeType: unique symbol;

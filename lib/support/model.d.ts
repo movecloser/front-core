@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models';
 import { IIntention } from '../contracts';
 /**

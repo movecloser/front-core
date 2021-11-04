@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import { ProvidersFactory } from './contracts/bootstrapper';
 import { ApiConnector } from './services/connector';
 import { AuthMiddleware } from './services/resources/auth-middleware';

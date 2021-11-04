@@ -108,7 +108,7 @@ export class ModalConnector implements IModal {
       component: key,
       opened: true,
       payload,
-      config: Object.assign(this._defaultConfig, config)
+      config: Object.assign({}, {  ...this._defaultConfig, ...config })
     })
 
     this.lockScroll()

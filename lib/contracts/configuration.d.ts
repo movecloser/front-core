@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import { AppConfig } from './bootstrapper';
 export interface IConfiguration {
     byFile<Expected>(name: string): Expected;

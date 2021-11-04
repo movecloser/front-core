@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import { ConnectorFactory, IConnector } from '../contracts/connector';
 import { ICollection, IMeta, IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models';
 import { MappingConfig } from '../contracts/support';

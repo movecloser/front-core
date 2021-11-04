@@ -1,7 +1,3 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import { AppConfig, BootstrapDriver, IBootstrapper as Abstract, RoutesStack, StoreStack } from './contracts/bootstrapper';
 import { IConfiguration } from './contracts/configuration';
 import { Container } from './container';

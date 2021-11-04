@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0-rc.79 | 2021.11.04
+
+###Fixes:
+
+* Fixed incorrect assign of modal's config to defaults.
+
 ---
 
 ## 1.0.0-rc.78 | 2021.10.27
