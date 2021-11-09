@@ -144,6 +144,27 @@ describe('Test adapter methods', () => {
     expect(mapped).toEqual(expected)
   })
 
+  test('Expect [mapModel] method to return properly mapped object when value is null', () => {
+    const toMap = {
+      id: 1,
+      first_name: 'John',
+      last_name: 'Testington',
+      nullValue: null
+    }
+    const expected = {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Testington',
+      fullName: 'John Testington',
+      permissions: undefined,
+      nullValue: null
+    }
+    const mapped = mapModel(toMap, mappingConfig, false)
+
+    expect(typeof mapped).toEqual('object')
+    expect(mapped).toEqual(expected)
+  })
+
   test('Expect [mapModel] method to return properly mapped object (preserve: false)', () => {
     const toMap = {
       id: 1,
