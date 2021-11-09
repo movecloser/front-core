@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.0-rc.80 | 2021.11.09
+
+###Fixes:
+
+* Fixed incorrect handling of null values in adapter.
+
+---
+
 ## 1.0.0-rc.79 | 2021.11.04
 
 ###Fixes:
