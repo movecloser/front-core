@@ -57,6 +57,13 @@ describe('Tests for DateTime service', () => {
     expect(result).toBeInstanceOf(moment)
   })
 
+  test('Expect [parse] method to return moment instance when format is provided', () => {
+    const result = dateTime.parse('25.01.2022', 'DD.MM.YYYY')
+
+    expect(typeof result).toBe('object')
+    expect(result).toBeInstanceOf(moment)
+  })
+
   // test('Expect [parse] method to throw error', () => {
   //   expect(() => {
   //     // @ts-ignore

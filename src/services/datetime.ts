@@ -44,8 +44,8 @@ export class DateTime implements IDateTime {
   /**
    * Parse date to instance of moment.
    */
-  parse (date: string): Moment {
-    return moment(date)
+  parse (date: string, format?: string): Moment {
+    return moment(date, format)
   }
 
   /**
