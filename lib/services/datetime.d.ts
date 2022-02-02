@@ -23,7 +23,7 @@ export declare class DateTime implements IDateTime {
     /**
      * Parse date to instance of moment.
      */
-    parse(date: string): Moment;
+    parse(date: string, format?: string): Moment;
     /**
      * Returns date to specific format.
      */

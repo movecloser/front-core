@@ -1,10 +1,11 @@
+/**
+ * @jest-environment node
+ */
+
 /*
  * Copyright (c) 2021 Move Closer
  */
 
-/**
- * @jest-environment node
- */
 import 'reflect-metadata'
 import { AxiosRequestConfig } from 'axios'
 
@@ -12,6 +13,7 @@ import { Methods } from '../../contracts/http'
 
 import { AxiosDriver } from './axios-driver'
 import { ConnectionError } from '../../exceptions/errors'
+import { ResponseType } from "../../contracts";
 
 const axiosConfig: AxiosRequestConfig = {
   // url: '/Testowanie_oprogramowania',
@@ -69,7 +71,7 @@ describe('Test AxiosDriver class', () => {
   test('Expect [_call] method to perform invalid test request (Post method)', async () => {
     const target = 'https://www.google.com/test'
     // @ts-ignore
-    const response = await driver._call(Methods.Post, target, {}, {}, { responseType: 'json' })
+    const response = await driver._call(Methods.Post, target, {}, {}, { responseType: ResponseType.Json })
 
     expect(response.status).toBe(404)
   })

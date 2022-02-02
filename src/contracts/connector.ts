@@ -78,6 +78,10 @@ export interface ResourceResponseMeta {
 }
 
 export enum ResponseType {
+  Arraybuffer = 'arraybuffer',
   Blob = 'blob',
-  Json = 'json'
+  Document = 'document',
+  Json = 'json',
+  Text = 'text',
+  Stream = 'stream'
 }

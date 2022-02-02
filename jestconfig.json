@@ -1,6 +1,7 @@
 {
   "coverageDirectory": "../coverage",
   "rootDir": ".",
+  "testEnvironment": "jsdom",
   "roots": [
     "<rootDir>"
   ],
