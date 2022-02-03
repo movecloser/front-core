@@ -28,10 +28,10 @@ export abstract class CSRFService implements ICSRFService {
 
     let response
     if (typeof this._config.source === 'string') {
-      response = await this._http.post(this._config.source, payload)
+      response = await this._http.post(this._config.source, payload, headers)
     } else {
       const { connection, method, url } = this._config.source
-      response = await this._http.destination(connection)[method](url, payload)
+      response = await this._http.destination(connection)[method](url, payload, headers)
     }
 
     return this.retrieveTokenFromResponse(response.data)
