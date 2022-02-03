@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 export type DriverRegistry = {
   [key: string]: IHttp
 }

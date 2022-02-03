@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 export interface IContainer<C, M, N> {
   createContainer: (config?: ContainerOptions) => void
   getContainer: () => C

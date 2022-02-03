@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { Headers, IHttp, IResponse, Payload } from '../../contracts/http'
 
 import { Response } from './response'

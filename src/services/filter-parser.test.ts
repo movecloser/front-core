@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { ConjunctionOperator, FilterOperator, FiltersConfig } from '../contracts/filter-parser'
 import { IncorrectValueError, MissingParameter } from '../exceptions/errors'
 import { composeQueryParams, parseQueryParams } from './filter-parser'

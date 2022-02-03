@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { ContainerOptions, Interfaces } from './container'
 import { IConfiguration } from './configuration'
 import { IHttpConnectorConfig } from './http'
@@ -6,9 +8,11 @@ import { ResourcesRegistry } from './connector'
 import { Container } from '../container'
 import { IModuleConstructor } from '../module'
 import { ModalConfig, ModalRegistry } from './services'
+import { CSRFConfig } from './csrf';
 
 export interface AppConfig extends AnyObject {
   container?: ContainerOptions
+  csrf?: CSRFConfig
   http?: IHttpConnectorConfig
   middlewares?: symbol[]
   modals?: ModalRegistry<any>

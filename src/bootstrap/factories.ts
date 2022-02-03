@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { Container } from '../container'
 import { RouterDriver, StoreDriver } from '../contracts/bootstrapper'

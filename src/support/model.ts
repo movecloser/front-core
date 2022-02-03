@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { createProxy } from './proxy'
 import { IModel, MagicModel, ModelConstructor, ModelPayload } from '../contracts/models'

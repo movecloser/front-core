@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { IToken, Token } from '../../contracts'
 import { AbstractToken } from './token'
 

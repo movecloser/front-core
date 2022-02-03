@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { Observable } from 'rxjs'
 
 import { IStreamBus, StreamFactory, StreamList, StreamRegistry } from '../contracts/services'

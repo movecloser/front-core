@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { MappingConfig, MappingTypes } from '../contracts/support'
 
 import { AbstractIntention } from '../support/intention'

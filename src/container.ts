@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { AsyncContainerModule, Container as Inversify, ContainerModule, interfaces } from 'inversify'
 import { IContainer, ContainerOptions } from './contracts/container'

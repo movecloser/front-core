@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { ModelPayload } from '../contracts/models'
 import { Intersected, Proxable } from '../contracts/support'

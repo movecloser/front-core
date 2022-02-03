@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { Headers, IResponse, Methods, Payload } from '../../contracts/http'

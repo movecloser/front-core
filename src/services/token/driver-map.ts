@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { TokenDriver } from '../../contracts'
 
 import { SingleToken } from './single'

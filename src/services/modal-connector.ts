@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { BehaviorSubject } from 'rxjs'
 import { IModal, ModalConfig, ModalPayload, ModalRegistry, ModalState } from '../contracts'

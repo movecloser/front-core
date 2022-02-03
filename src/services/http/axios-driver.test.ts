@@ -1,11 +1,8 @@
+// Copyright (c) 2022 Move Closer
+
 /**
  * @jest-environment node
  */
-
-/*
- * Copyright (c) 2021 Move Closer
- */
-
 import 'reflect-metadata'
 import { AxiosRequestConfig } from 'axios'
 
@@ -13,7 +10,7 @@ import { Methods } from '../../contracts/http'
 
 import { AxiosDriver } from './axios-driver'
 import { ConnectionError } from '../../exceptions/errors'
-import { ResponseType } from "../../contracts";
+import { ResponseType } from '../../contracts'
 
 const axiosConfig: AxiosRequestConfig = {
   // url: '/Testowanie_oprogramowania',

@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 /* istanbul ignore file */
 
 // TODO: add tests and remove ignore

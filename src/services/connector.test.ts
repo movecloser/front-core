@@ -1,14 +1,12 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2022 Move Closer
 
 import 'reflect-metadata'
 
 import { ApiConnector } from './connector'
-import { HttpConnector } from './http'
 import { Headers, IResponse, Methods, Payload, ResourcesRegistry } from '../contracts'
-import { IncorrectCall } from '../exceptions/errors'
+import { HttpConnector } from './http'
 import { HttpDriver } from './http/http-driver'
+import { IncorrectCall } from '../exceptions/errors'
 
 describe('Test Connector class.', () => {
   const registry: ResourcesRegistry = {
@@ -48,6 +46,16 @@ describe('Test Connector class.', () => {
         test: {
           url: 'test',
           method: Methods.Get
+        }
+      }
+    },
+    resourceCsrf: {
+      prefix: '',
+      methods: {
+        test: {
+          url: 'test',
+          method: Methods.Post,
+          meta: { csrf: true }
         }
       }
     }
@@ -113,7 +121,6 @@ describe('Test Connector class.', () => {
       options: { responseType: 'json' }
     })
   })
-
 
   test('Expect [findResource] to return resource.', () => {
     const connector = new ApiConnector(registry, new HttpConnector({}, 'resource'), [])
@@ -199,7 +206,7 @@ describe('Test Connector class.', () => {
       }
     ])
     // @ts-ignore
-    expect(Object.keys(connector._list).length).toBe(3)
+    expect(Object.keys(connector._middlewares).length).toBe(1)
   })
 
   test('Expect [useResources] to merge resources.', () => {
@@ -207,7 +214,7 @@ describe('Test Connector class.', () => {
     // @ts-ignore
     connector.useResources({ 'test': {} })
     // @ts-ignore
-    expect(Object.keys(connector._list).length).toBe(4)
+    expect(Object.keys(connector._list).length).toBe(5)
   })
 
   test('Expect [buildUrl] to do build url.', () => {
