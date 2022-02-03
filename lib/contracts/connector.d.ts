@@ -8,7 +8,10 @@ export interface ConnectorMiddleware {
     beforeCall: (resource: FoundResource, headers: Headers, body: Payload) => ({
         headers: Headers;
         body: Payload;
-    });
+    }) | Promise<({
+        headers: Headers;
+        body: Payload;
+    })>;
 }
 export declare type FoundResource = {
     connection: string;
