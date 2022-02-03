@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2022 Move Closer
 
 import { Payload } from '../contracts'
 
@@ -13,7 +11,7 @@ export class BadRequestError extends Error {
 }
 
 export class ConnectionError extends Error {
-  public name: string = 'ConflictError'
+  public name: string = 'ConnectionError'
 
   constructor (public message: string) {
     super()

@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { BehaviorSubject, Subscription } from 'rxjs'
 import { filter, first } from 'rxjs/operators'
 

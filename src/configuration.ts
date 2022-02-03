@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { AppConfig } from './contracts/bootstrapper'
 import { IConfiguration } from './contracts/configuration'
 

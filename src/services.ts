@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2022 Move Closer
 
 /* istanbul ignore file */
 import {
@@ -11,6 +9,7 @@ import {
 } from './contracts/connector'
 import {
   AuthMiddlewareType,
+  CSRFMiddlewareType,
   EventbusMiddlewareType,
   InternalServerErrorMiddlewareType,
   ValidationMiddlewareType
@@ -32,6 +31,8 @@ import { ProvidersFactory } from './contracts/bootstrapper'
 
 import { ApiConnector } from './services/connector'
 import { AuthMiddleware } from './services/resources/auth-middleware'
+import { CSRFMiddleware } from "./services/csrf/middleware"
+import { CSRFServiceType, ICSRFService } from "./contracts/csrf"
 import { DateTime } from './services/datetime'
 import { DocumentService } from './services/document'
 import { Eventbus } from './services/eventbus'
@@ -113,6 +114,15 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
 
     // Middlewares
     if (config.has('resources')) {
+      if (config.has('csrf')) {
+        bind<ConnectorMiddleware>(CSRFMiddlewareType)
+          .toDynamicValue((context: Interfaces.Context) => {
+            return new CSRFMiddleware(
+              context.container.get<ICSRFService>(CSRFServiceType)
+            )
+          })
+      }
+
       bind<ConnectorMiddleware>(EventbusMiddlewareType)
         .toDynamicValue((context: Interfaces.Context) => {
           return new EventbusMiddleware(

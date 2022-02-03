@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { FoundResource, ConnectorMiddleware } from '../../contracts/connector'
 import { Headers, IResponse, Payload } from '../../contracts/http'

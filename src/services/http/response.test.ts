@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { Response } from './response'
 
 describe('Test Response methods', () => {

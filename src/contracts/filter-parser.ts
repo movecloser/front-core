@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 export enum ConjunctionOperator {
   Or = 'or',
   And = 'and'

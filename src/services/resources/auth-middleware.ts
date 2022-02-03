@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2021 Move Closer
 
 import { AuthProvider } from '../../contracts/authentication'
 import { FoundResource, ConnectorMiddleware } from '../../contracts/connector'

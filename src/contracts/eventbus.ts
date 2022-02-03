@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { Subscription } from 'rxjs'
 
 export type EventbusCallback<Data> = (event: EventPayload<Data>) => void

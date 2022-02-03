@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import { MetaPayload } from '../contracts/models'
 import { Headers, IResponse, Methods, Payload } from './http'
 
@@ -13,7 +15,7 @@ export interface ConnectorMiddleware {
     resource: FoundResource,
     headers: Headers,
     body: Payload
-  ) => ({ headers: Headers, body: Payload })
+  ) => ({ headers: Headers, body: Payload }) | Promise<({ headers: Headers, body: Payload })>
 }
 
 export type FoundResource = {

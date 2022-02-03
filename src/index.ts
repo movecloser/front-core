@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 export * from './bootstrapper'
 export * from './configuration'
 export * from './container'

@@ -1,6 +1,4 @@
-/*
- * Copyright (c) 2021 Move Closer
- */
+// Copyright (c) 2022 Move Closer
 
 import {
   ConnectorMiddleware,
@@ -51,7 +49,9 @@ export class ApiConnector implements IConnector {
     const res: FoundResource = this.findResource(resource, action, params)
 
     for (const middleware of this._middlewares) {
-      const afterBefore = middleware.beforeCall(res, headers, body)
+      const result = middleware.beforeCall(res, headers, body)
+      const afterBefore = result instanceof Promise ? await result : result
+
       headers = afterBefore.headers
       body = afterBefore.body
     }

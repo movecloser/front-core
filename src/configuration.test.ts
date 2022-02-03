@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Move Closer
+
 import 'reflect-metadata'
 import { AppConfig, RouterDriver, StoreDriver } from './contracts'
 import { Configuration } from './configuration'
