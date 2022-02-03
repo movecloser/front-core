@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.0 | 2020.02.03
+
+###New Features:
+
+* Async middleware hooks.
+* CSRF service.
+
+## 1.0.0 | 2022.02.03
+
+###Fixes:
+* Fixed typo at middleware name.
+
+###Improvements:
+
+* Added other supported response types to Enum value.
+
 ## 1.0.0-rc.80 | 2021.11.09
 
 ###Fixes:
