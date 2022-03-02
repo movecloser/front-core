@@ -53,7 +53,7 @@ export class Validation implements IValidation {
    */
   onClear (form: string, callback: (value: ValidationEvent) => void): Subscription {
     return this._stream$.pipe(
-      filter<ValidationEvent>(event => event.form === form || event.type === ValidationEventType.Clear)
+      filter<ValidationEvent>(event => event.form === form && event.type === ValidationEventType.Clear)
     ).subscribe(callback)
   }
 
