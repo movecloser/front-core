@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 | 2020.03.02
+
+###Fixes:
+
+* Incorrect condition conjunction at Validation's `onClear` method.
+
 ## 1.1.0 | 2020.02.03
 
 ###New Features:
