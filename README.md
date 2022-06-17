@@ -1071,7 +1071,7 @@ export interface IWindow {
 
 ## 🚀 Made by
 
-[<img src="https://movecloser.co/wp-content/themes/movecloser/assets/img/logo-white.svg" alt="MoveCloser" style="filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));"/>](https://movecloser.co)
+[<img src="https://movecloser.co/app/themes/movecloser/resources/assets/images/movecloser.svg" alt="MoveCloser" style="filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));"/>](https://movecloser.co)
 
 [![LinkedIn](https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/company/move-closer-sp-z-o-o-/mycompany/)
 [![Instagram](https://img.shields.io/badge/movecloserdev-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/movecloserdev/)
