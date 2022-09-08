@@ -106,7 +106,7 @@ export class ModalConnector implements IModal {
       component: key,
       opened: true,
       payload,
-      config: Object.assign({}, {  ...this._defaultConfig, ...config })
+      config: Object.assign({}, { ...this._defaultConfig, ...config })
     })
 
     this.lockScroll()
@@ -172,8 +172,14 @@ export class ModalConnector implements IModal {
   private lockScroll (): void {
     /* istanbul ignore else */
     if (typeof window !== 'undefined') {
-      document.body.style.overflowY = 'hidden'
+      document.body.addEventListener('wheel', this.onScroll, { passive: false })
     }
+  }
+
+  private onScroll (e: Event) {
+    e.preventDefault()
+    e.stopPropagation()
+    return false
   }
 
   /**
@@ -185,7 +191,7 @@ export class ModalConnector implements IModal {
   private unlockScroll (): void {
     /* istanbul ignore else */
     if (typeof window !== 'undefined') {
-      document.body.style.overflowY = 'auto'
+      document.body.removeEventListener('wheel', this.onScroll)
     }
   }
 }
