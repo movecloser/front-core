@@ -4,7 +4,7 @@
     "type": "git",
     "url": "git@github.com:movecloser/front-core.git"
   },
-  "version": "1.1.2",
+  "version": "1.2.0",
   "license": "MIT",
   "scripts": {
     "build": "tsc",

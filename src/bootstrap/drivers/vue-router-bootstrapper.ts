@@ -4,20 +4,20 @@
 
 import { RouteConfig } from 'vue-router'
 
-import { BootstrapDriver, ContainerFactory, RoutesStack } from '../../contracts/bootstrapper'
+import { BootstrapDriver, ContainerFactory, IConfiguration, RoutesStack } from '../../contracts'
 import { Container } from '../../container'
 
 export class VueRouterBootstrapper implements BootstrapDriver<RoutesStack> {
   private _stack: RoutesStack = []
 
-  constructor (private container: Container) {
+  constructor (private container: Container, private configuration?: IConfiguration) {
   }
 
   /**
    * Applies callback to bootstrapper stack.
    */
   public applyModule (name: string, callback: ContainerFactory): void {
-    const routes = callback(this.container).map((route: RouteConfig) => {
+    const routes = callback(this.container, this.configuration).map((route: RouteConfig) => {
       return this.prefixRouteName(route, name)
     })
 

@@ -1,9 +1,10 @@
-import { BootstrapDriver, ContainerFactory, RoutesStack } from '../../contracts/bootstrapper';
+import { BootstrapDriver, ContainerFactory, IConfiguration, RoutesStack } from '../../contracts';
 import { Container } from '../../container';
 export declare class VueRouterBootstrapper implements BootstrapDriver<RoutesStack> {
     private container;
+    private configuration?;
     private _stack;
-    constructor(container: Container);
+    constructor(container: Container, configuration?: IConfiguration | undefined);
     /**
      * Applies callback to bootstrapper stack.
      */

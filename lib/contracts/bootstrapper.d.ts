@@ -19,12 +19,12 @@ export interface AppConfig extends AnyObject {
     store: StoreDriver;
     services?: ProvidersFactory;
 }
-export declare type BootMethod = (container: Container) => void;
+export declare type BootMethod = (container: Container, configuration: IConfiguration) => void;
 export interface BootstrapDriver<Stack> {
     applyModule(name: string, callback: ContainerFactory): void;
     stack(): Stack;
 }
-export declare type ContainerFactory = (container: Container) => any;
+export declare type ContainerFactory = (container: Container, configuration?: IConfiguration) => any;
 export interface IBootstrapper {
     boot(): void;
     getConfiguration(): IConfiguration;

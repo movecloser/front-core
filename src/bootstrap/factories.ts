@@ -6,15 +6,16 @@ import { NoneBootstrapper } from './drivers/none-bootstrapper'
 import { ReactRouterBootstrapper } from './drivers/react-router-bootstraper'
 import { VueRouterBootstrapper } from './drivers/vue-router-bootstrapper'
 import { VuexBootstrapper } from './drivers/vuex-bootstrapper'
+import { IConfiguration } from '../contracts'
 
 /**
  * Decide which of predefined router driver to use.
  */
 /* istanbul ignore next */
-export const routerFactory = (routerType: RouterDriver, container: Container): any => {
+export const routerFactory = (routerType: RouterDriver, container: Container, configuration?: IConfiguration): any => {
   switch (routerType) {
     case RouterDriver.VueRouter:
-      return new VueRouterBootstrapper(container)
+      return new VueRouterBootstrapper(container, configuration)
     case RouterDriver.ReactRouter:
       return new ReactRouterBootstrapper(container)
     case RouterDriver.None:
