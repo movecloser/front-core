@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2022 Move Closer
 
 import {
   AppConfig,
@@ -9,7 +9,7 @@ import {
   RoutesStack,
   StoreStack
 } from './contracts/bootstrapper'
-import { IConfiguration } from './contracts/configuration'
+import { IConfiguration } from './contracts'
 
 import { Configuration } from './configuration'
 import { Container } from './container'
@@ -35,8 +35,8 @@ export class Bootstrapper implements Abstract {
     this.config = new Configuration(config)
     this.container = this.createContainer()
 
-    this.routerBootstrapper = routerFactory(this.config.byFile('router'), this.container)
-    this.storeBootstrapper = storeFactory(this.config.byFile('store'), this.container)
+    this.routerBootstrapper = routerFactory(this.config.byFile('router'), this.container, this.config)
+    this.storeBootstrapper = storeFactory(this.config.byFile('store'), this.container, this.config)
   }
 
   /**
@@ -98,7 +98,7 @@ export class Bootstrapper implements Abstract {
 
     // TODO: Test it.
     for (const boot of bootMethods) {
-      boot(this.container)
+      boot(this.container, this.config)
     }
   }
 

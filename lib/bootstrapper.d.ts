@@ -1,5 +1,5 @@
 import { AppConfig, BootstrapDriver, IBootstrapper as Abstract, RoutesStack, StoreStack } from './contracts/bootstrapper';
-import { IConfiguration } from './contracts/configuration';
+import { IConfiguration } from './contracts';
 import { Container } from './container';
 /**
  * Bootstrapper is responsible for booting the app with entire dependencies & base setup.

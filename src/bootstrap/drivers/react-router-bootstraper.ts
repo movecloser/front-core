@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2022 Move Closer
 
 /* istanbul ignore file */
 
@@ -9,19 +9,20 @@ import {
   RoutesStack,
   StoreStack
 } from '../../contracts/bootstrapper'
+import { IConfiguration } from '../../contracts'
 import { ModuleRoute } from '../../platforms/react'
 
 export class ReactRouterBootstrapper implements BootstrapDriver<StoreStack> {
   private _stack: RoutesStack = []
 
-  constructor (private container: Container) {
+  constructor (private container: Container, private configuration: IConfiguration) {
   }
 
   /**
    * Applies callback to bootstrapper stack.
    */
   public applyModule (name: string, callback: ContainerFactory): void {
-    const routes: ModuleRoute = callback(this.container)
+    const routes: ModuleRoute = callback(this.container, this.configuration)
 
     this._stack.push(routes)
   }

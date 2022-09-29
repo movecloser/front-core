@@ -162,4 +162,68 @@ describe('Test Bootstrapper class.', () => {
 
     expect(result).toBeUndefined()
   })
+
+  test('Expect [boot] method to bootstrap app with configuration available in router.', async () => {
+    let testConfig: string | null = null
+
+    @AppModule({
+      name: 'test',
+      routes: (container, configuration) => {
+        if (configuration) {
+          testConfig = configuration.byKey('lorem')
+        }
+
+        return []
+      },
+      state: () => {
+      }
+    })
+    class TestModule extends Module {}
+
+    const config: AppConfig = {
+      modules: [
+        TestModule
+      ],
+      router: RouterDriver.VueRouter,
+      store: StoreDriver.Vuex,
+      lorem: 'ipsum'
+    }
+
+    const bootstrapper = new Bootstrapper(config)
+    const result = await bootstrapper.boot()
+
+    expect(result).toBeUndefined()
+    expect(testConfig).toBe('ipsum')
+  })
+
+  test('Expect [boot] method to bootstrap app with configuration available in boot.', async () => {
+    let testConfig: string | null = null
+
+    @AppModule({
+      name: 'test',
+      routes: () => [],
+      state: () => {},
+      boot: (container, configuration) => {
+        if (configuration) {
+          testConfig = configuration.byKey('lorem')
+        }
+      }
+    })
+    class TestModule extends Module {}
+
+    const config: AppConfig = {
+      modules: [
+        TestModule
+      ],
+      router: RouterDriver.VueRouter,
+      store: StoreDriver.Vuex,
+      lorem: 'ipsum'
+    }
+
+    const bootstrapper = new Bootstrapper(config)
+    const result = await bootstrapper.boot()
+
+    expect(result).toBeUndefined()
+    expect(testConfig).toBe('ipsum')
+  })
 })

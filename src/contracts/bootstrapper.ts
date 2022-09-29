@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2022 Move Closer
 
 import { ContainerOptions, Interfaces } from './container'
 import { IConfiguration } from './configuration'
@@ -24,14 +24,14 @@ export interface AppConfig extends AnyObject {
   services?: ProvidersFactory
 }
 
-export type BootMethod = (container: Container) => void
+export type BootMethod = (container: Container, configuration: IConfiguration) => void
 
 export interface BootstrapDriver<Stack> {
   applyModule (name: string, callback: ContainerFactory): void
   stack (): Stack
 }
 
-export type ContainerFactory = (container: Container) => any
+export type ContainerFactory = (container: Container, configuration: IConfiguration) => any
 
 export interface IBootstrapper {
   boot (): void
