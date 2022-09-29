@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2022 Move Closer
 
 import { ContainerOptions, Interfaces } from './container'
 import { IConfiguration } from './configuration'
@@ -31,7 +31,7 @@ export interface BootstrapDriver<Stack> {
   stack (): Stack
 }
 
-export type ContainerFactory = (container: Container, configuration?: IConfiguration) => any
+export type ContainerFactory = (container: Container, configuration: IConfiguration) => any
 
 export interface IBootstrapper {
   boot (): void

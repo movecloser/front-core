@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2022 Move Closer
 
 import {
   AppConfig,
@@ -36,7 +36,7 @@ export class Bootstrapper implements Abstract {
     this.container = this.createContainer()
 
     this.routerBootstrapper = routerFactory(this.config.byFile('router'), this.container, this.config)
-    this.storeBootstrapper = storeFactory(this.config.byFile('store'), this.container)
+    this.storeBootstrapper = storeFactory(this.config.byFile('store'), this.container, this.config)
   }
 
   /**

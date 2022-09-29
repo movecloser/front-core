@@ -1,14 +1,15 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2022 Move Closer
 
 /* istanbul ignore file */
 
 import { BootstrapDriver, ContainerFactory, StoreStack } from '../../contracts/bootstrapper'
 import { Container } from '../../container'
+import { IConfiguration } from '../../contracts'
 
 export class VuexBootstrapper implements BootstrapDriver<StoreStack> {
   private _stack: StoreStack = {}
 
-  constructor (private container: Container) {
+  constructor (private container: Container, private configuration: IConfiguration) {
   }
 
   /**
@@ -17,7 +18,7 @@ export class VuexBootstrapper implements BootstrapDriver<StoreStack> {
    * @param callback
    */
   public applyModule (name: string, callback: ContainerFactory): void {
-    Object.assign(this._stack, { [name]: callback(this.container) })
+    Object.assign(this._stack, { [name]: callback(this.container, this.configuration) })
   }
 
   /**

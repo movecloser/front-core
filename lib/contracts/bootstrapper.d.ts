@@ -24,7 +24,7 @@ export interface BootstrapDriver<Stack> {
     applyModule(name: string, callback: ContainerFactory): void;
     stack(): Stack;
 }
-export declare type ContainerFactory = (container: Container, configuration?: IConfiguration) => any;
+export declare type ContainerFactory = (container: Container, configuration: IConfiguration) => any;
 export interface IBootstrapper {
     boot(): void;
     getConfiguration(): IConfiguration;
