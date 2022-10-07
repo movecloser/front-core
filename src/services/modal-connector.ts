@@ -167,31 +167,30 @@ export class ModalConnector implements IModal {
    * Locks the window's scroll.
    * @private
    *
-   * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
+   * @author Agnieszka Zawadzka <agnieszka.zawadzka@movecloser.pl>
    */
   private lockScroll (): void {
     /* istanbul ignore else */
     if (typeof window !== 'undefined') {
-      document.body.addEventListener('wheel', this.onScroll, { passive: false })
+      const scrollY = window.scrollY
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
     }
-  }
-
-  private onScroll (e: Event) {
-    e.preventDefault()
-    e.stopPropagation()
-    return false
   }
 
   /**
    * Unlocks the window's scroll.
    * @private
    *
-   * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
+   * @author Agnieszka Zawadzka <agnieszka.zawadzka@movecloser.pl>
    */
   private unlockScroll (): void {
     /* istanbul ignore else */
     if (typeof window !== 'undefined') {
-      document.body.removeEventListener('wheel', this.onScroll)
+      const scrollY = document.body.style.top;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      window.scrollTo(0, parseInt(scrollY || '0') * -1);
     }
   }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1 | 2022.10.07
+
+### Fixes:
+
+* Fixed scroll inside modals.
+
 ## 1.2.0 | 2022.09.28
 
 ### New features:

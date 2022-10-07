@@ -64,15 +64,14 @@ export declare class ModalConnector implements IModal {
      * Locks the window's scroll.
      * @private
      *
-     * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
+     * @author Agnieszka Zawadzka <agnieszka.zawadzka@movecloser.pl>
      */
     private lockScroll;
-    private onScroll;
     /**
      * Unlocks the window's scroll.
      * @private
      *
-     * @author Stanisław Gregor <stanislaw.gregor@movecloser.pl>
+     * @author Agnieszka Zawadzka <agnieszka.zawadzka@movecloser.pl>
      */
     private unlockScroll;
 }
