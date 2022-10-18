@@ -5,6 +5,7 @@ import 'reflect-metadata'
 import { MissingParameter } from '../../exceptions/errors'
 import { Token } from '../../contracts'
 import { SolidToken } from './solid'
+import { LegacyDateTime } from '../legacy-datetime'
 
 /**
  * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
@@ -22,17 +23,17 @@ describe('Solid token test', () => {
 
     delete token.accessToken
 
-    const mockFunction = () => new SolidToken(token as Token)
+    const mockFunction = () => new SolidToken(token as Token, new LegacyDateTime())
 
     expect(mockFunction).toThrow(MissingParameter)
     expect(mockFunction).toThrow('Property [accessToken] is missing from Authorization Token.')
   })
 
   it('accessToken property check in constructor', () => {
-    expect(() => new SolidToken(mockToken)).not.toThrow()
+    expect(() => new SolidToken(mockToken, new LegacyDateTime())).not.toThrow()
   })
 
-  const mockSolidToken = new SolidToken(mockToken)
+  const mockSolidToken = new SolidToken(mockToken, new LegacyDateTime())
 
   it('access token retrieval', () => {
     expect(mockSolidToken.accessToken).toBe('a')

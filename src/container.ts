@@ -38,13 +38,21 @@ export class Container implements IContainer<Inversify, ContainerModule, AsyncCo
   }
 
   /**
-   * Returns instance of Service by it's identifier.
+   * Returns instance of Service by its identifier.
    * @param identifier
    */
-
   /* istanbul ignore next */
   public get<ServiceContract> (identifier: any): ServiceContract {
     return this.container.get<ServiceContract>(identifier)
+  }
+
+  /**
+   * Returns instance of Service by its identifier with given tag.
+   * @param identifier
+   * @param tag
+   */
+  public getNamed<ServiceContract> (identifier: any, tag: string): ServiceContract {
+    return this.container.getNamed<ServiceContract>(identifier, tag)
   }
 
   /**

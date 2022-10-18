@@ -6,13 +6,18 @@ import { Observable } from 'rxjs'
 export const DateTimeType = Symbol.for('IDateTime')
 export const DocumentType = Symbol.for('IDocument')
 
-export interface IDateTime {
+export interface IBaseDateTime {
   difference (start: string, end?: string): number
-  now: Moment
   nowToFormat (format: string): string
-  parse (date: string): Moment
   parseToFormat (date: string, format: string): string
 }
+
+export interface ILegacyDateTime extends IBaseDateTime {
+  now: Moment
+  parse (date: string): Moment
+}
+
+export type IDateTime = IBaseDateTime
 
 export interface IDocument {
   addEventListener (name: any, handler: (this: Document, ev: any) => any, options?: any): void

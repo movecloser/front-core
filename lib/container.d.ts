@@ -24,10 +24,16 @@ export declare class Container implements IContainer<Inversify, ContainerModule,
      */
     createModule(binder: any, async?: boolean): ContainerModule | AsyncContainerModule;
     /**
-     * Returns instance of Service by it's identifier.
+     * Returns instance of Service by its identifier.
      * @param identifier
      */
     get<ServiceContract>(identifier: any): ServiceContract;
+    /**
+     * Returns instance of Service by its identifier with given tag.
+     * @param identifier
+     * @param tag
+     */
+    getNamed<ServiceContract>(identifier: any, tag: string): ServiceContract;
     /**
      * Returns instance of IOC container.
      */

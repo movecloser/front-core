@@ -1,14 +1,15 @@
 import { Subscription } from 'rxjs';
 import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IToken, IUser, Token, TokenDriver } from '../contracts/authentication';
-import { IWindow } from '../contracts/services';
+import { IDateTime, IWindow } from '../contracts/services';
 export declare class AuthService implements Authentication<IUser> {
     private _config;
     private _window;
+    private _date;
     private _auth$;
     private _driver;
     private _token;
     private _user;
-    constructor(_config: AuthConfig, _window: IWindow);
+    constructor(_config: AuthConfig, _window: IWindow, _date: IDateTime);
     /**
      * Returns if user is logged-in.
      */

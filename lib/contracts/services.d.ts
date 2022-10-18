@@ -2,13 +2,16 @@ import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 export declare const DateTimeType: unique symbol;
 export declare const DocumentType: unique symbol;
-export interface IDateTime {
+export interface IBaseDateTime {
     difference(start: string, end?: string): number;
-    now: Moment;
     nowToFormat(format: string): string;
-    parse(date: string): Moment;
     parseToFormat(date: string, format: string): string;
 }
+export interface ILegacyDateTime extends IBaseDateTime {
+    now: Moment;
+    parse(date: string): Moment;
+}
+export declare type IDateTime = IBaseDateTime;
 export interface IDocument {
     addEventListener(name: any, handler: (this: Document, ev: any) => any, options?: any): void;
     call(method: string, params?: any[]): any;

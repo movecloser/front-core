@@ -1,6 +1,7 @@
 // Copyright (c) 2021 Move Closer
 
 import { Subscription } from 'rxjs'
+import { IDateTime } from './services'
 
 export interface AuthConfig {
   tokenName: string
@@ -58,7 +59,7 @@ export interface Token {
 }
 
 export interface ITokenConstructor {
-  new (payload: Token): IToken
+  new (payload: Token, date: IDateTime): IToken
   recreateFromStorage (tokenName: string): Token | null
 }
 

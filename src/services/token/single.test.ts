@@ -5,6 +5,7 @@ import 'reflect-metadata'
 import { MissingParameter } from '../../exceptions/errors'
 import { SingleToken } from './single'
 import { Token } from '../../contracts'
+import { LegacyDateTime } from '../legacy-datetime'
 
 /**
  * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
@@ -22,17 +23,17 @@ describe('Single token test', () => {
 
     delete token.accessToken
 
-    const mockFunction = () => new SingleToken(token as Token)
+    const mockFunction = () => new SingleToken(token as Token, new LegacyDateTime())
 
     expect(mockFunction).toThrow(MissingParameter)
     expect(mockFunction).toThrow('Property [accessToken] is missing from Authorization Token.')
   })
 
   it('accessToken property check in constructor', () => {
-    expect(() => new SingleToken(mockToken)).not.toThrow()
+    expect(() => new SingleToken(mockToken, new LegacyDateTime())).not.toThrow()
   })
 
-  const mockSingleToken = new SingleToken(mockToken)
+  const mockSingleToken = new SingleToken(mockToken, new LegacyDateTime())
 
   it('token retrieval', () => {
     expect(mockSingleToken.accessToken).toBe(mockSingleToken.refreshToken)
