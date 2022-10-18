@@ -2,7 +2,7 @@ import { IDateTime, Token } from '../../contracts';
 export declare abstract class AbstractToken {
     protected _token: Token;
     protected _date: IDateTime;
-    protected constructor(token: Token);
+    protected constructor(token: Token, date: IDateTime);
     /**
      * Check if token is equipped with all necessary properties.
      * @protected

@@ -2,15 +2,14 @@
 
 import { IDateTime, Token } from '../../contracts'
 import { MissingParameter } from '../../exceptions/errors'
-import { DateTime } from '../datetime'
 import { LocalStorage } from '../../support/local-storage'
 
 export abstract class AbstractToken {
   protected _token!: Token
   protected _date!: IDateTime
 
-  protected constructor (token: Token) {
-    this._date = new DateTime()
+  protected constructor (token: Token, date: IDateTime) {
+    this._date = date
     this._token = token
   }
 

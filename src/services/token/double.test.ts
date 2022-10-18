@@ -5,6 +5,7 @@ import 'reflect-metadata'
 import { MissingParameter } from '../../exceptions/errors'
 import { Token } from '../../contracts'
 import { DoubleToken } from './double'
+import { LegacyDateTime } from '../legacy-datetime'
 
 /**
  * @author Łukasz Jakubowski <lukasz.jakubowski@movecloser.pl>
@@ -22,14 +23,14 @@ describe('Double token test', () => {
 
     delete token.accessToken
 
-    const mockFunction = () => new DoubleToken(token as Token)
+    const mockFunction = () => new DoubleToken(token as Token, new LegacyDateTime())
 
     expect(mockFunction).toThrow(MissingParameter)
     expect(mockFunction).toThrow('Property [accessToken] is missing from Authorization Token.')
   })
 
   it('accessToken property check in constructor', () => {
-    expect(() => new DoubleToken(mockToken)).not.toThrow()
+    expect(() => new DoubleToken(mockToken, new LegacyDateTime())).not.toThrow()
   })
 
   it('refreshToken property check in constructor', () => {
@@ -37,17 +38,17 @@ describe('Double token test', () => {
 
     delete token.refreshToken
 
-    const mockFunction = () => new DoubleToken(token as Token)
+    const mockFunction = () => new DoubleToken(token as Token, new LegacyDateTime())
 
     expect(mockFunction).toThrow(MissingParameter)
     expect(mockFunction).toThrow('Property [refreshToken] is missing from Authorization Token.')
   })
 
   it('refreshToken property check in constructor', () => {
-    expect(() => new DoubleToken(mockToken)).not.toThrow()
+    expect(() => new DoubleToken(mockToken, new LegacyDateTime())).not.toThrow()
   })
 
-  const mockDoubleToken = new DoubleToken(mockToken)
+  const mockDoubleToken = new DoubleToken(mockToken, new LegacyDateTime())
 
   it('access token retrieval', () => {
     expect(mockDoubleToken.accessToken).toBe('a')

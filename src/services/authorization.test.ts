@@ -6,6 +6,7 @@ import { AuthConfig, AuthEvent, IWindow, TokenDriver } from '../contracts'
 import { MissingParameter } from '../exceptions/errors'
 
 import { AuthService } from './authorization'
+import { LegacyDateTime } from './legacy-datetime'
 
 describe('Test AuthService class.', () => {
   const config: AuthConfig = {
@@ -41,20 +42,20 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [check] to do fail.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime())
     const result = auth.check()
 
     expect(result).toBe(false)
   })
 
   test('Expect [check] to do check.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime())
     // @ts-ignore
     auth._token = new auth._driver({
       accessToken: 'test-token',
       expiresAt: new Date().toUTCString(),
       tokenType: 'Bearer'
-    })
+    }, new LegacyDateTime())
 
     const result = auth.check()
 
@@ -62,7 +63,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [check] to do check.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime())
     // @ts-ignore
     auth._token = new auth._driver({
       accessToken: 'test-token',
@@ -75,7 +76,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [deleteToken] to do work.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime())
     //@ts-ignore
     const nextSpy = jest.spyOn(auth._auth$, 'next')
     // @ts-ignore
@@ -97,7 +98,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do work.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime())
     // @ts-ignore
     auth._token = new auth._driver({
       accessToken: 'test-token',
@@ -111,7 +112,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do work.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime())
     // @ts-ignore
     auth._token = new auth._driver({
       accessToken: 'test-token',
@@ -124,7 +125,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do fail.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
 
     const result = auth.getAuthorizationHeader()
 
@@ -132,7 +133,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getAuthorizationHeader] to do fail.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
 
     const result = auth.listen((event: AuthEvent) => {
     })
@@ -142,7 +143,7 @@ describe('Test AuthService class.', () => {
 
 
   test('Expect [listen] to return Subscription.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     const expires = new Date()
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold + 1) * 1000)
 
@@ -161,7 +162,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [setToken] to trigger refresh.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     const expires = new Date()
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500))
 
@@ -180,7 +181,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [setToken] to use non-refreshable token.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     const expires = new Date()
     expires.setSeconds(expires.getSeconds() + (config.refreshThreshold - 500))
 
@@ -199,7 +200,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [setToken] to throw an error (Missing parameter).', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     let error
 
     try {
@@ -216,7 +217,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [setUser] to do work.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     // @ts-ignore
     auth.setUser({ user: 'test' })
 
@@ -225,7 +226,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [get User] to do work.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     // @ts-ignore
     auth._user = { user: 'test' }
 
@@ -236,7 +237,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getUserId] to do work.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     // @ts-ignore
     auth._user = { user: 'test', id: '1' }
 
@@ -247,7 +248,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [getUserId] to do return null.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     // @ts-ignore
     auth._user = { user: 'test' }
 
@@ -258,7 +259,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [isTokenValid] to be false.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     // @ts-ignore
     const nextSpy = jest.spyOn(auth._auth$, 'next')
     auth.setToken({
@@ -275,7 +276,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [isTokenValid] to be true.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     auth.setToken({
       tokenType: 'xxx',
       accessToken: 'test-token',
@@ -289,7 +290,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [retrieveToken] to be true.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
 
     // @ts-ignore
     auth.retrieveToken()
@@ -304,7 +305,7 @@ describe('Test AuthService class.', () => {
       expiresAt: new Date('9999').toUTCString()
     }
     window.localStorage.setItem(config.tokenName, JSON.stringify(token))
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
 
     // @ts-ignore
     auth.retrieveToken()
@@ -320,7 +321,7 @@ describe('Test AuthService class.', () => {
       expiresAt: null
     }
     window.localStorage.setItem(config.tokenName, JSON.stringify(token))
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
 
     // @ts-ignore
     auth.retrieveToken()
@@ -330,7 +331,7 @@ describe('Test AuthService class.', () => {
   })
 
   test('Expect [retrieveToken] to be fail.', () => {
-    const auth = new AuthService(config, windowMock)
+    const auth = new AuthService(config, windowMock, new LegacyDateTime)
     window.localStorage.getItem = () => {
       throw new Error()
     }

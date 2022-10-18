@@ -17,8 +17,7 @@ import {
 import {
   DateTimeType,
   DocumentType,
-  IDateTime,
-  IDocument, IModal,
+  IDocument, ILegacyDateTime, IModal,
   IWindow, ModalConfig, ModalRegistry, ModalType,
   WindowType
 } from './contracts/services'
@@ -91,13 +90,12 @@ export const services: ProvidersFactory = (config: IConfiguration) => {
       bind<Authentication<IUser>>(AuthServiceType).toDynamicValue((context: Interfaces.Context) => {
         return new AuthService(
           config.byFile('auth'),
-          context.container.get<WindowService>(WindowType)
+          context.container.get<WindowService>(WindowType),
+          context.container.get<ILegacyDateTime>(DateTimeType)
         )
       }).inSingletonScope()
     }
 
-    // Datetime
-    bind<IDateTime>(DateTimeType).to(DateTime)
     // Document
     bind<IDocument>(DocumentType).to(DocumentService).inSingletonScope()
     // Eventbus
