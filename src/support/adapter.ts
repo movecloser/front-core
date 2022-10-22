@@ -1,6 +1,7 @@
 // Copyright (c) 2021 Move Closer
 
-import { isObject, merge } from 'lodash'
+import isObject from 'lodash/isObject'
+import merge from 'lodash/merge'
 
 import { MappingConfig, MappingFunction, MappingInstruction, MappingTypes } from '../contracts/support'
 import { MappingError } from '../exceptions/errors'
@@ -180,4 +181,3 @@ function mapByStructure (mapped: any, item: any, mapping: MappingConfig): void {
     }
   }
 }
-

@@ -1,3 +1,7 @@
+## 1.3.1 | 2022.10.22
+
+* Change lodash import to specific function, shrink vendor chunk
+
 ## 1.3.0 | 2022.10.14
 
 ### New features:
