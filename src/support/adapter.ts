@@ -1,9 +1,14 @@
 // Copyright (c) 2021 Move Closer
 
-import isObject from 'lodash/isObject'
-import _merge from 'lodash/merge'
+import isObject = require("lodash/merge")
+import merge = require("lodash/merge")
 
-import { MappingConfig, MappingFunction, MappingInstruction, MappingTypes } from '../contracts/support'
+import {
+  MappingConfig,
+  MappingFunction,
+  MappingInstruction,
+  MappingTypes
+} from '../contracts/support'
 import { MappingError } from '../exceptions/errors'
 
 /**
@@ -75,7 +80,7 @@ export function mapModel<T> (toMap: any, mapping: MappingConfig, preserve: boole
 function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: boolean): void {
   Object.keys(item).forEach(key => {
     if (item[key] && typeof item[key] === 'object' && !Array.isArray(item[key])) {
-      mapped[key] = _merge(mapped[key], item[key])
+      mapped[key] = merge(mapped[key], item[key])
     } else {
       mapped[key] = item[key]
     }
@@ -84,7 +89,7 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
   for (const [key, instruction] of Object.entries(mapping)) {
     if (typeof instruction === 'string') {
       if (isObject(item[key])) {
-        mapped[key] = _merge(mapped[key], item[instruction])
+        mapped[key] = merge(mapped[key], item[instruction])
       } else {
         mapped[key] = item[instruction]
       }
