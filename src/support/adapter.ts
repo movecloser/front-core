@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Move Closer
 
-import isObject = require("lodash/merge")
+import isObject = require("lodash/isObject")
 import merge = require("lodash/merge")
 
 import {
