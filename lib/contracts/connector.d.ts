@@ -3,9 +3,17 @@ import { Headers, IResponse, Methods, Payload } from './http';
 export declare const ApiConnectorType: unique symbol;
 export declare const ApiConnectorFactory: unique symbol;
 export declare type ConnectorFactory = () => IConnector;
+export declare type RequestCall = {
+    resource: string;
+    action: string;
+    params: Params;
+    body: Payload;
+    headers: Headers;
+    responseType: ResponseType;
+};
 export interface ConnectorMiddleware {
-    afterCall: (response: IResponse, resource: FoundResource) => void;
-    beforeCall: (resource: FoundResource, headers: Headers, body: Payload) => ({
+    afterCall?: (response: IResponse, resource: FoundResource, requestCall: RequestCall) => Promise<IResponse | void> | void;
+    beforeCall?: (resource: FoundResource, headers: Headers, body: Payload) => ({
         headers: Headers;
         body: Payload;
     }) | Promise<({
