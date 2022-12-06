@@ -49,6 +49,8 @@ export class ApiConnector implements IConnector {
     const res: FoundResource = this.findResource(resource, action, params)
 
     for (const middleware of this._middlewares) {
+      if (typeof middleware.beforeCall !== 'function') { continue }
+
       const result = middleware.beforeCall(res, headers, body)
       const afterBefore = result instanceof Promise ? await result : result
 
@@ -56,7 +58,7 @@ export class ApiConnector implements IConnector {
       body = afterBefore.body
     }
 
-    const response: IResponse = await this._http.destination(res.connection)[res.method](
+    let response: IResponse = await this._http.destination(res.connection)[res.method](
       res.url,
       body,
       headers,
@@ -64,7 +66,20 @@ export class ApiConnector implements IConnector {
     )
 
     for (const middleware of this._middlewares) {
-      middleware.afterCall(response, res)
+      if (typeof middleware.afterCall !== 'function') { continue }
+
+      const result = middleware.afterCall(response, res, {
+          resource,
+          action,
+          params,
+          body,
+          headers,
+          responseType })
+        const afterAfter = result instanceof Promise ? await result: result
+
+        if (typeof afterAfter !== 'undefined') {
+          response = afterAfter
+        }
     }
 
     return response
