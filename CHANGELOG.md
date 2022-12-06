@@ -1,4 +1,16 @@
-## 1.3.1 | 2022.10.22
+# Changelog
+
+## 1.3.6 | 2022.12.06
+
+### New features:
+
+* Added async `afterCall` that is able to intercept Response.
+
+### Changes:
+
+* Middleware methods are now optional. 
+
+## 1.3.1 - 1.3.5 | 2022.10.22
 
 * Change lodash import to specific function, shrink vendor chunk
 
@@ -12,7 +24,7 @@
 ### Migration guide:
 
 * Bind DateTime or LegacyDateTime in `config/services.ts`
-E.g.
+  E.g.
 ```ts
 // based on dayjs
 bind<IDateTime>(DateTimeType).to(DateTime).inSingletonScope()
@@ -20,8 +32,6 @@ bind<IDateTime>(DateTimeType).to(DateTime).inSingletonScope()
 // based on moment (legacy)
 bind<ILegacyDateTime>(DateTimeType).to(LegacyDateTime).inSingletonScope()
 ```
-
-# Changelog
 
 ## 1.2.1 | 2022.10.07
 
