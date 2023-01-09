@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.7 | 2023.01.09
+
+### Changes:
+
+* ModalConnector: when unlocking scroll, scroll behaviour is set to `instant`, so that user does not notice disappearing scroll.
+
 ## 1.3.6 | 2022.12.06
 
 ### New features:

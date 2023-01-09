@@ -190,7 +190,11 @@ export class ModalConnector implements IModal {
       const scrollY = document.body.style.top;
       document.body.style.position = '';
       document.body.style.top = '';
-      window.scrollTo(0, parseInt(scrollY || '0') * -1);
+
+      // @see https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1195
+      // @ts-expect-error
+      const behavior: ScrollBehavior = 'instant'
+      window.scrollTo({ left: 0, top: parseInt(scrollY || '0') * -1, behavior });
     }
   }
 }
