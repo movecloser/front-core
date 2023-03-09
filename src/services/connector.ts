@@ -1,14 +1,15 @@
-// Copyright (c) 2022 Move Closer
+// Copyright (c) 2023 Move Closer
 
 import {
   ConnectorMiddleware,
   FoundResource,
+  IConnector,
   Params,
   Resource,
-  ResourcesRegistry, ResponseType
+  ResourcesRegistry,
+  ResponseType
 } from '../contracts/connector'
 import { Headers, IHttpConnector, IResponse, Payload } from '../contracts/http'
-import { IConnector } from '../contracts/connector'
 
 import { Injectable } from '../container'
 
@@ -69,17 +70,18 @@ export class ApiConnector implements IConnector {
       if (typeof middleware.afterCall !== 'function') { continue }
 
       const result = middleware.afterCall(response, res, {
-          resource,
-          action,
-          params,
-          body,
-          headers,
-          responseType })
-        const afterAfter = result instanceof Promise ? await result: result
+        resource,
+        action,
+        params,
+        body,
+        headers,
+        responseType
+      })
+      const afterAfter = result instanceof Promise ? await result : result
 
-        if (typeof afterAfter !== 'undefined') {
-          response = afterAfter
-        }
+      if (typeof afterAfter !== 'undefined') {
+        response = afterAfter
+      }
     }
 
     return response
@@ -116,7 +118,7 @@ export class ApiConnector implements IConnector {
    * Merge given list with existing middlewares.
    */
   public useMiddlewares (list: ConnectorMiddleware[]): void {
-    this._middlewares = { ...this._middlewares, ...list }
+    this._middlewares = [...this._middlewares, ...list]
   }
 
   /**
