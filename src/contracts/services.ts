@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2023 mr-luke
 
 import { Moment } from 'moment'
 import { Observable } from 'rxjs'
@@ -45,6 +45,7 @@ export interface IModal {
 }
 
 export interface ModalConfig {
+  lockScroll?: boolean
   [key: string]: any
 }
 

@@ -31,6 +31,7 @@ export interface IModal {
     subscribe(callback: (open: ModalState) => any): void;
 }
 export interface ModalConfig {
+    lockScroll?: boolean;
     [key: string]: any;
 }
 export interface ModalPayload {
