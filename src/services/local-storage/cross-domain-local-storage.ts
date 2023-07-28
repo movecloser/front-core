@@ -12,7 +12,7 @@ interface LocalStorageActionPayload {
 
 @Injectable()
 export class CrossDomainLocalStorageProvider implements ILocalStorage {
-  private readonly allowedOrigins: string[]
+  // private readonly allowedOrigins: string[]
   private readonly domain: string
   private readonly iframeId: string = 'xs-iframe'
   private readonly iframeUrl: string
@@ -24,14 +24,14 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
       throw new Error('[CrossDomainLocalStorageProvider] Missing config!')
     }
 
-    if (!('iframePath' in config && 'domain' in config && 'allowedOrigins' in config)) {
+    if (!('iframePath' in config && 'domain' in config)) {
       throw new Error('[CrossDomainLocalStorageProvider] Invalid config!')
     }
 
     this.iframeId = config.iframeId ?? 'xs-iframe'
     this.domain = config.domain
     this.iframeUrl = `${this.domain}${config.iframePath}`
-    this.allowedOrigins = config.allowedOrigins
+    // this.allowedOrigins = config.allowedOrigins
   }
 
   get (key: string): Promise<string | null> | string | null {
@@ -43,19 +43,16 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
       return window.localStorage.getItem(key)
     }
 
-    return new Promise((resolve) => {
-      const listener = (e: MessageEvent) => {
-        if (e.origin !== this.domain || !e.data || e.data.key !== key) {
-          return
+    return new Promise((resolve, reject) => {
+      this.runInIframe({ method: 'get', key }, function (e) {
+        this.close()
+
+        if (!e.data || e.data.key !== key) {
+          reject(`[CrossDomainLocalStorageProvider] did not receive value for key ${key}`)
         }
 
         resolve(e.data.value)
-
-        window.removeEventListener('message', listener)
-      }
-      window.addEventListener('message', listener)
-
-      this.runInIframe({ method: 'get', key })
+      })
     })
   }
 
@@ -87,44 +84,46 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
     this.runInIframe({ method: 'set', key, value })
   }
 
-  protected runInIframe (payload: LocalStorageActionPayload): void {
-    if (this.iframe) {
-      this.iframeCallback(payload)
-    } else {
-      this.createCrossSiteIframe(payload)
+  protected async runInIframe (payload: LocalStorageActionPayload, callback?: MessagePort['onmessage']): Promise<void> {
+    if (!this.iframe) {
+      await this.createCrossSiteIframe()
     }
+    this.sendRequest(payload, callback)
   }
 
-  protected createCrossSiteIframe (payload: LocalStorageActionPayload) {
-    this.iframe = document.querySelector(`iframe#${this.iframeId}`)
+  protected createCrossSiteIframe (): Promise<void> {
+    return new Promise((resolve) => {
+      this.iframe = document.querySelector(`iframe#${this.iframeId}`)
 
-    if (this.iframe) {
-      return
-    }
-
-    this.iframe = document.createElement('iframe')
-    this.iframe.id = this.iframeId
-    this.iframe.src = this.iframeUrl
-    this.iframe.style.display = 'none'
-    this.iframe.onload = () => {
-      if (!this.iframe || !this.iframe.contentWindow) {
+      if (this.iframe) {
+        resolve()
         return
       }
 
-      this.injectIframeScript()
-      this.iframeCallback(payload)
-    }
-    document.body.appendChild(this.iframe)
+      this.iframe = document.createElement('iframe')
+      this.iframe.id = this.iframeId
+      this.iframe.src = this.iframeUrl
+      this.iframe.style.display = 'none'
+      this.iframe.onload = async () => {
+        if (!this.iframe || !this.iframe.contentWindow) {
+          return
+        }
+
+        await this.injectIframeScript()
+        resolve()
+      }
+      document.body.appendChild(this.iframe)
+    })
   }
 
-  protected injectIframeScript () {
+  protected async injectIframeScript (): Promise<void> {
     if (!this.iframe || !this.iframe.contentWindow) {
       return
     }
 
     const script = `
       window.onmessage = (e) => {
-        var allowedOrigins = ${JSON.stringify(this.allowedOrigins)};
+        // iframe has to have a global variable allowedOrigins: string[]
         if (!allowedOrigins.includes(e.origin)) {
           console.error('[CrossDomainLocalStorageProvider] Origin ' + e.origin + ' not allowed!')
           return
@@ -135,10 +134,10 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
             localStorage.setItem(e.data.key, e.data.value)
             break
           case 'get':
-            window.parent.postMessage({
+            e.ports[0].postMessage({
                 key: e.data.key,
                 value: localStorage.getItem(e.data.key)
-            }, e.origin)
+            })
             break
           case 'remove':
             localStorage.removeItem(e.data.key)
@@ -148,25 +147,37 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
         }
     }`
 
+    const channel = new MessageChannel()
+
     this.iframe.contentWindow.postMessage({
       method: 'init',
       config: {
         script
       }
-    }, this.domain)
+    }, this.domain, [channel.port2])
+
+    return new Promise((resolve, reject) => {
+      channel.port1.onmessage = (e) => {
+        console.info(e)
+        if (e.data === 'ok') {
+          resolve()
+        } else {
+          reject()
+        }
+      }
+    })
   }
 
-  protected iframeCallback (payload: LocalStorageActionPayload) {
-    if (!this.iframe) {
+  protected sendRequest (payload: LocalStorageActionPayload, callback?: MessagePort['onmessage']) {
+    if (!this.iframe || !this.iframe.contentWindow) {
       return null
     }
+    const channel = new MessageChannel()
 
-    const receiver = this.iframe.contentWindow
-    if (!receiver) {
-      return null
+    if (callback && typeof callback === 'function') {
+      channel.port1.onmessage = callback
     }
-
-    receiver.postMessage(payload, this.domain)
+    this.iframe.contentWindow.postMessage(payload, this.domain, [channel.port2])
   }
 
   private get isMaster (): boolean {

@@ -5,7 +5,6 @@ interface LocalStorageActionPayload {
     value?: string;
 }
 export declare class CrossDomainLocalStorageProvider implements ILocalStorage {
-    private readonly allowedOrigins;
     private readonly domain;
     private readonly iframeId;
     private readonly iframeUrl;
@@ -15,10 +14,10 @@ export declare class CrossDomainLocalStorageProvider implements ILocalStorage {
     isSet(key: string): boolean;
     remove(key: string): void;
     set(key: string, value: string): void;
-    protected runInIframe(payload: LocalStorageActionPayload): void;
-    protected createCrossSiteIframe(payload: LocalStorageActionPayload): void;
-    protected injectIframeScript(): void;
-    protected iframeCallback(payload: LocalStorageActionPayload): null | undefined;
+    protected runInIframe(payload: LocalStorageActionPayload, callback?: MessagePort['onmessage']): Promise<void>;
+    protected createCrossSiteIframe(): Promise<void>;
+    protected injectIframeScript(): Promise<void>;
+    protected sendRequest(payload: LocalStorageActionPayload, callback?: MessagePort['onmessage']): null | undefined;
     private get isMaster();
 }
 export {};

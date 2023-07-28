@@ -3,7 +3,7 @@ import { NativeLocalStorageProvider, CrossDomainLocalStorageProvider } from '../
 export type NativeLocalStorageConfig = {}
 
 export interface CrossDomainLocalStorageConfig {
-  allowedOrigins: string[]
+  // allowedOrigins: string[]
   domain: string
   iframeId?: string
   iframePath: string

@@ -1,6 +1,5 @@
 export declare type NativeLocalStorageConfig = {};
 export interface CrossDomainLocalStorageConfig {
-    allowedOrigins: string[];
     domain: string;
     iframeId?: string;
     iframePath: string;
