@@ -96,6 +96,12 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
   }
 
   protected createCrossSiteIframe (payload: LocalStorageActionPayload) {
+    this.iframe = document.querySelector(`iframe#${this.iframeId}`)
+
+    if (this.iframe) {
+      return
+    }
+
     this.iframe = document.createElement('iframe')
     this.iframe.id = this.iframeId
     this.iframe.src = this.iframeUrl
