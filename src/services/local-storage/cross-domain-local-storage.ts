@@ -40,7 +40,7 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
     }
 
     if (this.isMaster) {
-      return window.localStorage.get(key)
+      return window.localStorage.getItem(key)
     }
 
     return new Promise((resolve) => {
@@ -69,7 +69,7 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
     }
 
     if (this.isMaster) {
-      return window.localStorage.remove(key)
+      return window.localStorage.removeItem(key)
     }
 
     this.runInIframe({ method: 'remove', key })
@@ -81,7 +81,7 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
     }
 
     if (this.isMaster) {
-      return window.localStorage.set(key, value)
+      return window.localStorage.setItem(key, value)
     }
 
     this.runInIframe({ method: 'set', key, value })
