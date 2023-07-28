@@ -1,5 +1,10 @@
 import { Subscription } from 'rxjs';
+import { ILocalStorage, LocalStorageConfig, LocalStorageDriver } from './local-storage';
 export interface AuthConfig {
+    localStorageConfig?: {
+        driver: LocalStorageDriver;
+        config?: LocalStorageConfig;
+    };
     tokenName: string;
     refreshThreshold: number;
     validThreshold: number;
@@ -47,7 +52,7 @@ export interface Token {
 }
 export interface ITokenConstructor {
     new (payload: Token): IToken;
-    recreateFromStorage(tokenName: string): Token | null;
+    recreateFromStorage(tokenName: string, localStorageProvider?: ILocalStorage): Promise<Token | null>;
 }
 export interface IToken {
     accessToken: string;

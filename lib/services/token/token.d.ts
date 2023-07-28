@@ -1,4 +1,4 @@
-import { IDateTime, Token } from '../../contracts';
+import { IDateTime, ILocalStorage, Token } from '../../contracts';
 export declare abstract class AbstractToken {
     protected _token: Token;
     protected _date: IDateTime;
@@ -11,7 +11,7 @@ export declare abstract class AbstractToken {
     /**
      * Retrieve token from storage.
      */
-    static recreateFromStorage(tokenName: string): Token | null;
+    static recreateFromStorage(tokenName: string, localStorageProvider?: ILocalStorage): Promise<Token | null>;
     /**
      * Returns raw Token data.
      */

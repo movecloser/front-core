@@ -18,15 +18,16 @@ import {
   TokenDriver
 } from '../contracts/authentication'
 import { IWindow } from '../contracts/services'
-import { LocalStorage } from '../support/local-storage'
 import { SingleToken } from './token/single'
 import { tokenDriversMap } from './token/driver-map'
 import { WindowService } from './window'
+import { ILocalStorage, LocalStorageDriver, localStorageDriversMap } from '../contracts'
 
 @Injectable()
 export class AuthService implements Authentication <IUser> {
   private _auth$!: BehaviorSubject<AuthEvent>
   private _driver!: ITokenConstructor | null
+  private _localStorage!: ILocalStorage
   private _token: IToken | null = null
   private _user: IUser | null = null
 
@@ -35,12 +36,14 @@ export class AuthService implements Authentication <IUser> {
       type: AuthEventType.Booting
     })
 
+    this.setLocalStorageDriver(_config.localStorageConfig?.driver)
     this.setDriver(_config.tokenDriver)
     this.retrieveToken()
     this.registerStorageListener()
     if (WindowService.isDefined) {
       this._window.onFocus(
-        () => {
+        async () => {
+          await this.reloadFromStorage()
           if (this._token && this._token.calculateTokenLifetime() <= this._config.refreshThreshold) {
             this._auth$.next({
               type: AuthEventType.Refresh,
@@ -74,7 +77,7 @@ export class AuthService implements Authentication <IUser> {
   public deleteToken (): void {
     /* istanbul ignore else */
     if (WindowService.isDefined) {
-      LocalStorage.remove(this._config.tokenName)
+      this._localStorage.remove(this._config.tokenName)
     }
 
     this._token = null
@@ -139,6 +142,13 @@ export class AuthService implements Authentication <IUser> {
     return this
   }
 
+  public setLocalStorageDriver (driver: LocalStorageDriver = LocalStorageDriver.Native): this {
+    const localStorageDriver = localStorageDriversMap[driver]
+    this._localStorage = new localStorageDriver(this._config.localStorageConfig?.config)
+
+    return this
+  }
+
   /**
    * Sets Token to state.
    * @param token
@@ -168,7 +178,7 @@ export class AuthService implements Authentication <IUser> {
 
     /* istanbul ignore else */
     if (WindowService.isDefined && isPersistent) {
-      LocalStorage.set(
+      this._localStorage.set(
         this._config.tokenName,
         JSON.stringify(this.token)
       )
@@ -238,8 +248,8 @@ export class AuthService implements Authentication <IUser> {
   /**
    * Tries to parse value stored in local storage under this._config.tokenName key
    */
-  protected parseLocalStorageValue (): Token {
-    const localStorageValue = this._driver?.recreateFromStorage(this._config.tokenName)
+  protected async parseLocalStorageValue (): Promise<Token> {
+    const localStorageValue = await this._driver?.recreateFromStorage(this._config.tokenName, this._localStorage)
 
     if (!localStorageValue) {
       throw new Error('Incorrect value in local storage')
@@ -248,35 +258,49 @@ export class AuthService implements Authentication <IUser> {
     return localStorageValue
   }
 
+  protected async reloadFromStorage () {
+    if (!WindowService.isDefined) {
+      return
+    }
+
+    if (!this._driver) {
+      return
+    }
+
+    try {
+      const localStorageValue = await this.parseLocalStorageValue()
+      const newToken = new this._driver(localStorageValue)
+
+      if (newToken) {
+        if (!this._token || newToken.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
+          this.setToken(newToken.token)
+        }
+      } else {
+        this.deleteToken()
+      }
+    } catch (error) {
+      this.deleteToken()
+    }
+  }
+
   /**
    * Listens to storage change.
    * When new Token appears in other browser tab.
    */
   protected registerStorageListener () {
-    if (WindowService.isDefined) {
-      window.addEventListener('storage', () => {
-        if (!this._token || !this._driver) {
-          return
-        }
-
-        try {
-          const localStorageValue = this.parseLocalStorageValue()
-          const newToken = new this._driver(localStorageValue)
-
-          if (newToken && newToken!.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
-            this.setToken(newToken.token)
-          }
-        } catch (error) {
-          this.deleteToken()
-        }
-      })
+    if (!WindowService.isDefined) {
+      return
     }
+
+    window.addEventListener('storage', async () => {
+      await this.reloadFromStorage()
+    })
   }
 
   /**
    * Sets token retrieved from device localstorage.
    */
-  protected retrieveToken (): void {
+  protected async retrieveToken (): Promise<void> {
     /* istanbul ignore else */
     if (WindowService.isDefined) {
       const payload: AuthEvent = {
@@ -288,7 +312,7 @@ export class AuthService implements Authentication <IUser> {
       }
 
       try {
-        const localStorageValue = this.parseLocalStorageValue()
+        const localStorageValue = await this.parseLocalStorageValue()
 
         payload.type = AuthEventType.BootedWithToken
         payload.token = new this._driver(localStorageValue)
@@ -314,12 +338,10 @@ export class AuthService implements Authentication <IUser> {
       tokenLifeTime > this._config.validThreshold
     ) {
       this.compareWithStorage(token)
-
     } else if (tokenLifeTime > this._config.refreshThreshold) {
       /* istanbul ignore next */
       setTimeout(() => {
         this.compareWithStorage(token)
-
       }, (tokenLifeTime - this._config.refreshThreshold) * 1000)
     }
   }
@@ -328,13 +350,13 @@ export class AuthService implements Authentication <IUser> {
    * Decides whether to use new token or existing one.
    * Fires only if tab is active.
    */
-  private compareWithStorage (token: IToken) {
+  private async compareWithStorage (token: IToken) {
     if (!this._driver) {
       throw new Error('Token Driver not set.')
     }
 
     try {
-      const localStorageValue = this.parseLocalStorageValue()
+      const localStorageValue = await this.parseLocalStorageValue()
       const storageToken = new this._driver(localStorageValue)
       const storageTokenLifetime = storageToken.calculateTokenLifetime()
       const tokenLifeTime = token.calculateTokenLifetime()

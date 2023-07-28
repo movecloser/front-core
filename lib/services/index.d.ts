@@ -9,6 +9,7 @@ export * from './http';
 export * from './http/axios-driver';
 export * from './http/http-driver';
 export * from './http/response';
+export * from './local-storage';
 export * from './modal-connector';
 export * from './streambus';
 export * from './streams/clock-factory';

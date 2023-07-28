@@ -1,9 +1,9 @@
 // Copyright (c) 2021 Move Closer
 
-import { IDateTime, Token } from '../../contracts'
+import { IDateTime, ILocalStorage, Token } from '../../contracts'
 import { MissingParameter } from '../../exceptions/errors'
 import { DateTime } from '../datetime'
-import { LocalStorage } from '../../support/local-storage'
+import { NativeLocalStorageProvider } from '../local-storage'
 
 export abstract class AbstractToken {
   protected _token!: Token
@@ -29,8 +29,9 @@ export abstract class AbstractToken {
   /**
    * Retrieve token from storage.
    */
-  public static recreateFromStorage (tokenName: string): Token | null {
-    const token: any = JSON.parse(LocalStorage.get(tokenName) as string)
+  public static async recreateFromStorage (tokenName: string, localStorageProvider?: ILocalStorage): Promise<Token | null> {
+    const localStorage = localStorageProvider ? localStorageProvider : new NativeLocalStorageProvider()
+    const token: any = JSON.parse(await localStorage.get(tokenName) as string)
 
     for (const key of ['accessToken', 'tokenType']) {
       if (!token || !token.hasOwnProperty(key) || token[key] === null) {
