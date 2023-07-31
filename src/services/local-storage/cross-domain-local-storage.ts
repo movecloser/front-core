@@ -128,7 +128,6 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
           console.error('[CrossDomainLocalStorageProvider] Origin ' + e.origin + ' not allowed!')
           return
         }
-        console.info(e.data)
         switch (e.data.method) {
           case 'set':
             localStorage.setItem(e.data.key, e.data.value)
@@ -158,7 +157,6 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
 
     return new Promise((resolve, reject) => {
       channel.port1.onmessage = (e) => {
-        console.info(e)
         if (e.data === 'ok') {
           resolve()
         } else {

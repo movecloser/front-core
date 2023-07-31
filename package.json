@@ -7,7 +7,7 @@
   "version": "1.2.1",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build:prod": "tsc",
     "coverage": "jest --config jestconfig.json --coverage",
     "lint": "ts lint --project \"./tsconfig.json\"",
     "test": "jest --config jestconfig.json",
