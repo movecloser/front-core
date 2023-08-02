@@ -22,6 +22,7 @@ import { SingleToken } from './token/single'
 import { tokenDriversMap } from './token/driver-map'
 import { WindowService } from './window'
 import { ILocalStorage, LocalStorageDriver, localStorageDriversMap } from '../contracts'
+import { NativeLocalStorageProvider } from './local-storage'
 
 @Injectable()
 export class AuthService implements Authentication <IUser> {
@@ -144,7 +145,13 @@ export class AuthService implements Authentication <IUser> {
 
   public setLocalStorageDriver (driver: LocalStorageDriver = LocalStorageDriver.Native): this {
     const localStorageDriver = localStorageDriversMap[driver]
-    this._localStorage = new localStorageDriver(this._config.localStorageConfig?.config)
+
+    try {
+      this._localStorage = new localStorageDriver(this._config.localStorageConfig?.config)
+    } catch (e) {
+      console.warn('[AuthService] Initializing driver for LocalStorage failed, falling back to native LocalStorage')
+      this._localStorage = new NativeLocalStorageProvider()
+    }
 
     return this
   }
