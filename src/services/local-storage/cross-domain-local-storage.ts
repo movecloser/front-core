@@ -103,6 +103,9 @@ export class CrossDomainLocalStorageProvider implements ILocalStorage {
       this.iframe = document.createElement('iframe')
       this.iframe.id = this.iframeId
       this.iframe.src = this.iframeUrl
+      this.iframe.sandbox.add('allow-storage-access-by-user-activation');
+      this.iframe.sandbox.add('allow-scripts');
+      this.iframe.sandbox.add('allow-same-origin');
       this.iframe.style.display = 'none'
       this.iframe.onload = async () => {
         if (!this.iframe || !this.iframe.contentWindow) {
