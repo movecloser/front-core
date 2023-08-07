@@ -1,6 +1,5 @@
-import { ConnectorMiddleware, FoundResource, Params, ResourcesRegistry, ResponseType } from '../contracts/connector';
+import { ConnectorMiddleware, FoundResource, IConnector, Params, ResourcesRegistry, ResponseType } from '../contracts/connector';
 import { Headers, IHttpConnector, IResponse, Payload } from '../contracts/http';
-import { IConnector } from '../contracts/connector';
 /**
  * ApiConnector is a service class that provides unified access to the REST API.
  *

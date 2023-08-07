@@ -838,6 +838,8 @@ The package includes a number of universal services.
 - [ValidationService](src/services/validation.ts) - Helper class used to handle validation across whole application.
 - [WindowService](src/services/window.ts) - Class providing universal access to browser WindowAPI.
 
+*Note! Since 1.3.0 DateTimeService required additional binding. For more details read Changelog.md*
+
 ---
 ### Authorization
 

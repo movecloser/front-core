@@ -1,8 +1,14 @@
 // Copyright (c) 2021 Move Closer
 
-import { isObject, merge } from 'lodash'
+import isObject = require("lodash/isObject")
+import merge = require("lodash/merge")
 
-import { MappingConfig, MappingFunction, MappingInstruction, MappingTypes } from '../contracts/support'
+import {
+  MappingConfig,
+  MappingFunction,
+  MappingInstruction,
+  MappingTypes
+} from '../contracts/support'
 import { MappingError } from '../exceptions/errors'
 
 /**
@@ -180,4 +186,3 @@ function mapByStructure (mapped: any, item: any, mapping: MappingConfig): void {
     }
   }
 }
-

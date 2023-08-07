@@ -17,7 +17,7 @@ import {
   Token,
   TokenDriver
 } from '../contracts/authentication'
-import { IWindow } from '../contracts/services'
+import { IDateTime, IWindow } from '../contracts/services'
 import { SingleToken } from './token/single'
 import { tokenDriversMap } from './token/driver-map'
 import { WindowService } from './window'
@@ -32,7 +32,7 @@ export class AuthService implements Authentication <IUser> {
   private _token: IToken | null = null
   private _user: IUser | null = null
 
-  constructor (private _config: AuthConfig, private _window: IWindow) {
+  constructor (private _config: AuthConfig, private _window: IWindow, private _date: IDateTime) {
     this._auth$ = new BehaviorSubject<AuthEvent>({
       type: AuthEventType.Booting
     })
@@ -166,7 +166,7 @@ export class AuthService implements Authentication <IUser> {
       throw new Error('Token Driven not set.')
     }
 
-    const newToken: IToken = new this._driver(token)
+    const newToken: IToken = new this._driver(token, this._date)
 
     if (newToken.isRefreshable()) {
       const tokenLifeTime = (newToken.calculateTokenLifetime())
@@ -274,9 +274,9 @@ export class AuthService implements Authentication <IUser> {
       return
     }
 
-    try {
-      const localStorageValue = await this.parseLocalStorageValue()
-      const newToken = new this._driver(localStorageValue)
+        try {
+          const localStorageValue = await this.parseLocalStorageValue()
+          const newToken = new this._driver(localStorageValue, this._date)
 
       if (newToken) {
         if (!this._token || newToken.calculateTokenLifetime() > this._token.calculateTokenLifetime()) {
@@ -322,7 +322,7 @@ export class AuthService implements Authentication <IUser> {
         const localStorageValue = await this.parseLocalStorageValue()
 
         payload.type = AuthEventType.BootedWithToken
-        payload.token = new this._driver(localStorageValue)
+        payload.token = new this._driver(localStorageValue, this._date)
         /* istanbul ignore next */
       } catch (error) {
         this.deleteToken()
@@ -364,7 +364,7 @@ export class AuthService implements Authentication <IUser> {
 
     try {
       const localStorageValue = await this.parseLocalStorageValue()
-      const storageToken = new this._driver(localStorageValue)
+      const storageToken = new this._driver(localStorageValue, this._date)
       const storageTokenLifetime = storageToken.calculateTokenLifetime()
       const tokenLifeTime = token.calculateTokenLifetime()
 

@@ -1,6 +1,7 @@
 // Copyright (c) 2021 Move Closer
 
 import { Subscription } from 'rxjs'
+import { IDateTime } from './services'
 
 import { ILocalStorage, LocalStorageConfig, LocalStorageDriver } from './local-storage'
 
@@ -64,7 +65,7 @@ export interface Token {
 }
 
 export interface ITokenConstructor {
-  new (payload: Token): IToken
+  new (payload: Token, date: IDateTime): IToken
   recreateFromStorage (tokenName: string, localStorageProvider?: ILocalStorage): Promise<Token | null>
 }
 

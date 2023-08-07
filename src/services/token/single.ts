@@ -1,14 +1,14 @@
 // Copyright (c) 2021 Move Closer
 
-import { IToken, Token } from '../../contracts'
+import { IDateTime, IToken, Token } from '../../contracts'
 import { AbstractToken } from './token'
 
 /**
  * Single Token Driver Class
  */
 export class SingleToken extends AbstractToken implements IToken {
-  constructor (token: Token) {
-    super(token)
+  constructor (token: Token, date: IDateTime) {
+    super(token, date)
 
     this.checkRequiredProperties(['accessToken'])
   }

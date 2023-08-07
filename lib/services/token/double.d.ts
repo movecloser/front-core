@@ -1,10 +1,10 @@
-import { IToken, Token } from '../../contracts';
+import { IDateTime, IToken, Token } from '../../contracts';
 import { AbstractToken } from './token';
 /**
  * Double Token Driver Class
  */
 export declare class DoubleToken extends AbstractToken implements IToken {
-    constructor(token: Token);
+    constructor(token: Token, date: IDateTime);
     /**
      * Returns string representing key used as access token.
      */
