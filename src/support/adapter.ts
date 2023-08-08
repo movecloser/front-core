@@ -78,6 +78,10 @@ export function mapModel<T> (toMap: any, mapping: MappingConfig, preserve: boole
  * @param preserve
  */
 function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: boolean): void {
+  if (typeof item !== 'object' || item === null) {
+    return
+  }
+
   Object.keys(item).forEach(key => {
     if (item[key] && typeof item[key] === 'object' && !Array.isArray(item[key])) {
       mapped[key] = merge(mapped[key], item[key])
