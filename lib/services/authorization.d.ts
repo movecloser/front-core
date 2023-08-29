@@ -1,12 +1,14 @@
 import { Subscription } from 'rxjs';
 import { AuthConfig, Authentication, AuthEventCallback, AuthHeader, IToken, IUser, Token, TokenDriver } from '../contracts/authentication';
 import { IDateTime, IWindow } from '../contracts/services';
+import { LocalStorageDriver } from '../contracts';
 export declare class AuthService implements Authentication<IUser> {
     private _config;
     private _window;
     private _date;
     private _auth$;
     private _driver;
+    private _localStorage;
     private _token;
     private _user;
     constructor(_config: AuthConfig, _window: IWindow, _date: IDateTime);
@@ -35,6 +37,7 @@ export declare class AuthService implements Authentication<IUser> {
      * @param driver
      */
     setDriver(driver: TokenDriver): this;
+    setLocalStorageDriver(driver?: LocalStorageDriver): this;
     /**
      * Sets Token to state.
      * @param token
@@ -67,7 +70,8 @@ export declare class AuthService implements Authentication<IUser> {
     /**
      * Tries to parse value stored in local storage under this._config.tokenName key
      */
-    protected parseLocalStorageValue(): Token;
+    protected parseLocalStorageValue(): Promise<Token>;
+    protected reloadFromStorage(): Promise<void>;
     /**
      * Listens to storage change.
      * When new Token appears in other browser tab.
@@ -76,7 +80,7 @@ export declare class AuthService implements Authentication<IUser> {
     /**
      * Sets token retrieved from device localstorage.
      */
-    protected retrieveToken(): void;
+    protected retrieveToken(): Promise<void>;
     /**
      * Sets refresh behaviour for token.
      * @param tokenLifeTime

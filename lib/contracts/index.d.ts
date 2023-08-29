@@ -7,6 +7,7 @@ export * from './csrf';
 export * from './eventbus';
 export * from './filter-parser';
 export * from './http';
+export * from './local-storage';
 export * from './middlewares';
 export * from './models';
 export * from './services';

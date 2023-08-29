@@ -14,7 +14,6 @@
     "watch-test": "jest --config jestconfig.json --watch"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.176",
     "axios": "^0.21.2",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.5",
@@ -27,6 +26,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.9.1",
+    "@types/lodash": "^4.14.176",
     "@types/react": "^16.9.53",
     "@types/react-router-dom": "^5.1.7",
     "eslint": "^5.16.0",
