@@ -82,6 +82,18 @@ export class HttpConnector implements IHttpConnector {
   }
 
   /**
+   * Perform patch http request.
+   */
+  public patch (
+    target: string,
+    data: Payload = {},
+    headers: Headers = {},
+    options = null
+  ): Promise<IResponse> {
+    return this.defaultDriver.patch(target, data, headers, options)
+  }
+
+  /**
    * Perform post http request.
    */
   public post (

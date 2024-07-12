@@ -307,6 +307,40 @@ describe('Test Http class', () => {
     expect(mockedCallFn).toBeCalledWith('get', '/test', {}, {}, null)
   })
 
+  test('Expect [patch] method to return response.', async () => {
+    mockedCallFn.mockReturnValueOnce({})
+
+    const http = new HttpConnector({
+      'test-driver': () => {
+        // @ts-ignore
+        return new TestDriver(false)
+      }
+    }, 'test-driver')
+
+    // @ts-ignore
+    await http.patch('/test')
+
+    expect(mockedCallFn).toBeCalledTimes(1)
+    expect(mockedCallFn).toBeCalledWith('patch', '/test', {}, {}, null)
+  })
+
+  test('Expect [patch] method to return response.', async () => {
+    mockedCallFn.mockReturnValueOnce({})
+
+    const http = new HttpConnector({
+      'test-driver': () => {
+        // @ts-ignore
+        return new TestDriver(false)
+      }
+    }, 'test-driver')
+
+    // @ts-ignore
+    await http.patch('/test', {}, {}, {})
+
+    expect(mockedCallFn).toBeCalledTimes(1)
+    expect(mockedCallFn).toBeCalledWith('patch', '/test', {}, {}, {})
+  })
+
   test('Expect [post] method to return response.', async () => {
     mockedCallFn.mockReturnValueOnce({})
 

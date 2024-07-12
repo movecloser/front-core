@@ -29,6 +29,10 @@ export declare class HttpConnector implements IHttpConnector {
      */
     get(target: string, params?: Payload, headers?: Headers, options?: null): Promise<IResponse>;
     /**
+     * Perform patch http request.
+     */
+    patch(target: string, data?: Payload, headers?: Headers, options?: null): Promise<IResponse>;
+    /**
      * Perform post http request.
      */
     post(target: string, data?: Payload, headers?: Headers, options?: null): Promise<IResponse>;

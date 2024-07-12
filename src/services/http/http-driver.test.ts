@@ -106,6 +106,29 @@ describe('Test HttpDriver class', () => {
     expect(response.status).toBe(200)
   })
 
+  test('Expect [patch] to return be called', async () => {
+    mockedCallFn.mockReturnValueOnce({
+      method: 'PATCH',
+      target: '/test',
+      status: 200,
+      request: {
+        headers: {}
+      },
+      response: {
+        data: {}
+      }
+    })
+
+    const driver = new TestDriver()
+    const callSpy = jest.spyOn(driver, 'patch')
+    // @ts-ignore
+    const response = await driver.patch('/test')
+
+    expect(callSpy).toBeCalledTimes(1)
+    expect(callSpy).toBeCalledWith('/test')
+    expect(response.status).toBe(200)
+  })
+
   test('Expect [post] to return be called', async () => {
     mockedCallFn.mockReturnValueOnce({
       method: 'POST',
