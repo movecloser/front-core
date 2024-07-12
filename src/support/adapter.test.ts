@@ -25,7 +25,7 @@ const nestedMappingConfig: MappingConfig = {
   lastName: 'last_name',
   children: {
     type: MappingTypes.Self,
-    value: 'children'
+    value: 'child_node'
   }
 }
 
@@ -35,11 +35,11 @@ describe('Test adapter methods', () => {
       id: 1,
       first_name: 'John',
       last_name: 'Testington',
-      children: {
+      child_node: {
         id: 2,
         first_name: 'Mary',
         last_name: 'Testington',
-        children: {
+        child_node: {
           id: 3,
           first_name: 'Sue',
           last_name: 'Testington'
@@ -72,12 +72,12 @@ describe('Test adapter methods', () => {
       id: 1,
       first_name: 'John',
       last_name: 'Testington',
-      children: [
+      child_node: [
         {
           id: 2,
           first_name: 'Mary',
           last_name: 'Testington',
-          children: [
+          child_node: [
             {
               id: 3,
               first_name: 'Sue',
@@ -94,7 +94,7 @@ describe('Test adapter methods', () => {
           id: 5,
           first_name: 'Mary',
           last_name: 'Testington',
-          children: {
+          child_node: {
             id: 6,
             first_name: 'Sue',
             last_name: 'Testington'
@@ -171,7 +171,8 @@ describe('Test adapter methods', () => {
       roles: {
         alpha: true,
         beta: true
-      }
+      },
+      some_field: 'aaa'
     }
     const expectedWithoutPreserve = {
       id: 1,
@@ -181,9 +182,20 @@ describe('Test adapter methods', () => {
       permissions: {
         alpha: true,
         beta: true
-      }
+      },
+      another: 'aaa 123'
     }
-    const mapped = mapModel(toMap, mappingConfig, false)
+    const config = {
+      ...mappingConfig,
+      another: {
+        type: MappingTypes.Function,
+        value: (item: any): any => {
+          return item.some_field + ' 123'
+        },
+        source: 'some_field'
+      },
+    }
+    const mapped = mapModel(toMap, config, false)
 
     expect(typeof mapped).toEqual('object')
     expect(mapped).toEqual(expectedWithoutPreserve)
@@ -555,6 +567,84 @@ describe('Test adapter methods', () => {
     const result = { types: [1, 2, 3] }
 
     expect(intention.toRequest()).toEqual(result)
+  })
+
+  test('Expect [mapIntention] to map intention by adapter.', () => {
+    interface TestIntentionPayload {
+      id: number
+      firstName: string
+      lastName: string
+      children: any
+    }
+
+    const addressMap: MappingConfig = {
+      postCode: 'post_code'
+    }
+
+    class TestIntention extends AbstractIntention<TestIntentionPayload> {
+
+      protected map: MappingConfig = {
+        id: 'id',
+        firstName: 'first_name',
+        lastName: 'last_name',
+        homeAddress: {
+          type: MappingTypes.Adapter,
+          map: addressMap,
+          value: 'homeAddress',
+          target: 'address'
+        },
+        children: {
+          type: MappingTypes.Self,
+          value: 'children',
+          target: 'child_node'
+        }
+      }
+    }
+
+    const expected = {
+      id: 1,
+      first_name: 'John',
+      last_name: 'Testington',
+      address: {
+        post_code: '12-345'
+      },
+      child_node: [
+        {
+          id: 3,
+          first_name: 'Sue',
+          last_name: 'Testington'
+        },
+        {
+          id: 4,
+          first_name: 'Sue',
+          last_name: 'Testington'
+        }
+      ]
+    }
+
+    const payload = {
+      id: 1,
+      firstName: 'John',
+      lastName: 'Testington',
+      homeAddress: {
+        postCode: '12-345'
+      },
+      children: [
+        {
+          id: 3,
+          firstName: 'Sue',
+          lastName: 'Testington'
+        },
+        {
+          id: 4,
+          firstName: 'Sue',
+          lastName: 'Testington'
+        }
+      ]
+    }
+    const intention = new TestIntention(payload)
+
+    expect(intention.toRequest()).toEqual(expected)
   })
 
   test('Expect [mapIntention] to throw error when mapping function is not provided.', () => {

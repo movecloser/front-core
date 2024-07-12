@@ -78,6 +78,10 @@ export function mapModel<T> (toMap: any, mapping: MappingConfig, preserve: boole
  * @param preserve
  */
 function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: boolean): void {
+  if (typeof item !== 'object' || item === null) {
+    return
+  }
+
   Object.keys(item).forEach(key => {
     if (item[key] && typeof item[key] === 'object' && !Array.isArray(item[key])) {
       mapped[key] = merge(mapped[key], item[key])
@@ -124,15 +128,23 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
           }
 
           if (Array.isArray(item[instruction.value])) {
+            mapped[key] = []
             for (const i in item[instruction.value]) {
               if (!item[instruction.value].hasOwnProperty(i)) continue
-
+              mapped[key][i] = {}
               mapByConfig(mapped[key][i], item[instruction.value][i], mappingInstruction, false)
             }
-            continue
+          } else {
+            mapped[key] = {}
+            mapByConfig(mapped[key], item[instruction.value], mappingInstruction, false)
           }
 
-          mapByConfig(mapped[key], item[instruction.value], mappingInstruction, false)
+          if (!preserve) {
+            if (key === instruction.value) {
+              continue
+            }
+            delete mapped[instruction.value]
+          }
           continue
 
         case MappingTypes.Function:
@@ -142,6 +154,13 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
 
           const callbackFunction: MappingFunction = instruction.value as MappingFunction
           mapped[key] = callbackFunction(item)
+
+          if (!preserve && instruction.source) {
+            if (key === instruction.source) {
+              continue
+            }
+            delete mapped[instruction.source]
+          }
 
           continue
       }
@@ -172,17 +191,59 @@ function mapByStructure (mapped: any, item: any, mapping: MappingConfig): void {
     if (typeof instruction === 'string') {
       mapped[instruction] = value
 
-    } else {
-      if (typeof instruction.value !== 'function') {
-        throw new MappingError('Invalid instruction. Value is not a function.')
-      }
+      continue
+    }
 
-      if (typeof instruction.target !== 'string') {
+    if (typeof instruction === 'object' && instruction !== null) {
+      const { value, map, target, type } = instruction
+
+      if (typeof target !== 'string') {
         throw new MappingError('Invalid instruction. Missing target.')
       }
 
-      const callbackFunction: MappingFunction = instruction.value as MappingFunction
-      mapped[instruction.target as string] = callbackFunction(item)
+      switch (type) {
+        case MappingTypes.Self:
+        case MappingTypes.Adapter:
+          const mappingInstruction = type === MappingTypes.Self ? mapping : map
+
+          if (typeof mappingInstruction === 'undefined' || typeof value !== 'string') {
+            throw new MappingError(
+              'Invalid instruction. Map in not a MappingConfig or value is not a string.')
+          }
+
+          if (item[value] === undefined) {
+            console.debug(
+              `Adapter is SKIPPING field. Key [${value}] is not present in provided item: `,
+              item
+            )
+            continue
+          }
+
+          if (Array.isArray(item[value])) {
+            mapped[target] = []
+            for (const i in item[value]) {
+              if (!item[value].hasOwnProperty(i)) continue
+              mapped[target][i] = {}
+              mapByStructure(mapped[target][i], item[value][i], mappingInstruction)
+            }
+          } else {
+            mapped[target] = {}
+            mapByStructure(mapped[target], item[value], mappingInstruction)
+          }
+
+          continue
+        case MappingTypes.Function:
+          if (typeof value !== 'function') {
+            throw new MappingError('Invalid instruction. Value is not a function.')
+          }
+
+          const callbackFunction: MappingFunction = value
+          mapped[target] = callbackFunction(item)
+
+          continue
+      }
     }
+
+    throw new MappingError('Invalid mapping instruction type given.')
   }
 }
