@@ -1,4 +1,4 @@
-// Copyright (c) 2021 Move Closer
+// Copyright (c) 2023 mr-luke
 
 import { BehaviorSubject } from 'rxjs'
 import { IModal, ModalConfig, ModalPayload, ModalRegistry, ModalState } from '../contracts'
@@ -109,6 +109,15 @@ export class ModalConnector implements IModal {
       config: Object.assign({}, { ...this._defaultConfig, ...config })
     })
 
+    let shouldLockScroll: boolean = true
+    if ('lockScroll' in config && typeof config.lockScroll === 'boolean') {
+      shouldLockScroll = config.lockScroll
+    }
+
+    if (!shouldLockScroll) {
+      return
+    }
+
     this.lockScroll()
   }
 
@@ -129,14 +138,7 @@ export class ModalConnector implements IModal {
       throw new Error(`Unregistered modal component [${key}]`)
     }
 
-    promise.then(() => {
-      this._stream$.next({
-        component: key,
-        opened: true,
-        payload,
-        config: Object.assign(this._defaultConfig, config)
-      })
-    })
+    promise.then(() => this.open(key, payload, config))
   }
 
   /**
@@ -187,10 +189,14 @@ export class ModalConnector implements IModal {
   private unlockScroll (): void {
     /* istanbul ignore else */
     if (typeof window !== 'undefined') {
+      const wasLocked: boolean = document.body.style.position === 'fixed';
       const scrollY = document.body.style.top;
       document.body.style.position = '';
       document.body.style.top = '';
 
+      if (!wasLocked) {
+        return
+      }
       // @see https://github.com/microsoft/TypeScript-DOM-lib-generator/issues/1195
       // @ts-expect-error
       const behavior: ScrollBehavior = 'instant'
