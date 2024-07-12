@@ -156,6 +156,7 @@ export abstract class Model<T> implements IModel<T> {
       }
 
       this._data[property] = value
+      return true
     }
 
     return false

@@ -10,6 +10,7 @@ interface MappingDriver {
     value?: MappingFunction | string;
     map?: MappingConfig;
     target?: string;
+    source?: string;
 }
 export declare type MappingFunction = (toMap: any) => any;
 export interface MappingInstruction extends MappingDriver {
