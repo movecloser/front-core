@@ -17,9 +17,9 @@ export declare abstract class Repository<MData extends object, MClass extends IM
     /**
      * Compose collection based on mapping settings.
      */
-    protected composeCollection<Data extends object = MData, Class extends IModel<Data> = IModel<Data>>(rawCollection: any[], modelConstructor: ModelConstructor<Data, Class>, meta: IMeta): ICollection<MagicModel<Data, Class>>;
+    protected composeCollection<Data extends object = MData, Class extends IModel<Data> = IModel<Data>>(rawCollection: any[], modelConstructor: ModelConstructor<Data, Class>, meta: IMeta, preserve?: boolean): ICollection<MagicModel<Data, Class>>;
     /**
      * Compose model based on mapping settings.
      */
-    protected composeModel<Data extends object = MData, Class extends IModel<Data> = IModel<Data>>(rawModel: ModelPayload, modelConstructor: ModelConstructor<Data, Class>): MagicModel<Data, Class>;
+    protected composeModel<Data extends object = MData, Class extends IModel<Data> = IModel<Data>>(rawModel: ModelPayload, modelConstructor: ModelConstructor<Data, Class>, preserve?: boolean): MagicModel<Data, Class>;
 }

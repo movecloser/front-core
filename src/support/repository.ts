@@ -40,14 +40,15 @@ export abstract class Repository<MData extends object, MClass extends IModel<MDa
   protected composeCollection<Data extends object = MData, Class extends IModel<Data> = IModel<Data>> (
     rawCollection: any[],
     modelConstructor: ModelConstructor<Data, Class>,
-    meta: IMeta
+    meta: IMeta,
+    preserve?: boolean
   ): ICollection<MagicModel<Data, Class>> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
 
     return new Collection<MagicModel<Data, Class>>(
-      (this.useAdapter ? mapCollection(rawCollection, this.map) : rawCollection)
+      (this.useAdapter ? mapCollection(rawCollection, this.map, preserve) : rawCollection)
         .map((item: any) => modelConstructor.hydrate(item)),
       meta
     )
@@ -58,12 +59,13 @@ export abstract class Repository<MData extends object, MClass extends IModel<MDa
    */
   protected composeModel<Data extends object = MData, Class extends IModel<Data> = IModel<Data>> (
     rawModel: ModelPayload,
-    modelConstructor: ModelConstructor<Data, Class>
+    modelConstructor: ModelConstructor<Data, Class>,
+    preserve?: boolean
   ): MagicModel<Data, Class> {
     if (this.useAdapter && Object.keys(this.map).length === 0) {
       throw new MappingError(`Mapping config must be provided when adapter is turned on.`)
     }
 
-    return modelConstructor.hydrate(this.useAdapter ? mapModel(rawModel, this.map) : rawModel)
+    return modelConstructor.hydrate(this.useAdapter ? mapModel(rawModel, this.map, preserve) : rawModel)
   }
 }

@@ -132,11 +132,11 @@ function mapByConfig (mapped: any, item: any, mapping: MappingConfig, preserve: 
             for (const i in item[instruction.value]) {
               if (!item[instruction.value].hasOwnProperty(i)) continue
               mapped[key][i] = {}
-              mapByConfig(mapped[key][i], item[instruction.value][i], mappingInstruction, false)
+              mapByConfig(mapped[key][i], item[instruction.value][i], mappingInstruction, preserve)
             }
           } else {
             mapped[key] = {}
-            mapByConfig(mapped[key], item[instruction.value], mappingInstruction, false)
+            mapByConfig(mapped[key], item[instruction.value], mappingInstruction, preserve)
           }
 
           if (!preserve) {
