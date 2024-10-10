@@ -1,4 +1,4 @@
-// Copyright (c) 2023 mr-luke
+// Copyright (c) 2021 Move Closer
 
 import { Moment } from 'moment'
 import { Observable } from 'rxjs'

@@ -15,12 +15,12 @@
   },
   "dependencies": {
     "@types/lodash": "^4.14.176",
-    "axios": "^0.21.2",
+    "axios": "^1.7.4",
     "core-js": "^3.8.3",
     "dayjs": "^1.11.5",
     "inversify": "^5.0.5",
     "lodash": "^4.17.21",
-    "moment": "^2.27.0",
+    "moment": "^2.30.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.2",
     "vue-class-component": "^7.2.6"
