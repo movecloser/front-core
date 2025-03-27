@@ -33,11 +33,11 @@ export interface IModal {
   name: string | null
   payload: ModalPayload
   close (key?: string | null): void
-  open<Payload> (key: string, payload?: (Payload extends ModalPayload ? ModalPayload : any), config?: ModalConfig): void
+  open<Payload> (key: string, payload?: Payload, config?: ModalConfig): void
   openAsync<Payload> (
     key: string,
     promise: Promise<any>,
-    payload?: (Payload extends ModalPayload ? ModalPayload : any),
+    payload?: Payload,
     config?: ModalConfig
   ): void
   register<C> (register: ModalRegistry<C>): void
